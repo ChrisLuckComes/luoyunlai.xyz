@@ -9,7 +9,7 @@ module.exports = {
     extend: {},
     fontSize: {
       header: ["1.25rem", "3"],
-      test: ["1.5rem"],
+      icon: ["1.25rem"],
     },
     fontFamily: {
       header: ["Arial"],

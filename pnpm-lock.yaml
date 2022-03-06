@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@ant-design/icons': ^4.7.0
   '@babel/core': ^7.16.0
   '@craco/craco': ^6.4.3
   '@pmmmwh/react-refresh-webpack-plugin': ^0.5.3
@@ -70,6 +71,7 @@ specifiers:
   workbox-webpack-plugin: ^6.4.1
 
 dependencies:
+  '@ant-design/icons': 4.7.0_react-dom@17.0.2+react@17.0.2
   '@babel/core': 7.17.5
   '@craco/craco': 6.4.3_e79e62fe450383fd2d418267dc75e645
   '@pmmmwh/react-refresh-webpack-plugin': 0.5.4_cb46ffc29cbac33b1cd7a2454d0f4425

@@ -1,9 +1,18 @@
 import { lazy } from "react";
 
-export default [
+const routers = [
+  {
+    key: "/",
+    path: "/",
+    name: "首页",
+    element: lazy(() => import("@/home")),
+  },
   {
     key: "experience",
+    path: "/experience",
     name: "经验",
-    component: lazy(() => import("@/pages/experiences/index")),
+    element: lazy(() => import("@/pages/experiences/index")),
   },
 ];
+
+export default routers;
