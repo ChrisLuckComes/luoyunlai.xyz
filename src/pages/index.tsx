@@ -1,5 +1,9 @@
 import React, { FC } from "react";
 
 export default (): React.ComponentType<any> => {
-  return () => <div>经验</div>;
+  const classMap = {
+    container: "flex justify-center align-center",
+  };
+
+  return () => <div className={classMap.container}>经验</div>;
 };

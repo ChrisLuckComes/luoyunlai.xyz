@@ -6,7 +6,11 @@ module.exports = {
     "./public/index.html",
   ],
   theme: {
-    extend: {},
+    extend: {
+      padding: {
+        content: "40px",
+      },
+    },
     fontSize: {
       header: ["1.25rem", "3"],
       icon: ["1.25rem"],

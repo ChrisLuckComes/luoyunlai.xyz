@@ -8,9 +8,10 @@ import "./styles/home.css";
 const { Header, Content, Footer } = Layout;
 
 const classMap = {
-  menu: "flex justify-between bg-white rounded-b-sm shadow-xl",
+  menu: "flex justify-between bg-white rounded-b-sm shadow-md",
   logo: "text-header font-header cursor-pointer",
   footer: "flex justify-center bg-white rounded-t-sm shadow-xl",
+  content:"pt-content"
 };
 
 export default function App() {
@@ -32,7 +33,7 @@ export default function App() {
           ))}
         </Menu>
       </Header>
-      <Content>
+      <Content className={classMap.content}>
         <Routes>
           {routers.map((router) => (
             <Route
