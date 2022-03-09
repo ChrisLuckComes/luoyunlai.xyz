@@ -5,6 +5,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.11",
     "@craco/craco": "^6.4.3",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@svgr/webpack": "^5.5.0",
@@ -38,7 +39,7 @@
     "eslint-webpack-plugin": "^3.1.1",
     "file-loader": "^6.2.0",
     "fs-extra": "^10.0.0",
-    "html-webpack-plugin": "^5.5.0",
+    "html-webpack-plugin": "^5.0.0",
     "identity-obj-proxy": "^3.0.0",
     "immer": "^9.0.12",
     "jest": "^27.4.3",
@@ -78,24 +79,13 @@
     "start:css": "cross-env TAILWIND_MODE=watch tailwindcss -o src/styles/tailwind.css --watch",
     "start": "concurrently \"npm run start:css\" \"node scripts/start.js\"",
     "build": "node scripts/build.js",
+    "build:modern": "node scripts/build.js --modern",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
     ]
   },
   "jest": {
@@ -149,7 +139,15 @@
   },
   "babel": {
     "presets": [
-      "react-app"
+      [
+        "@babel/preset-env",
+        {
+          "modules": false,
+          "targets": {
+            "esmodules": true
+          }
+        }
+      ]
     ],
     "plugins": [
       [

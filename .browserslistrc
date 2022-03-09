@@ -1,0 +1,19 @@
+[production]
+firefox >= 60
+chrome >= 61
+safari >= 11
+
+[development]
+last 1 chrome version
+last 1 firefox version
+last 1 safari version
+
+[modern]
+firefox >= 60
+chrome >= 61
+safari >= 11
+
+[legacy]
+> 0.2%
+not dead
+not op_mini all

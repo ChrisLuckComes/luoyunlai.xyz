@@ -85,11 +85,17 @@ const hasJsxRuntime = (() => {
   }
 })();
 
+//自定义plugin
+const ModuleHtmlPlugin = require("./html-webpack-esmodules-plugin");
+
+//是否使用 modern 模式
+const MODERN_MODE = process.argv.some((x) => x === "--modern");
+
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
-module.exports = function (webpackEnv) {
-  const isEnvDevelopment = webpackEnv === "development";
-  const isEnvProduction = webpackEnv === "production";
+module.exports = function (isModernBuild) {
+  const isEnvDevelopment = process.env.NODE_ENV === "development";
+  const isEnvProduction = process.env.NODE_ENV === "production";
 
   // Variable used for enabling profiling in Production
   // passed into alias object. Uses a flag if passed into the build command
@@ -187,7 +193,7 @@ module.exports = function (webpackEnv) {
   };
 
   return {
-    target: ["browserslist"],
+    target: ["browserslist:modern", "browserslist:legacy"],
     mode: isEnvProduction ? "production" : isEnvDevelopment && "development",
     // Stop compilation early in production
     bail: isEnvProduction,
@@ -206,13 +212,15 @@ module.exports = function (webpackEnv) {
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
-      filename: isEnvProduction
-        ? "static/js/[name].[contenthash:8].js"
-        : isEnvDevelopment && "static/js/bundle.js",
+      filename:
+        !MODERN_MODE || isModernBuild
+          ? "static/js/[name].[contenthash:8].js"
+          : "static/js/[name]-legacy.[chunkhash:8].js",
       // There are also additional JS chunk files if you use code splitting.
-      chunkFilename: isEnvProduction
-        ? "static/js/[name].[contenthash:8].chunk.js"
-        : isEnvDevelopment && "static/js/[name].chunk.js",
+      chunkFilename:
+        !MODERN_MODE || isModernBuild
+          ? "static/js/[name].[contenthash:8].chunk.js"
+          : "static/js/[name]-legacy.[chunkhash:8].chunk.js",
       assetModuleFilename: "static/media/[name].[hash][ext]",
       // webpack uses `publicPath` to determine where the app is being served from.
       // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -564,31 +572,26 @@ module.exports = function (webpackEnv) {
     },
     plugins: [
       // Generates an `index.html` file with the <script> injected.
-      new HtmlWebpackPlugin(
-        Object.assign(
-          {},
-          {
-            inject: true,
-            template: paths.appHtml,
-          },
-          isEnvProduction
-            ? {
-                minify: {
-                  removeComments: true,
-                  collapseWhitespace: true,
-                  removeRedundantAttributes: true,
-                  useShortDoctype: true,
-                  removeEmptyAttributes: true,
-                  removeStyleLinkTypeAttributes: true,
-                  keepClosingSlash: true,
-                  minifyJS: true,
-                  minifyCSS: true,
-                  minifyURLs: true,
-                },
-              }
-            : undefined
-        )
-      ),
+      new HtmlWebpackPlugin({
+        inject: MODERN_MODE ? "head" : true,
+        //如果是第二次构建，就使用paths.buildHtml作为模板
+        template:
+          MODERN_MODE && !isModernBuild
+            ? paths.buildHtml
+            : paths.appHtml,
+        minify: {
+          removeComments: true,
+          collapseWhitespace: true,
+          removeRedundantAttributes: true,
+          useShortDoctype: true,
+          removeEmptyAttributes: true,
+          removeStyleLinkTypeAttributes: true,
+          keepClosingSlash: true,
+          minifyJS: true,
+          minifyCSS: true,
+          minifyURLs: true,
+        },
+      }),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
       // https://github.com/facebook/create-react-app/issues/5358
@@ -603,13 +606,20 @@ module.exports = function (webpackEnv) {
       new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
       // This gives some necessary context to module not found errors, such as
       // the requesting resource.
+      MODERN_MODE &&
+        new ModuleHtmlPlugin(HtmlWebpackPlugin, {
+          isModernBuild,
+        }),
       new ModuleNotFoundPlugin(paths.appPath),
       // Makes some environment variables available to the JS code, for example:
       // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
       // It is absolutely essential that NODE_ENV is set to production
       // during a production build.
       // Otherwise React will be compiled in the very slow development mode.
-      new webpack.DefinePlugin(env.stringified),
+      new webpack.DefinePlugin({
+        ...env.stringified,
+        "process.env.isModernBuild": isModernBuild,
+      }),
       // Experimental hot reloading for React .
       // https://github.com/facebook/react/tree/main/packages/react-refresh
       isEnvDevelopment &&
