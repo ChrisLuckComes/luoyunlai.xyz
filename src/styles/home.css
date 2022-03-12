@@ -1,3 +1,34 @@
-.ant-layout-header{
-    @apply bg-white;
+.ant-layout-header {
+  @apply bg-white;
+}
+
+.ant-layout-sider {
+  @apply min-w-sider w-sider max-w-sider !important;
+}
+
+code {
+  margin: 0 1px;
+  padding: 0.2em 0.4em;
+  font-size: 0.9em;
+  background: #f2f4f5;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 3px;
+}
+
+.list-disc-li {
+  @apply mt-li mb-li;
+}
+
+ul {
+  li {
+    @apply list-disc-li;
+  }
+}
+
+.text-assist{
+  @apply text-gray-500;
+}
+
+.flex-center{
+  @apply flex items-center justify-center;
 }

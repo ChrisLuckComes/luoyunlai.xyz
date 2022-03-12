@@ -487,6 +487,18 @@ Ensure the default browser behavior of the `hidden` attribute.
   }
 }
 
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.\!inline {
+  display: inline !important;
+}
+
 .inline {
   display: inline;
 }
@@ -499,8 +511,32 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: 100vh;
 }
 
+.h-full {
+  height: 100%;
+}
+
+.h-content {
+  height: calc(100vh - 64px - 69px - 40px);
+}
+
+.w-full {
+  width: 100%;
+}
+
 .cursor-pointer {
   cursor: pointer;
+}
+
+.list-inside {
+  list-style-position: inside;
+}
+
+.list-disc {
+  list-style-type: disc;
+}
+
+.flex-col {
+  flex-direction: column;
 }
 
 .justify-center {
@@ -509,6 +545,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .justify-between {
   justify-content: space-between;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
 }
 
 .rounded-b-sm {
@@ -530,6 +570,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-top: 40px;
 }
 
+.pl-content {
+  padding-left: 40px;
+}
+
 .font-header {
   font-family: Arial;
 }
@@ -541,6 +585,27 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .text-icon {
   font-size: 1.25rem;
+}
+
+.text-h1 {
+  font-size: 30px;
+}
+
+.text-h2 {
+  font-size: 24px;
+}
+
+.text-assist {
+  font-size: 12px;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.text-sky-400 {
+  --tw-text-opacity: 1;
+  color: rgb(56 189 248 / var(--tw-text-opacity));
 }
 
 .shadow-md {

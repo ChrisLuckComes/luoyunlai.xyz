@@ -8,10 +8,11 @@ import "./styles/home.css";
 const { Header, Content, Footer } = Layout;
 
 const classMap = {
+  layout: "h-screen bg-white",
   menu: "flex justify-between bg-white rounded-b-sm shadow-md",
   logo: "text-header font-header cursor-pointer",
   footer: "flex justify-center bg-white rounded-t-sm shadow-xl",
-  content:"pt-content"
+  content: "pt-content overflow-y-auto",
 };
 
 export default function App() {
@@ -24,10 +25,14 @@ export default function App() {
   };
 
   return (
-    <Layout className="h-screen">
+    <Layout className={classMap.layout}>
       <Header className={classMap.menu}>
         <div className={classMap.logo}>Luoyunlai.xyz</div>
-        <Menu defaultSelectedKeys={['/']} onClick={(e) => clickMenu(e)} mode="horizontal">
+        <Menu
+          defaultSelectedKeys={["/"]}
+          onClick={(e) => clickMenu(e)}
+          mode="horizontal"
+        >
           {routers.map((router) => (
             <Menu.Item key={router.key}>{router.name}</Menu.Item>
           ))}

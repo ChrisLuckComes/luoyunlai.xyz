@@ -155,6 +155,7 @@ module.exports = function (isModernBuild) {
                   "postcss-normalize",
                 ]
               : [
+                  "tailwindcss/nesting",
                   "tailwindcss",
                   "postcss-flexbugs-fixes",
                   [
@@ -576,9 +577,7 @@ module.exports = function (isModernBuild) {
         inject: MODERN_MODE ? "head" : true,
         //如果是第二次构建，就使用paths.buildHtml作为模板
         template:
-          MODERN_MODE && !isModernBuild
-            ? paths.buildHtml
-            : paths.appHtml,
+          MODERN_MODE && !isModernBuild ? paths.buildHtml : paths.appHtml,
         minify: {
           removeComments: true,
           collapseWhitespace: true,

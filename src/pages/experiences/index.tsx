@@ -11,6 +11,12 @@ const { Item } = Menu;
 const menus =
   routers.find((router) => router.key === "experience")?.children ?? [];
 
+const classMap = {
+  layout:"h-content",
+  content: "h-full pl-content bg-white overflow-y-auto",
+  sider:"bg-white"
+};
+
 export default function Experience() {
   const [selectedKeys, setSelectedKeys] = useImmer<string[]>([]);
 
@@ -41,8 +47,8 @@ export default function Experience() {
   };
 
   return (
-    <Layout>
-      <Sider>
+    <Layout className={classMap.layout}>
+      <Sider className={classMap.sider}>
         <Menu
           selectedKeys={selectedKeys}
           onClick={(e) => clickMenu(e)}
@@ -53,7 +59,7 @@ export default function Experience() {
           ))}
         </Menu>
       </Sider>
-      <Content>{current()}</Content>
+      <Content className={classMap.content}>{current()}</Content>
     </Layout>
   );
 }
