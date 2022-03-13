@@ -110,6 +110,10 @@ const tsConfig = `
     "lib": ["es5", "dom"] /* Specify library files to be included in the compilation. */,
     "declaration": true /* Generates corresponding '.d.ts' file. */,
     "outDir": "dist" /* Redirect output structure to the directory. */,
+    "baseUrl": "." /* Base directory to resolve non-absolute module names. */,
+    "paths": {
+      "@/*": ["src/*"]
+    } /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
     /* Strict Type-Checking Options */
     "strict": true /* Enable all strict type-checking options. */,
     "types": ["cypress"] /* Type declaration files to be included in compilation. */,
