@@ -2,12 +2,12 @@ import React from "react";
 import { useMarkDown } from "@/hooks/useMarkdown";
 
 const classMap = {
-  pageTitle: "text-h1 font-medium",
-  artical: "h-full overflow-y-auto",
-  articleTitle: "text-h2 mt-6 mb-2",
-  href: "text-sky-400",
-  ul: "list-disc list-inside",
-  assist: "text-assist",
+  pageTitle: "page-title",
+  article: "article",
+  articleTitle: "article-title",
+  href: "href",
+  ul: "ul",
+  assist: "assist",
 };
 
 const packageJson = `
@@ -175,7 +175,7 @@ tsconfig.json
 
 export default function Npm() {
   return (
-    <article className={classMap.artical}>
+    <article className={classMap.article}>
       <h1 className={classMap.pageTitle}>从0到1发布一个npm包</h1>
       <br />
       <h2 className={classMap.articleTitle}>前言</h2>

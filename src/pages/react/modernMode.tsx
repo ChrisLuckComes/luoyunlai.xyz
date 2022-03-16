@@ -13,7 +13,7 @@ const classMap = {
 export default function () {
   return (
     <article className={classMap.article}>
-      <h1 className={classMap.pageTitle}>来不及了，快上车tailwindcss</h1>
+      <h1 className={classMap.pageTitle}>什么？creact-react-app也能用现代模式？</h1>
     </article>
   );
 }

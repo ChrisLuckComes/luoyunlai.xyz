@@ -25,10 +25,34 @@ ul {
   }
 }
 
-.text-assist{
+.page-title {
+  @apply text-h1 font-medium;
+}
+
+.article {
+  @apply h-full overflow-y-auto;
+}
+
+.article-title {
+  @apply text-h2 mt-6 mb-2;
+}
+
+.href {
+  @apply text-sky-400;
+}
+
+.ul {
+  @apply list-disc list-inside;
+}
+
+.text-assist {
   @apply text-gray-500;
 }
 
-.flex-center{
+.assist {
+  @apply text-assist;
+}
+
+.flex-center {
   @apply flex items-center justify-center;
 }

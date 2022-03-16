@@ -11,7 +11,7 @@ const routers = [
     key: "experience",
     path: "/experience",
     name: "经验",
-    element: lazy(() => import("@/pages/experiences/index")),
+    element: lazy(() => import("@/pages/index")),
     children: [
       {
         key: "npm",
@@ -24,6 +24,26 @@ const routers = [
         path: "/experience/tailwindcss",
         name: "来不及了，快上车tailwindcss",
         element: lazy(() => import("@/pages/experiences/tailwindcss")),
+      },
+      {
+        key: "cloud",
+        path: "/experience/cloud",
+        name: "作为一个前端好意思说没有个人网站？",
+        element: lazy(() => import("@/pages/experiences/cloud")),
+      },
+    ],
+  },
+  {
+    key: "react",
+    path: "/react",
+    name: "React",
+    element: lazy(() => import("@/pages/index")),
+    children: [
+      {
+        key: "modernMode",
+        path: "/react/modernMode",
+        name: "什么？creact-react-app也能用现代模式？",
+        element: lazy(() => import("@/pages/react/modernMode")),
       },
     ],
   },

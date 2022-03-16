@@ -52,7 +52,7 @@ export default function App() {
                     ></Spin>
                   }
                 >
-                  <router.element />
+                  <router.element menus={router.children as []} />
                 </Suspense>
               }
             ></Route>
@@ -60,7 +60,12 @@ export default function App() {
         </Routes>
       </Content>
       <Footer className={classMap.footer}>
-        Made with &nbsp;<span>❤</span> &nbsp; by luoyunlai
+        <span>
+          Copyright 2022- Made with &nbsp;<span>❤</span> &nbsp; by luoyunlai.
+          All Rights Reserved{" "}
+        </span>
+        &nbsp;
+        <a href="https://beian.miit.gov.cn">粤ICP备2022028524号-1</a>
       </Footer>
     </Layout>
   );
