@@ -1,5 +1,5 @@
 import React from "react";
-import { useMarkDown } from "@/hooks/useMarkdown";
+// import { useMarkDown } from "@/hooks/useMarkdown";
 
 const classMap = {
   pageTitle: "page-title",
@@ -10,7 +10,7 @@ const classMap = {
   assist: "assist",
 };
 
-export default function () {
+export default function Cloud() {
   return (
     <article className={classMap.article}>
       <h1 className={classMap.pageTitle}>作为一个前端好意思说没有个人网站？</h1>

@@ -1,15 +1,12 @@
-import React, { Suspense, useMemo } from "react";
+import React, { Suspense } from "react";
 import { useImmer } from "use-immer";
 
 import { Layout, Menu, Spin } from "antd";
-import routers from "@/router/router";
+
 import { LoadingOutlined } from "@ant-design/icons";
 
 const { Sider, Content } = Layout;
 const { Item } = Menu;
-
-// const menus =
-//   routers.find((router) => router.key === "experience")?.children ?? [];
 
 const classMap = {
   layout: "h-content",
@@ -17,7 +14,7 @@ const classMap = {
   sider: "bg-white",
 };
 
-interface Content {
+interface PageContentProps {
   menus: {
     key: string;
     path: string;
@@ -26,7 +23,7 @@ interface Content {
   }[];
 }
 
-export default function PageContent(props: Content) {
+export default function PageContent(props: PageContentProps) {
   const [selectedKeys, setSelectedKeys] = useImmer<string[]>([]);
 
   const clickMenu = (e: { key: string }) => {

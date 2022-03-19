@@ -56,6 +56,7 @@ module.exports = {
 ~~~
 `;
 
+/* eslint-disable */
 const scripts = `
 ~~~json
 "scripts":{
@@ -64,6 +65,7 @@ const scripts = `
 }
 ~~~
 `;
+/* eslint-disable */
 
 const html = `
 ~~~tsx
