@@ -22,7 +22,7 @@ const routers = [
       {
         key: "tailwindcss",
         path: "/experience/tailwindcss",
-        name: "来不及了，快上车tailwindcss",
+        name: "来不及了，快上车tailwindcss🚘",
         element: lazy(() => import("@/pages/experiences/tailwindcss")),
       },
       {
@@ -30,6 +30,12 @@ const routers = [
         path: "/experience/cloud",
         name: "作为一个前端好意思说没有个人网站？",
         element: lazy(() => import("@/pages/experiences/cloud")),
+      },
+      {
+        key: "http2",
+        path: "/experience/http2",
+        name: "什么是http2，怎么启用？",
+        element: lazy(() => import("@/pages/experiences/http2")),
       },
     ],
   },

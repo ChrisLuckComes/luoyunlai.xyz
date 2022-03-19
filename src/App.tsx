@@ -4,6 +4,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import routers from "@/router/router";
 import "./styles/home.css";
+import { useImmer } from "use-immer";
 
 const { Header, Content, Footer } = Layout;
 
@@ -19,7 +20,10 @@ export default function App() {
   let navigate = useNavigate();
   let location = useLocation();
 
+  const [selectedKeys, setSelectedkeys] = useImmer(["/"]);
+
   const clickMenu = (e: { key: string }) => {
+    setSelectedkeys((draft) => (draft = [e.key]));
     const path = e.key === "/" ? "/" : `/${e.key}`;
     navigate(path + location.search);
   };
@@ -27,9 +31,11 @@ export default function App() {
   return (
     <Layout className={classMap.layout}>
       <Header className={classMap.menu}>
-        <div className={classMap.logo}>Luoyunlai.xyz</div>
+        <div onClick={() => clickMenu({ key: "/" })} className={classMap.logo}>
+          Luoyunlai.xyz
+        </div>
         <Menu
-          defaultSelectedKeys={["/"]}
+          selectedKeys={selectedKeys}
           onClick={(e) => clickMenu(e)}
           mode="horizontal"
         >
