@@ -2,18 +2,9 @@ import React from "react";
 import { Image } from "antd";
 import { useMarkDown } from "@/hooks/useMarkdown";
 
-import { imgFallback } from "@/constants/constant";
+import { classMap, imgFallback } from "@/constants/constant";
 
 const touDa = require("@/images/头大.webp");
-
-const classMap = {
-  pageTitle: "page-title",
-  article: "article",
-  articleTitle: "article-title",
-  href: "href",
-  ul: "ul",
-  assist: "assist",
-};
 
 const indexCss = `
 ~~~css

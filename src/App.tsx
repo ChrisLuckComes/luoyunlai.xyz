@@ -5,6 +5,7 @@ import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import routers from "@/router/router";
 import "./styles/home.css";
 import { useImmer } from "use-immer";
+const policeIcon = require("@/images/policeIcon.png");
 
 const { Header, Content, Footer } = Layout;
 
@@ -71,7 +72,19 @@ export default function App() {
           All Rights Reserved{" "}
         </span>
         &nbsp;
-        <a href="https://beian.miit.gov.cn">粤ICP备2022028524号-1</a>
+        <a target="_blank" rel="noreferrer" href="https://beian.miit.gov.cn">
+          粤ICP备2022028524号-1
+        </a>
+        &nbsp;
+        <img src={policeIcon} alt="公安备案号" />
+        &nbsp;
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030502008760"
+        >
+          粤公网安备 44030502008760号
+        </a>
       </Footer>
     </Layout>
   );

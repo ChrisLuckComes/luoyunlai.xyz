@@ -1,14 +1,6 @@
+import { classMap } from "@/constants/constant";
 import React from "react";
 // import { useMarkDown } from "@/hooks/useMarkdown";
-
-const classMap = {
-  pageTitle: "page-title",
-  article: "article",
-  articleTitle: "article-title",
-  href: "href",
-  ul: "ul",
-  assist: "assist",
-};
 
 export default function modernMode() {
   return (
