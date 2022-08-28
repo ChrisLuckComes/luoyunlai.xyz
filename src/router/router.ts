@@ -46,10 +46,10 @@ const routers = [
     element: lazy(() => import("@/pages/index")),
     children: [
       {
-        key: "modernMode",
-        path: "/react/modernMode",
-        name: "什么？creact-react-app也能用现代模式？",
-        element: lazy(() => import("@/pages/react/modernMode")),
+        key: "vite",
+        path: "/react/vite",
+        name: "2022年还在用webpack?快上Vite！",
+        element: lazy(() => import("@/pages/react/vite")),
       },
     ],
   },

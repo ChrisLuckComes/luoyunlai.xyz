@@ -10,7 +10,7 @@ const { Item } = Menu;
 
 const classMap = {
   layout: "h-content",
-  content: "h-full pl-content bg-white overflow-y-auto",
+  content: "h-full pl-content pr-5 bg-white overflow-y-auto",
   sider: "bg-white",
 };
 

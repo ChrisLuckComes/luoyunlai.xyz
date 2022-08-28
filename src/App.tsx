@@ -1,64 +1,79 @@
-import React, { Suspense } from "react";
-import { Layout, Menu, Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import routers from "@/router/router";
-import "./styles/home.css";
-import { useImmer } from "use-immer";
-const policeIcon = require("@/images/policeIcon.png");
+import React, { Suspense, useEffect } from 'react';
+import { Layout, Menu, Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import routers from '@/router/router';
+import './styles/home.css';
+import { useImmer } from 'use-immer';
+
+type WindowWithGoogle = Window & typeof globalThis & { google: any };
+
+import policeIcon from '@/images/policeIcon.png';
 
 const { Header, Content, Footer } = Layout;
 
 const classMap = {
-  layout: "h-screen bg-white",
-  menu: "flex justify-between bg-white rounded-b-sm shadow-md",
-  logo: "text-header font-header cursor-pointer",
-  footer: "flex justify-center bg-white rounded-t-sm shadow-xl",
-  content: "pt-content overflow-y-auto",
+  layout: 'h-screen bg-white',
+  menu: 'flex justify-between bg-white rounded-b-sm shadow-md',
+  logo: 'text-header font-header cursor-pointer',
+  footer: 'flex justify-center bg-white rounded-t-sm shadow-xl',
+  content: 'pt-content overflow-y-auto'
 };
 
 export default function App() {
   let navigate = useNavigate();
   let location = useLocation();
 
-  const [selectedKeys, setSelectedkeys] = useImmer(["/"]);
+  const [selectedKeys, setSelectedkeys] = useImmer(['/']);
 
   const clickMenu = (e: { key: string }) => {
-    setSelectedkeys((draft) => (draft = [e.key]));
-    const path = e.key === "/" ? "/" : `/${e.key}`;
+    setSelectedkeys(draft => (draft = [e.key]));
+    const path = e.key === '/' ? '/' : `/${e.key}`;
     navigate(path + location.search);
   };
+
+  const handleCredentialResponse = (response: unknown) => {
+    console.log(response);
+  };
+
+  useEffect(() => {
+    const google = (window as WindowWithGoogle).google;
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: '47933756817-cksrva93h0ka1em5glkcljfs57a2tk29.apps.googleusercontent.com',
+        callback: handleCredentialResponse
+      });
+      // google.accounts.id.prompt();
+      google.accounts.id.renderButton(document.getElementById('buttonDiv'), {
+        type: 'icon',
+        theme: 'outline',
+        size: 'large',
+        width: '60.021',
+        shape: 'circle'
+      });
+    };
+  }, []);
 
   return (
     <Layout className={classMap.layout}>
       <Header className={classMap.menu}>
-        <div onClick={() => clickMenu({ key: "/" })} className={classMap.logo}>
+        <div onClick={() => clickMenu({ key: '/' })} className={classMap.logo}>
           Luoyunlai.xyz
         </div>
-        <Menu
-          selectedKeys={selectedKeys}
-          onClick={(e) => clickMenu(e)}
-          mode="horizontal"
-        >
-          {routers.map((router) => (
+        <Menu selectedKeys={selectedKeys} onClick={e => clickMenu(e)} mode="horizontal">
+          {routers.map(router => (
             <Menu.Item key={router.key}>{router.name}</Menu.Item>
           ))}
         </Menu>
       </Header>
       <Content className={classMap.content}>
         <Routes>
-          {routers.map((router) => (
+          {routers.map(router => (
             <Route
               key={router.key}
               path={router.path}
               element={
-                <Suspense
-                  fallback={
-                    <Spin
-                      indicator={<LoadingOutlined className="text-icon" spin />}
-                    ></Spin>
-                  }
-                >
+                <Suspense fallback={<Spin indicator={<LoadingOutlined className="text-icon" spin />}></Spin>}>
                   <router.element menus={router.children as []} />
                 </Suspense>
               }
@@ -68,8 +83,7 @@ export default function App() {
       </Content>
       <Footer className={classMap.footer}>
         <span>
-          Copyright 2022- Made with &nbsp;<span>❤</span> &nbsp; by luoyunlai.
-          All Rights Reserved{" "}
+          Copyright 2022- Made with &nbsp;<span>❤</span> &nbsp; by luoyunlai. All Rights Reserved{' '}
         </span>
         &nbsp;
         <a target="_blank" rel="noreferrer" href="https://beian.miit.gov.cn">
@@ -85,6 +99,7 @@ export default function App() {
         >
           粤公网安备 44030502008760号
         </a>
+        <div id="buttonDiv"></div>
       </Footer>
     </Layout>
   );

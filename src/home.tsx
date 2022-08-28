@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-const githubLogo = require("@/images/githubLogo.png");
+import githubLogo from '@/images/githubLogo.png';
 
-const classMap={
-  home:"flex-center flex-col w-full h-full"
-}
+const classMap = {
+  home: 'flex-center flex-col w-full h-full'
+};
 
 export default function Home() {
   return (

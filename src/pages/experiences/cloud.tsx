@@ -1,6 +1,5 @@
 import { classMap } from "@/constants/constant";
 import React from "react";
-// import { useMarkDown } from "@/hooks/useMarkdown";
 
 export default function Cloud() {
   return (
