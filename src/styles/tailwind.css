@@ -457,6 +457,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   position: relative;
 }
 
+.mr-8 {
+  margin-right: 8px;
+}
+
 .\!inline {
   display: inline !important;
 }
@@ -473,6 +477,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: 100vh;
 }
 
+.h-36 {
+  height: 36px;
+}
+
 .h-full {
   height: 100%;
 }
@@ -487,6 +495,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .min-w-300 {
   min-width: 300px;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
 }
 
 .transform {

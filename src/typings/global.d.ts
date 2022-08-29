@@ -7,5 +7,6 @@ declare module '*.md' {
   export { html };
 }
 declare module '*.webp';
+declare module '*.gif';
 declare module '*.png';
 declare module '*.mdx';

@@ -6,16 +6,15 @@ import routers from '@/router/router';
 import './styles/home.css';
 import { useImmer } from 'use-immer';
 
-type WindowWithGoogle = Window & typeof globalThis & { google: any };
-
 import policeIcon from '@/images/policeIcon.png';
+import CAIGOU from '@/images/caigou.gif';
 
 const { Header, Content, Footer } = Layout;
 
 const classMap = {
   layout: 'h-screen bg-white',
   menu: 'flex justify-between bg-white rounded-b-sm shadow-md min-w-300',
-  logo: 'text-header font-header cursor-pointer',
+  logo: 'text-header font-header cursor-pointer flex-center',
   footer: 'flex justify-center bg-white rounded-t-sm shadow-xl',
   content: 'pt-content overflow-y-auto'
 };
@@ -36,7 +35,10 @@ export default function App() {
     <Layout className={classMap.layout}>
       <Header className={classMap.menu}>
         <div onClick={() => clickMenu({ key: '/' })} className={classMap.logo}>
-          Luoyunlai.xyz
+          <div className="flex-shrink-0">
+            <img className="h-36 mr-8" src={CAIGOU} alt="caigou" width={36} />
+          </div>
+          <span>Luoyunlai.xyz</span>
         </div>
         <Menu selectedKeys={selectedKeys} onClick={e => clickMenu(e)} mode="horizontal">
           {routers.map(router => (

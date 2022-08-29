@@ -11,6 +11,9 @@ module.exports = {
       },
       colors: {
         blue: '#1890ff'
+      },
+      spacing: {
+        8: '8px'
       }
     },
     fontSize: {
@@ -38,7 +41,8 @@ module.exports = {
     height: {
       content: 'calc(100vh - 64px - 69px - 40px)',
       full: '100%',
-      screen: '100vh'
+      screen: '100vh',
+      36: '36px'
     }
   },
   plugins: []
