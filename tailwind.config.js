@@ -8,6 +8,9 @@ module.exports = {
       },
       margin: {
         li: '12px'
+      },
+      colors: {
+        blue: '#1890ff'
       }
     },
     fontSize: {
@@ -17,6 +20,7 @@ module.exports = {
       h2: ['24px'],
       assist: ['12px']
     },
+
     fontFamily: {
       header: ['Arial']
     },

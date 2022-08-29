@@ -12,7 +12,12 @@ import { VITE_CONFIG } from '.';
 export default function Vite() {
   return (
     <article className={classMap.article}>
-      <h1 className={classMap.pageTitle}>2022年还在用webpack?快上Vite！</h1>
+      <h1 className={classMap.pageTitle}>
+        2022年还在用webpack?快上
+        <a className="text-blue" target="_blank" rel="noreferrer" href="https://cn.vitejs.dev/">
+          Vite！
+        </a>
+      </h1>
       <br />
       <img src={VITE} alt="VITE" width={320} height={320} />
       <h2 className={classMap.articleTitle}>前言</h2>
@@ -108,7 +113,7 @@ export default function Vite() {
       </ul>
       <h2 className={classMap.articleTitle}>结语</h2>
       可以看出本文重复最多的单词就是ESM，vite的核心理念就在于此，充分的利用现代浏览器原生支持ESM。而现在兴起了一股用其他编译型语言来开发javascript工具的热潮，例如Rust(
-      <a className="text-blue" href="https://github.com/swc-project/swc">
+      <a className="text-blue" target="_blank" rel="noreferrer" href="https://github.com/swc-project/swc">
         SWC
       </a>
       ),Go
