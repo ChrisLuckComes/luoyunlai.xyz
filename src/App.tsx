@@ -14,7 +14,7 @@ const { Header, Content, Footer } = Layout;
 
 const classMap = {
   layout: 'h-screen bg-white',
-  menu: 'flex justify-between bg-white rounded-b-sm shadow-md',
+  menu: 'flex justify-between bg-white rounded-b-sm shadow-md min-w-300',
   logo: 'text-header font-header cursor-pointer',
   footer: 'flex justify-center bg-white rounded-t-sm shadow-xl',
   content: 'pt-content overflow-y-auto'
@@ -31,28 +31,6 @@ export default function App() {
     const path = e.key === '/' ? '/' : `/${e.key}`;
     navigate(path + location.search);
   };
-
-  const handleCredentialResponse = (response: unknown) => {
-    console.log(response);
-  };
-
-  useEffect(() => {
-    const google = (window as WindowWithGoogle).google;
-    window.onload = function () {
-      google.accounts.id.initialize({
-        client_id: '47933756817-cksrva93h0ka1em5glkcljfs57a2tk29.apps.googleusercontent.com',
-        callback: handleCredentialResponse
-      });
-      // google.accounts.id.prompt();
-      google.accounts.id.renderButton(document.getElementById('buttonDiv'), {
-        type: 'icon',
-        theme: 'outline',
-        size: 'large',
-        width: '60.021',
-        shape: 'circle'
-      });
-    };
-  }, []);
 
   return (
     <Layout className={classMap.layout}>
@@ -83,7 +61,7 @@ export default function App() {
       </Content>
       <Footer className={classMap.footer}>
         <span>
-          Copyright 2022- Made with &nbsp;<span>❤</span> &nbsp; by luoyunlai. All Rights Reserved{' '}
+          Copyright 2022- Made with &nbsp;<span>❤</span> &nbsp; by luoyunlai. All Rights Reserved
         </span>
         &nbsp;
         <a target="_blank" rel="noreferrer" href="https://beian.miit.gov.cn">
@@ -99,7 +77,6 @@ export default function App() {
         >
           粤公网安备 44030502008760号
         </a>
-        <div id="buttonDiv"></div>
       </Footer>
     </Layout>
   );

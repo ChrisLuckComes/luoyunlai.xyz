@@ -4,7 +4,7 @@ import { Image } from 'antd';
 import { classMap, imgFallback } from '@/constants/constant';
 
 import touDa from '@/images/头大.webp';
-import { indexCss, tailwind, scripts, html, postcss } from '.';
+import { indexCss, tailwind, scripts, html, postcss } from '../experiences/index';
 
 export default function Tailwind() {
   return (
