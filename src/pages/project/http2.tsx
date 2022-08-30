@@ -9,6 +9,7 @@ import HTTPS from '@/images/https.png';
 import HTTPS_INSTRUCTION from '@/images/https-instruction.png';
 import HTTP2_FRAME from '@/images/http2-frame.png';
 import HTTP2_STREAM from '@/images/http2-stream.jpg';
+import { NGINX } from '.';
 const { Link } = Anchor;
 
 export default function Index() {
@@ -106,6 +107,11 @@ export default function Index() {
             其他优点
           </strong>
           <p>头部压缩,服务器推送等</p>
+          <h2 id="nginx" className={classMap.articleTitle}>
+            nginx配置
+          </h2>
+          开启http2非常简单，在listen 443 ssl后面追加http2就行，需要有 <code>http_v2_module</code> 模块，否则需要重新安装更高版本的nginx
+          <div className="markdown-container">{NGINX}</div>
         </div>
 
         <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
@@ -122,6 +128,7 @@ export default function Index() {
             <Link href="#stream" title="并发传输" />
             <Link href="#other" title="其他优点" />
           </Link>
+          <Link href="#nginx" title="nginx配置"></Link>
         </Anchor>
       </div>
     </article>
