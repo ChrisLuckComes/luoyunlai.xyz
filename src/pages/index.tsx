@@ -65,7 +65,7 @@ export default function PageContent(props: PageContentProps) {
           ))}
         </Menu>
       </Sider>
-      <Content className={classMap.content}>{current()}</Content>
+      <Content id="content" className={classMap.content}>{current()}</Content>
     </Layout>
   );
 }

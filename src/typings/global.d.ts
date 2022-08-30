@@ -6,7 +6,11 @@ declare module '*.md' {
   const ReactComponent: React.VFC;
   export { html };
 }
+
+//图片文件格式
 declare module '*.webp';
 declare module '*.gif';
 declare module '*.png';
+declare module '*.jpg';
+
 declare module '*.mdx';

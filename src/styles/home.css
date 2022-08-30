@@ -36,7 +36,7 @@ ul {
 }
 
 .article-title {
-  @apply text-h2 mt-6 mb-2;
+  @apply font-semibold text-h2 mt-6 mb-2;
 }
 
 .href {
@@ -93,13 +93,6 @@ ul {
   margin: 0.5em 0px;
 }
 
-/* .language-json {
-  color: rgb(238, 238, 238);
-  background: rgb(47, 47, 47);
-  font-family: 'Roboto Mono', monospace;
-  font-size: 1em;
-  line-height: 1.5em;
-  tab-size: 4;
-  hyphens: none;
-  @apply text-left whitespace-pre;
-} */
+.anchor {
+  @apply fixed top-150 right-100;
+}

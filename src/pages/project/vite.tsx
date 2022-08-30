@@ -8,7 +8,8 @@ import VITE_DEPS from '@/images/vite-deps.png';
 import VITE_RESOURCE from '@/images/vite-resource.png';
 import React from 'react';
 import { VITE_CONFIG } from '.';
-
+import { Anchor } from 'antd';
+const { Link } = Anchor;
 export default function Vite() {
   return (
     <article className={classMap.article}>
@@ -20,7 +21,9 @@ export default function Vite() {
       </h1>
       <br />
       <img src={VITE} alt="VITE" width={320} height={320} />
-      <h2 className={classMap.articleTitle}>前言</h2>
+      <h2 id="front" className={classMap.articleTitle}>
+        前言
+      </h2>
       <p>
         本仓库最开始是由 <code>create-react-app</code> 创建，其中使用了webpack，关于webpack我有几点想吐槽
       </p>
@@ -29,7 +32,9 @@ export default function Vite() {
         <li>2.工程规模变大后，启动速度显著变慢。</li>
         <li>3.配置大而复杂，不用vue-cli/umi/creatReactApp这种集大成者高低也得来个几十行代码才能达到最佳状态</li>
       </ul>
-      <h2 className={classMap.articleTitle}>优点</h2>
+      <h2 id="begin" className={classMap.articleTitle}>
+        优点
+      </h2>
       <p>
         所以至少在本地开发阶段或者仅面向现代浏览器的工程，可以大胆使用vite来加速。那么它为什么这么快呢？主要有以下两方面原因
       </p>
@@ -38,7 +43,7 @@ export default function Vite() {
           <img src={VITE_ADV_1} alt="adv1" />
           <div className="pl-10">
             <br />
-            <strong>无需打包</strong>：准确的说是不用js写的打包器全量打包🤪 <br />
+            <strong id="no-build">无需打包</strong>：准确的说是不用js写的打包器全量打包🤪 <br />
             <br />
             1. vite会直接启动服务，并且进行预构建依赖。具体表现为对代码进行导入分析，使用<strong>esbuild</strong>
             将CJS或UMD依赖全部转换为ESM缓存到node_modules/.vite/deps目录下，后续直接从缓存获取。
@@ -64,7 +69,7 @@ export default function Vite() {
           <br />
           <img src={VITE_ADV_2} alt="adv2" />
           <br />
-          <strong>热重载(HMR)</strong>
+          <strong id="hmr">热重载(HMR)</strong>
           &nbsp; vite明显快于webpack，这个跟它们各自的实现方式有关。
           <br />
           <br />
@@ -79,7 +84,9 @@ export default function Vite() {
           ,rollup产出的包体积天然比webpack的要小，原生支持ESM非常适合组件库的开发，而webpack需要注入额外胶水代码，天然有体积上的劣势。
         </li>
       </ul>
-      <h2 className={classMap.articleTitle}>迁移流程</h2>
+      <h2 id="move" className={classMap.articleTitle}>
+        迁移流程
+      </h2>
       <ul className={classMap.ul}>
         <li>
           从create-react-app迁移
@@ -111,7 +118,9 @@ export default function Vite() {
         </li>
         <li>umi4天然支持</li>
       </ul>
-      <h2 className={classMap.articleTitle}>结语</h2>
+      <h2 id="end" className={classMap.articleTitle}>
+        结语
+      </h2>
       可以看出本文重复最多的单词就是ESM，vite的核心理念就在于此，充分的利用现代浏览器原生支持ESM。而现在兴起了一股用其他编译型语言来开发javascript工具的热潮，例如Rust(
       <a className="text-blue" target="_blank" rel="noreferrer" href="https://github.com/swc-project/swc">
         SWC
@@ -126,6 +135,15 @@ export default function Vite() {
         <li>工程需要兼容性，需要跑在不支持ESM的客户端上</li>
         <li>类似Electron这种自带大量cjs模块的工程</li>
       </ul>
+      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
+        <Link href="#front" title="前言" />
+        <Link href="#begin" title="优点">
+          <Link href="#no-build" title="无需打包" />
+          <Link href="#hmr" title="热重载(HMR)" />
+        </Link>
+        <Link href="#move" title="迁移流程"></Link>
+        <Link href="#end" title="结语"></Link>
+      </Anchor>
     </article>
   );
 }

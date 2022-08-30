@@ -42,7 +42,7 @@ const routers = [
       {
         key: 'http2',
         path: '/experience/http2',
-        name: '什么是http2，怎么启用？',
+        name: 'http=>https=>http2',
         element: lazy(() => import('@/pages/project/http2'))
       },
       {

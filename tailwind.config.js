@@ -13,7 +13,10 @@ module.exports = {
         blue: '#1890ff'
       },
       spacing: {
-        8: '8px'
+        8: '8px',
+        10: '10px',
+        100: '100px',
+        150: '150px'
       }
     },
     fontSize: {
@@ -21,7 +24,11 @@ module.exports = {
       icon: ['1.25rem'],
       h1: ['30px'],
       h2: ['24px'],
-      assist: ['12px']
+      h3: '18px',
+      assist: ['12px'],
+      14: '14px',
+      16: '16px',
+      20: '20px'
     },
 
     fontFamily: {

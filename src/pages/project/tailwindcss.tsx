@@ -1,6 +1,6 @@
 import React from 'react';
-import { Image } from 'antd';
-
+import { Anchor, Image } from 'antd';
+const { Link } = Anchor;
 import { classMap, imgFallback } from '@/constants/constant';
 
 import touDa from '@/images/头大.webp';
@@ -11,7 +11,9 @@ export default function Tailwind() {
     <article className={classMap.article}>
       <h1 className={classMap.pageTitle}>来不及了，快上车tailwindcss🚘</h1>
       <br />
-      <h2 className={classMap.articleTitle}>前言</h2>
+      <h2 id="front" className={classMap.articleTitle}>
+        前言
+      </h2>
       <p>
         前端最讨厌的大概就是写css了🤮，而且还要注意优先级，命名覆盖等问题，取个啥名好是所有游戏的第一个难题🐶。项目大了css怎么维护真让人头大，多人协作一定会出现同样的样式却用不同的命名写了n次。
       </p>
@@ -30,7 +32,9 @@ export default function Tailwind() {
         tailwindcss
       </a>
       就是这么一个优秀的css框架，使用它之后写css只需要配置跟组合。响应式，主题都可以支持。性能方面支持tree-shaking，使用postcss预处理器可以摆脱sass
-      <h2 className={classMap.articleTitle}>开始使用</h2>
+      <h2 id="begin" className={classMap.articleTitle}>
+        开始使用
+      </h2>
       <code>npm install tailwindcss</code>&nbsp;
       <span className={classMap.assist}>
         <a className={classMap.href} href="https://www.postcss.com.cn/">
@@ -59,10 +63,17 @@ export default function Tailwind() {
           <div className="markdown-container">{scripts}</div>
         </li>
       </ul>
-      <h2 className={classMap.articleTitle}>开启愉快的css编写体验</h2>
+      <h2 id="exp" className={classMap.articleTitle}>
+        开启愉快的css编写体验
+      </h2>
       以下是一段本人的组件代码
       <div className="markdown-container">{html}</div>
       很清爽有没有🤓
+      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
+        <Link href="#front" title="前言" />
+        <Link href="#begin" title="开始使用"></Link>
+        <Link href="#exp" title="开启愉快的css编写体验"></Link>
+      </Anchor>
     </article>
   );
 }
