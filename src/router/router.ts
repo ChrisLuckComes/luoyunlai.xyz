@@ -59,6 +59,32 @@ const routers = [
     name: 'React',
     element: lazy(() => import('@/pages/index')),
     children: []
+  },
+  {
+    key: 'vue',
+    path: 'vue',
+    name: 'Vue',
+    element: lazy(() => import('@/pages/index')),
+    children: [
+      {
+        key: 'vue3Preset',
+        path: '/vue/vue3/preset',
+        name: 'Vue3 - 前置知识',
+        element: lazy(() => import('@/pages/vue/vue3/preset'))
+      },
+      {
+        key: 'vue3Global',
+        path: '/vue/vue3/global',
+        name: 'Vue3 - 全局概览',
+        element: lazy(() => import('@/pages/vue/vue3/global'))
+      },
+      {
+        key: 'vue3Reactive',
+        path: '/vue/vue3/reactive',
+        name: 'Vue3 - 响应式系统',
+        element: lazy(() => import('@/pages/vue/vue3/reactive'))
+      }
+    ]
   }
 ];
 

@@ -40,7 +40,7 @@ export default function App() {
           </div>
           <span>Luoyunlai.xyz</span>
         </div>
-        <Menu selectedKeys={selectedKeys} onClick={e => clickMenu(e)} mode="horizontal">
+        <Menu className='min-w-header-menu' selectedKeys={selectedKeys} onClick={e => clickMenu(e)} mode="horizontal">
           {routers.map(router => (
             <Menu.Item key={router.key}>{router.name}</Menu.Item>
           ))}

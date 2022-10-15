@@ -39,6 +39,10 @@ ul {
   @apply font-semibold text-h2 mt-6 mb-2;
 }
 
+.article-sub-title {
+  @apply font-medium text-h3 mt-6 mb-2;
+}
+
 .href {
   @apply text-sky-400;
 }
@@ -95,4 +99,8 @@ ul {
 
 .anchor {
   @apply fixed top-150 right-100;
+}
+
+.min-w-header-menu {
+  min-width: 360px;
 }

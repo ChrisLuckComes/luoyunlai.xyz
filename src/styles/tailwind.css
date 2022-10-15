@@ -453,12 +453,74 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-backdrop-sepia:  ;
 }
 
+.container {
+  width: 100%;
+}
+
+.\!container {
+  width: 100% !important;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+
+  .\!container {
+    max-width: 640px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+
+  .\!container {
+    max-width: 768px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+
+  .\!container {
+    max-width: 1024px !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+
+  .\!container {
+    max-width: 1280px !important;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+
+  .\!container {
+    max-width: 1536px !important;
+  }
+}
+
 .relative {
   position: relative;
 }
 
 .mr-8 {
   margin-right: 8px;
+}
+
+.block {
+  display: block;
 }
 
 .\!inline {
@@ -581,10 +643,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   font-size: 16px;
 }
 
-.text-h3 {
-  font-size: 18px;
-}
-
 .text-blue {
   --tw-text-opacity: 1;
   color: rgb(24 144 255 / var(--tw-text-opacity));
@@ -600,4 +658,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.transition {
+  transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }

@@ -5,7 +5,9 @@ export const classMap = {
   pageTitle: 'page-title',
   article: 'article',
   articleTitle: 'article-title',
+  articleSubTitle: 'article-sub-title',
   href: 'href',
   ul: 'ul',
-  assist: 'assist'
+  assist: 'assist',
+  markdown: 'markdown-container'
 };
