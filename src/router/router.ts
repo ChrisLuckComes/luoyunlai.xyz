@@ -83,7 +83,7 @@ const routers = [
         path: '/vue/vue3/reactive',
         name: 'Vue3 - 响应式系统',
         element: lazy(() => import('@/pages/vue/vue3/reactive'))
-      }
+      },
     ]
   }
 ];
