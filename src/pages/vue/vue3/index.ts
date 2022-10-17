@@ -928,3 +928,496 @@ function ownKeys(target: object): (string | symbol)[] {
   track(target, TrackOpTypes.ITERATE, isArray(target) ? 'length' : ITERATE_KEY)
   return Reflect.ownKeys(target)
 }`;
+
+export const EFFECT_1 = `export interface DebuggerOptions {
+  onTrack?: (event: DebuggerEvent) => void //追踪时触发
+  onTrigger?: (event: DebuggerEvent) => void //触发回调时触发
+}
+
+export interface ReactiveEffectOptions extends DebuggerOptions {
+  lazy?: boolean //是否延迟触发 effect
+  scheduler?: EffectScheduler //调度函数
+  scope?: EffectScope
+  allowRecurse?: boolean
+  onStop?: () => void //停止监听时触发
+}
+
+export interface ReactiveEffectRunner<T = any> {
+  (): T
+  effect: ReactiveEffect
+}
+
+export function effect<T = any>(
+  fn: () => T,
+  options?: ReactiveEffectOptions
+): ReactiveEffectRunner {
+  // 如果已经是effect，先重置
+  if ((fn as ReactiveEffectRunner).effect) {
+    fn = (fn as ReactiveEffectRunner).effect.fn
+  }
+  // 创建effect
+  const _effect = new ReactiveEffect(fn)
+  if (options) {
+    extend(_effect, options)
+    if (options.scope) recordEffectScope(_effect, options.scope)
+  }
+  // 如果没传lazy，直接执行一次effect
+  if (!options || !options.lazy) {
+    _effect.run()
+  }
+  const runner = _effect.run.bind(_effect) as ReactiveEffectRunner
+  runner.effect = _effect
+  return runner
+}`;
+
+export const RECORD_EFFECT_SCOPE = `export function recordEffectScope(
+  effect: ReactiveEffect,
+  scope: EffectScope | undefined = activeEffectScope
+) {
+  if (scope && scope.active) {
+    scope.effects.push(effect)
+  }
+}`;
+
+export const TRACK = `export function track(target: object, type: TrackOpTypes, key: unknown) {
+  if (shouldTrack && activeEffect) {
+    // targetMap用于收集和触发依赖
+    let depsMap = targetMap.get(target)
+    //检查targetMap是否存在target
+    if (!depsMap) {
+      //如果为空则新建一个
+      targetMap.set(target, (depsMap = new Map()))
+    }
+    //deps收集依赖函数，当key值发生变化时，触发dep中的依赖函数
+    let dep = depsMap.get(key)
+    if (!dep) {
+      depsMap.set(key, (dep = createDep()))
+    }
+
+    const eventInfo = __DEV__
+      ? { effect: activeEffect, target, type, key }
+      : undefined
+
+    trackEffects(dep, eventInfo)
+  }
+}
+
+export function trackEffects(
+  dep: Dep,
+  debuggerEventExtraInfo?: DebuggerEventExtraInfo
+) {
+  let shouldTrack = false
+  if (effectTrackDepth <= maxMarkerBits) {
+    if (!newTracked(dep)) {
+      dep.n |= trackOpBit // set newly tracked
+      shouldTrack = !wasTracked(dep)
+    }
+  } else {
+    // Full cleanup mode.
+    shouldTrack = !dep.has(activeEffect!)
+  }
+
+  if (shouldTrack) {
+    dep.add(activeEffect!)
+    activeEffect!.deps.push(dep)
+    if (__DEV__ && activeEffect!.onTrack) {
+      activeEffect!.onTrack({
+        effect: activeEffect!,
+        ...debuggerEventExtraInfo!
+      })
+    }
+  }
+}`;
+
+export const TRIGGER = `export function trigger(
+  target: object,
+  type: TriggerOpTypes,
+  key?: unknown,
+  newValue?: unknown,
+  oldValue?: unknown,
+  oldTarget?: Map<unknown, unknown> | Set<unknown>
+) {
+  const depsMap = targetMap.get(target)
+  //如果depsMap为空，代表没有收集过该依赖，直接返回
+  if (!depsMap) {
+    // never been tracked
+    return
+  }
+
+  let deps: (Dep | undefined)[] = []
+  if (type === TriggerOpTypes.CLEAR) {
+    // collection being cleared
+    // trigger all effects for target
+    deps = [...depsMap.values()]
+  } else if (key === 'length' && isArray(target)) {
+    depsMap.forEach((dep, key) => {
+      if (key === 'length' || key >= (newValue as number)) {
+        deps.push(dep)
+      }
+    })
+  } else {
+    // schedule runs for SET | ADD | DELETE
+    if (key !== void 0) {
+      deps.push(depsMap.get(key))
+    }
+
+    // also run for iteration key on ADD | DELETE | Map.SET
+    switch (type) {
+      case TriggerOpTypes.ADD:
+        if (!isArray(target)) {
+          deps.push(depsMap.get(ITERATE_KEY))
+          if (isMap(target)) {
+            deps.push(depsMap.get(MAP_KEY_ITERATE_KEY))
+          }
+        } else if (isIntegerKey(key)) {
+          // new index added to array -> length changes
+          deps.push(depsMap.get('length'))
+        }
+        break
+      case TriggerOpTypes.DELETE:
+        if (!isArray(target)) {
+          deps.push(depsMap.get(ITERATE_KEY))
+          if (isMap(target)) {
+            deps.push(depsMap.get(MAP_KEY_ITERATE_KEY))
+          }
+        }
+        break
+      case TriggerOpTypes.SET:
+        if (isMap(target)) {
+          deps.push(depsMap.get(ITERATE_KEY))
+        }
+        break
+    }
+  }
+
+  const eventInfo = __DEV__
+    ? { target, type, key, newValue, oldValue, oldTarget }
+    : undefined
+
+  if (deps.length === 1) {
+    if (deps[0]) {
+      if (__DEV__) {
+        triggerEffects(deps[0], eventInfo)
+      } else {
+        triggerEffects(deps[0])
+      }
+    }
+  } else {
+    const effects: ReactiveEffect[] = []
+    for (const dep of deps) {
+      if (dep) {
+        effects.push(...dep)
+      }
+    }
+    if (__DEV__) {
+      triggerEffects(createDep(effects), eventInfo)
+    } else {
+      triggerEffects(createDep(effects))
+    }
+  }
+}`;
+
+export const COMPUTED = `export function computed<T>(
+  getterOrOptions: ComputedGetter<T> | WritableComputedOptions<T>,
+  debugOptions?: DebuggerOptions,
+  isSSR = false
+) {
+  let getter: ComputedGetter<T>
+  let setter: ComputedSetter<T>
+  //判断是否只传了一个函数，如果是，那就把setter设置为空函数
+  const onlyGetter = isFunction(getterOrOptions)
+  if (onlyGetter) {
+    getter = getterOrOptions
+    setter = __DEV__
+      ? () => {
+          console.warn('Write operation failed: computed value is readonly')
+        }
+      : NOOP
+  } else {
+    getter = getterOrOptions.get
+    setter = getterOrOptions.set
+  }
+
+  const cRef = new ComputedRefImpl(getter, setter, onlyGetter || !setter, isSSR)
+
+  if (__DEV__ && debugOptions && !isSSR) {
+    cRef.effect.onTrack = debugOptions.onTrack
+    cRef.effect.onTrigger = debugOptions.onTrigger
+  }
+
+  return cRef as any
+}`;
+
+export const COMPUTED_REF_IMPL = `export class ComputedRefImpl<T> {
+  public dep?: Dep = undefined
+
+  private _value!: T
+  public readonly effect: ReactiveEffect<T>
+
+  public readonly __v_isRef = true
+  public readonly [ReactiveFlags.IS_READONLY]: boolean = false
+
+  public _dirty = true
+  public _cacheable: boolean
+
+  constructor(
+    getter: ComputedGetter<T>,
+    private readonly _setter: ComputedSetter<T>,
+    isReadonly: boolean,
+    isSSR: boolean
+  ) {
+    this.effect = new ReactiveEffect(getter, () => {
+      // 触发更新时，将dirty设为true，不会立即更新
+      if (!this._dirty) {
+        this._dirty = true
+        triggerRefValue(this)
+      }
+    })
+    this.effect.computed = this
+    this.effect.active = this._cacheable = !isSSR
+    this[ReactiveFlags.IS_READONLY] = isReadonly
+  }
+
+  get value() {
+    // the computed ref may get wrapped by other proxies e.g. readonly() #3376
+    const self = toRaw(this)
+    trackRefValue(self)
+    // 如果dirty为true，才需要重新run
+    if (self._dirty || !self._cacheable) {
+      self._dirty = false
+      self._value = self.effect.run()!
+    }
+    return self._value
+  }
+
+  set value(newValue: T) {
+    this._setter(newValue)
+  }
+}`;
+
+export const PATCH = `// Note: functions inside this closure should use 'const xxx = () => {}'
+// style in order to prevent being inlined by minifiers.
+const patch: PatchFn = (
+  n1, // 旧节点
+  n2, // 新节点
+  container,
+  anchor = null,
+  parentComponent = null,
+  parentSuspense = null,
+  isSVG = false,
+  slotScopeIds = null,
+  optimized = __DEV__ && isHmrUpdating ? false : !!n2.dynamicChildren
+) => {
+  // 如果新旧节点一样，退出patch
+  if (n1 === n2) {
+    return
+  }
+
+  // 旧节点跟新节点类型不同，直接卸载旧节点
+  // patching & not same type, unmount old tree
+  if (n1 && !isSameVNodeType(n1, n2)) {
+    anchor = getNextHostNode(n1)
+    unmount(n1, parentComponent, parentSuspense, true)
+    n1 = null
+  }
+
+  // 新节点patchFlag设置为PatchFlags.BAIL，表示无需优化
+  if (n2.patchFlag === PatchFlags.BAIL) {
+    optimized = false
+    n2.dynamicChildren = null
+  }
+
+  const { type, ref, shapeFlag } = n2
+  // 按新节点类型来处理
+  switch (type) {
+    case Text:
+      processText(n1, n2, container, anchor)
+      break
+    case Comment:
+      processCommentNode(n1, n2, container, anchor)
+      break
+    case Static:
+      if (n1 == null) {
+        mountStaticNode(n2, container, anchor, isSVG)
+      } else if (__DEV__) {
+        patchStaticNode(n1, n2, container, isSVG)
+      }
+      break
+    case Fragment:
+      processFragment(
+        n1,
+        n2,
+        container,
+        anchor,
+        parentComponent,
+        parentSuspense,
+        isSVG,
+        slotScopeIds,
+        optimized
+      )
+      break
+    default:
+      if (shapeFlag & ShapeFlags.ELEMENT) {
+        processElement(
+          n1,
+          n2,
+          container,
+          anchor,
+          parentComponent,
+          parentSuspense,
+          isSVG,
+          slotScopeIds,
+          optimized
+        )
+      } else if (shapeFlag & ShapeFlags.COMPONENT) {
+        processComponent(
+          n1,
+          n2,
+          container,
+          anchor,
+          parentComponent,
+          parentSuspense,
+          isSVG,
+          slotScopeIds,
+          optimized
+        )
+      } else if (shapeFlag & ShapeFlags.TELEPORT) {
+        ;(type as typeof TeleportImpl).process(
+          n1 as TeleportVNode,
+          n2 as TeleportVNode,
+          container,
+          anchor,
+          parentComponent,
+          parentSuspense,
+          isSVG,
+          slotScopeIds,
+          optimized,
+          internals
+        )
+      } else if (__FEATURE_SUSPENSE__ && shapeFlag & ShapeFlags.SUSPENSE) {
+        ;(type as typeof SuspenseImpl).process(
+          n1,
+          n2,
+          container,
+          anchor,
+          parentComponent,
+          parentSuspense,
+          isSVG,
+          slotScopeIds,
+          optimized,
+          internals
+        )
+      } else if (__DEV__) {
+        warn('Invalid VNode type:', type, typeof type)
+      }
+  }
+
+  // set ref
+  if (ref != null && parentComponent) {
+    setRef(ref, n1 && n1.ref, parentSuspense, n2 || n1, !n2)
+  }
+}`;
+
+export const PATCH_CHILDREN = `  const patchChildren: PatchChildrenFn = (
+  n1,
+  n2,
+  container,
+  anchor,
+  parentComponent,
+  parentSuspense,
+  isSVG,
+  slotScopeIds,
+  optimized = false
+) => {
+  const c1 = n1 && n1.children
+  const prevShapeFlag = n1 ? n1.shapeFlag : 0
+  const c2 = n2.children
+
+  const { patchFlag, shapeFlag } = n2
+  // fast path
+  if (patchFlag > 0) {
+    if (patchFlag & PatchFlags.KEYED_FRAGMENT) {
+      // this could be either fully-keyed or mixed (some keyed some not)
+      // presence of patchFlag means children are guaranteed to be arrays
+      patchKeyedChildren(
+        c1 as VNode[],
+        c2 as VNodeArrayChildren,
+        container,
+        anchor,
+        parentComponent,
+        parentSuspense,
+        isSVG,
+        slotScopeIds,
+        optimized
+      )
+      return
+    } else if (patchFlag & PatchFlags.UNKEYED_FRAGMENT) {
+      // unkeyed
+      patchUnkeyedChildren(
+        c1 as VNode[],
+        c2 as VNodeArrayChildren,
+        container,
+        anchor,
+        parentComponent,
+        parentSuspense,
+        isSVG,
+        slotScopeIds,
+        optimized
+      )
+      return
+    }
+  }
+
+  // children has 3 possibilities: text, array or no children.
+  if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
+    // text children fast path
+    if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+      unmountChildren(c1 as VNode[], parentComponent, parentSuspense)
+    }
+    if (c2 !== c1) {
+      hostSetElementText(container, c2 as string)
+    }
+  } else {
+    if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+      // prev children was array
+      if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+        // two arrays, cannot assume anything, do full diff
+        patchKeyedChildren(
+          c1 as VNode[],
+          c2 as VNodeArrayChildren,
+          container,
+          anchor,
+          parentComponent,
+          parentSuspense,
+          isSVG,
+          slotScopeIds,
+          optimized
+        )
+      } else {
+        // no new children, just unmount old
+        unmountChildren(c1 as VNode[], parentComponent, parentSuspense, true)
+      }
+    } else {
+      // prev children was text OR null
+      // new children is array OR null
+      if (prevShapeFlag & ShapeFlags.TEXT_CHILDREN) {
+        hostSetElementText(container, '')
+      }
+      // mount new if array
+      if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+        mountChildren(
+          c2 as VNodeArrayChildren,
+          container,
+          anchor,
+          parentComponent,
+          parentSuspense,
+          isSVG,
+          slotScopeIds,
+          optimized
+        )
+      }
+    }
+  }
+}`;
+
+export const LONGEST_SUB_SEQUENCE = ``;

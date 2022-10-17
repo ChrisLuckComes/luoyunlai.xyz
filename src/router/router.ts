@@ -84,6 +84,12 @@ const routers = [
         name: 'Vue3 - 响应式系统',
         element: lazy(() => import('@/pages/vue/vue3/reactive'))
       },
+      {
+        key: 'vue3Diff',
+        path: '/vue/vue3/diff',
+        name: 'Vue3 - Diff',
+        element: lazy(() => import('@/pages/vue/vue3/diff'))
+      }
     ]
   }
 ];

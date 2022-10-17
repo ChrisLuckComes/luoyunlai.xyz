@@ -2,16 +2,24 @@ import React from 'react';
 import { classMap } from '@/constants/constant';
 import { Anchor } from 'antd';
 import {
+  COMPUTED,
+  COMPUTED_REF_IMPL,
   CREATE_REACTIVE_OBJECT,
   CREATE_REF,
+  EFFECT_1,
   MUTABLE_GET,
   MUTABLE_HANDLERS,
   MUTABLE_OTHER,
   MUTABLE_SET,
   REACTIVE,
+  REACTIVE_EFFECT,
+  RECORD_EFFECT_SCOPE,
   REF,
-  TARGET_TYPE_MAP
+  TARGET_TYPE_MAP,
+  TRACK,
+  TRIGGER
 } from '.';
+
 const { Link } = Anchor;
 export default function Index() {
   return (
@@ -86,13 +94,62 @@ export default function Index() {
       <div className={classMap.markdown}>{MUTABLE_SET}</div>
       <code id="other">deleteProperty has ownKeys</code>
       <div className={classMap.markdown}>{MUTABLE_OTHER}</div>
-
       其中多次出现的两个函数
       <ul>
-        <li><code>track</code> 依赖收集</li>
-        <li><code>trigger</code> 触发依赖</li>
+        <li>
+          <code>track</code> 依赖收集
+        </li>
+        <li>
+          <code>trigger</code> 触发依赖
+        </li>
       </ul>
       它们是<code>effect</code>里的方法，effect是<code>reactive</code>的核心
+      <br />
+      <h2 id="effect" className={classMap.articleTitle}>
+        effect
+      </h2>
+      从定义看起，<code>effect</code>两个参数
+      <ul className={classMap.ul}>
+        <li>fn 回调函数</li>
+        <li>options 参数</li>
+      </ul>
+      <div className={classMap.assist}>packages\reactivity\src\effect.ts</div>
+      <div className={classMap.markdown}>{EFFECT_1}</div>
+      又回到了<code>reactiveEffect</code>
+      <div className={classMap.markdown}>{REACTIVE_EFFECT}</div>
+      构造函数调用 <code>recordEffectScope</code>
+      <div className={classMap.markdown}>{RECORD_EFFECT_SCOPE}</div>
+      <br />
+      那么<code>effect</code>是如何收集和触发依赖的呢？接下来就来看看<code>track</code>和<code>trigger</code>
+      <h3 id="track" className={classMap.articleSubTitle}>
+        track
+      </h3>
+      <div className={classMap.markdown}>{TRACK}</div>
+      <h3 id="trigger" className={classMap.articleSubTitle}>
+        trigger
+      </h3>
+      <div className={classMap.markdown}>{TRIGGER}</div>
+      <br />
+      <h2 id="computed" className={classMap.articleTitle}>
+        computed
+      </h2>
+      传入一个getter，返回不可手动修改的ref对象
+      <br />
+      或者传入一个包含get，set函数的对象，创建一个可以手动修改的计算属性
+      <br />
+      可能会依赖其他<code>reactive</code>的值，同时会延迟和缓存计算值
+      <div className={classMap.assist}>packages\reactivity\src\computed.ts</div>
+      <div className={classMap.markdown}>{COMPUTED}</div>
+      调用<code>ComputedRefImpl</code>
+      <div className={classMap.markdown}>{COMPUTED_REF_IMPL}</div>
+      <h2 id="summary" className={classMap.articleTitle}>
+        总结
+      </h2>
+      <ul>
+        <li><code>ref,reactive</code> proxy监听属性get,set操作</li>
+        <li>访问属性，触发get,调用<code>track</code>收集依赖</li>
+        <li>修改属性，触发set，调用<code>trigger</code>effect.run</li>
+      </ul>
       <div className="flex-between relative">
         <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
           <Link href="#reactive" title="reactive"></Link>
@@ -103,8 +160,12 @@ export default function Index() {
             <Link href="#set" title="set"></Link>
             <Link href="#other" title="deleteProperty has ownKeys"></Link>
           </Link>
-          <Link href="#effect" title="effect"></Link>
+          <Link href="#effect" title="effect">
+            <Link href="#track" title="track"></Link>
+            <Link href="#trigger" title="trigger"></Link>
+          </Link>
           <Link href="#computed" title="computed"></Link>
+          <Link href="#summary" title="总结"></Link>
         </Anchor>
       </div>
     </article>
