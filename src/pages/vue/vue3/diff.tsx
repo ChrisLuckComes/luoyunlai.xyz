@@ -1,4 +1,3 @@
-import React from 'react';
 import { classMap } from '@/constants/constant';
 import { Anchor } from 'antd';
 import { PATCH, PATCH_CHILDREN, PATCH_KEYED_CHILDREN_SEQUENCE } from '.';

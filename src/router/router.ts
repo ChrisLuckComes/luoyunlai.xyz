@@ -58,7 +58,20 @@ const routers = [
     path: '/react',
     name: 'React',
     element: lazy(() => import('@/pages/index')),
-    children: []
+    children: [
+      {
+        key: 'thinking',
+        path: '/react/thinking',
+        name: '理念',
+        element: lazy(() => import('@/pages/react/thinking'))
+      },
+      {
+        key: 'fiber',
+        path: '/react/fiber',
+        name: 'Fiber',
+        element: lazy(() => import('@/pages/react/fiber'))
+      },
+    ]
   },
   {
     key: 'vue',
