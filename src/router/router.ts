@@ -71,6 +71,18 @@ const routers = [
         name: 'Fiber',
         element: lazy(() => import('@/pages/react/fiber'))
       },
+      {
+        key: 'render',
+        path: '/react/render',
+        name: 'Render',
+        element: lazy(() => import('@/pages/react/render'))
+      },
+      {
+        key: 'commit',
+        path: '/react/commit',
+        name: 'Commit',
+        element: lazy(() => import('@/pages/react/commit'))
+      },
     ]
   },
   {
