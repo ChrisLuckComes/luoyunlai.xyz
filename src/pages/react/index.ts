@@ -148,7 +148,7 @@ root.current = uninitializedFiber;
 uninitializedFiber.stateNode = root;
 `;
 
-export const WORK_LOOP =`function workLoopSync() {
+export const WORK_LOOP = `function workLoopSync() {
   // Perform work without checking if we need to yield between fiber.
 
   if (workInProgressIsSuspended) {
@@ -165,8 +165,7 @@ export const WORK_LOOP =`function workLoopSync() {
   while (workInProgress !== null) {
     performUnitOfWork(workInProgress);
   }
-}`
-
+}`;
 
 export const BEGIN_WORK_PARAMS = `function beginWork(
   current: Fiber | null,
@@ -174,7 +173,7 @@ export const BEGIN_WORK_PARAMS = `function beginWork(
   renderLanes: Lanes,
 ): Fiber | null {
   // ...省略函数体
-}`
+}`;
 
 export const BEGIN_WORK = `function beginWork(
   current: Fiber | null,
@@ -434,10 +433,9 @@ export const BEGIN_WORK = `function beginWork(
       break;
     }
   }
-}`
+}`;
 
-
-export const CHECK_UPDATE =`function checkScheduledUpdateOrContext(
+export const CHECK_UPDATE = `function checkScheduledUpdateOrContext(
   current: Fiber,
   renderLanes: Lanes,
 ): boolean {
@@ -456,8 +454,7 @@ export const CHECK_UPDATE =`function checkScheduledUpdateOrContext(
     }
   }
   return false;
-}`
-
+}`;
 
 export const RECONCILER_CHILDREN = `export function reconcileChildren(
   current: Fiber | null,
@@ -492,4 +489,141 @@ export const RECONCILER_CHILDREN = `export function reconcileChildren(
       renderLanes,
     );
   }
+}`;
+
+export const COMPLETE_WORK = `function completeWork(
+  current: Fiber | null,
+  workInProgress: Fiber,
+  renderLanes: Lanes,
+): Fiber | null {
+  const newProps = workInProgress.pendingProps;
+
+  popTreeContext(workInProgress);
+  switch (workInProgress.tag) {
+    case IndeterminateComponent:
+    case LazyComponent:
+    case SimpleMemoComponent:
+    case FunctionComponent:
+    case ForwardRef:
+    case Fragment:
+    case Mode:
+    case Profiler:
+    case ContextConsumer:
+    case MemoComponent:
+      bubbleProperties(workInProgress);
+      return null;
+    case ClassComponent: {
+      // ...省略
+      return null;
+    }
+    case HostRoot: {
+      // ...省略
+      bubbleProperties(workInProgress);
+      updateHostContainer(workInProgress);
+      return null;
+    }
+    case HostComponent: {
+      // ...省略
+      return null;
+    }`;
+
+export const HOST_COMPONENT = `case HostComponent: {
+  popHostContext(workInProgress);
+  const rootContainerInstance = getRootHostContainer();
+  const type = workInProgress.type;
+
+  if (current !== null && workInProgress.stateNode != null) {
+    // update的情况
+    // ...省略
+  } else {
+    // mount的情况
+    // ...省略
+  }
+  return null;
+}`;
+
+export const HOST_UPDATE =`if (current !== null && workInProgress.stateNode != null) {
+  // update的情况
+  updateHostComponent(
+    current,
+    workInProgress,
+    type,
+    newProps,
+    rootContainerInstance,
+  );
 }`
+
+export const UPDATE_COMPONENT = `updateHostComponent = function(
+  current: Fiber,
+  workInProgress: Fiber,
+  type: Type,
+  newProps: Props,
+) {
+  // If we have an alternate, that means this is an update and we need to
+  // schedule a side-effect to do the updates.
+  const oldProps = current.memoizedProps;
+  if (oldProps === newProps) {
+    // In mutation mode, this is sufficient for a bailout because
+    // we won't touch this node even if children changed.
+    return;
+  }
+
+  // If we get updated because one of our children updated, we don't
+  // have newProps so we'll have to reuse them.
+  // TODO: Split the update API as separate for the props vs. children.
+  // Even better would be if children weren't special cased at all tho.
+  const instance: Instance = workInProgress.stateNode;
+  const currentHostContext = getHostContext();
+  // TODO: Experiencing an error where oldProps is null. Suggests a host
+  // component is hitting the resume path. Figure out why. Possibly
+  // related to 'hidden'.
+  const updatePayload = prepareUpdate(
+    instance,
+    type,
+    oldProps,
+    newProps,
+    currentHostContext,
+  );
+  // TODO: Type this specific to this type of component.
+  workInProgress.updateQueue = (updatePayload: any);
+  // If the update payload indicates that there is a change or if there
+  // is a new ref we mark this as an update. All the work is done in commitWork.
+  if (updatePayload) {
+    markUpdate(workInProgress);
+  }
+};`
+
+export const MOUNT_COMPONENT = `// ...省略服务端渲染相关逻辑
+
+const currentHostContext = getHostContext();
+// 为fiber创建对应DOM节点
+const instance = createInstance(
+    type,
+    newProps,
+    rootContainerInstance,
+    currentHostContext,
+    workInProgress,
+  );
+// 将子孙DOM节点插入刚生成的DOM节点中
+appendAllChildren(instance, workInProgress, false, false);
+// DOM节点赋值给fiber.stateNode
+workInProgress.stateNode = instance;
+
+// 与update逻辑中的updateHostComponent类似的处理props的过程
+if (
+  finalizeInitialChildren(
+    instance,
+    type,
+    newProps,
+    rootContainerInstance,
+    currentHostContext,
+  )
+) {
+  markUpdate(workInProgress);
+}`
+
+export const DIFF_PROP = `(updatePayload = updatePayload || []).push(propKey, nextProp);`
+
+
+export const EFFECT_LIST=`                       nextEffect         nextEffect
+rootFiber.firstEffect -----------> fiber -----------> fiber`
