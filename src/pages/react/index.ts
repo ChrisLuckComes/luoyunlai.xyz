@@ -542,7 +542,7 @@ export const HOST_COMPONENT = `case HostComponent: {
   return null;
 }`;
 
-export const HOST_UPDATE =`if (current !== null && workInProgress.stateNode != null) {
+export const HOST_UPDATE = `if (current !== null && workInProgress.stateNode != null) {
   // update的情况
   updateHostComponent(
     current,
@@ -551,7 +551,7 @@ export const HOST_UPDATE =`if (current !== null && workInProgress.stateNode != n
     newProps,
     rootContainerInstance,
   );
-}`
+}`;
 
 export const UPDATE_COMPONENT = `updateHostComponent = function(
   current: Fiber,
@@ -591,7 +591,7 @@ export const UPDATE_COMPONENT = `updateHostComponent = function(
   if (updatePayload) {
     markUpdate(workInProgress);
   }
-};`
+};`;
 
 export const MOUNT_COMPONENT = `// ...省略服务端渲染相关逻辑
 
@@ -620,10 +620,540 @@ if (
   )
 ) {
   markUpdate(workInProgress);
-}`
+}`;
 
-export const DIFF_PROP = `(updatePayload = updatePayload || []).push(propKey, nextProp);`
+export const DIFF_PROP = `(updatePayload = updatePayload || []).push(propKey, nextProp);`;
 
+export const EFFECT_LIST = `                       nextEffect         nextEffect
+rootFiber.firstEffect -----------> fiber -----------> fiber`;
 
-export const EFFECT_LIST=`                       nextEffect         nextEffect
-rootFiber.firstEffect -----------> fiber -----------> fiber`
+export const BEFORE_MUTATION_BEFORE = `\`\`\`js
+do {
+  // 触发useEffect回调与其他同步任务。这些任务可能触发新的渲染，所以这里需要循环执行到没有任务。
+  flushPassiveEffects();
+} while (rootWithPendingPassiveEffects !== null);
+flushRenderPhaseStrictModeWarningsInDEV();
+
+if ((executionContext & (RenderContext | CommitContext)) !== NoContext) {
+  throw new Error('Should not already be working.');
+}
+
+const finishedWork = root.finishedWork;
+const lanes = root.finishedLanes;
+
+if (__DEV__) {
+  if (enableDebugTracing) {
+    logCommitStarted(lanes);
+  }
+}
+
+if (enableSchedulingProfiler) {
+  markCommitStarted(lanes);
+}
+
+if (finishedWork === null) {
+  if (__DEV__) {
+    if (enableDebugTracing) {
+      logCommitStopped();
+    }
+  }
+
+  if (enableSchedulingProfiler) {
+    markCommitStopped();
+  }
+
+  return null;
+} else {
+  if (__DEV__) {
+    if (lanes === NoLanes) {
+      console.error(
+        'root.finishedLanes should not be empty during a commit. This is a ' +
+          'bug in React.',
+      );
+    }
+  }
+}
+root.finishedWork = null;
+root.finishedLanes = NoLanes;
+
+if (finishedWork === root.current) {
+  throw new Error(
+    'Cannot commit the same tree as before. This error is likely caused by ' +
+      'a bug in React. Please file an issue.',
+  );
+}
+
+// commitRoot never returns a continuation; it always finishes synchronously.
+// So we can clear these now to allow a new callback to be scheduled.
+root.callbackNode = null;
+root.callbackPriority = NoLane;
+
+// Check which lanes no longer have any work scheduled on them, and mark
+// those as finished.
+let remainingLanes = mergeLanes(finishedWork.lanes, finishedWork.childLanes);
+
+// Make sure to account for lanes that were updated by a concurrent event
+// during the render phase; don't mark them as finished.
+const concurrentlyUpdatedLanes = getConcurrentlyUpdatedLanes();
+remainingLanes = mergeLanes(remainingLanes, concurrentlyUpdatedLanes);
+
+//重置优先级相关变量
+markRootFinished(root, remainingLanes);
+
+//重置全局变量
+if (root === workInProgressRoot) {
+  // We can reset these now that they are finished.
+  workInProgressRoot = null;
+  workInProgress = null;
+  workInProgressRootRenderLanes = NoLanes;
+} else {
+  // This indicates that the last root we worked on is not the same one that
+  // we're committing now. This most commonly happens when a suspended root
+  // times out.
+}
+}\`\`\``;
+
+export const LAYOUT_AFTER = `\`\`\`js
+const rootDidHavePassiveEffects = rootDoesHavePassiveEffects;
+// useEffect相关
+if (rootDoesHavePassiveEffects) {
+  // This commit has passive effects. Stash a reference to them. But don't
+  // schedule a callback until after flushing layout work.
+  rootDoesHavePassiveEffects = false;
+  rootWithPendingPassiveEffects = root;
+  pendingPassiveEffectsLanes = lanes;
+} else {
+  // There were no passive effects, so we can immediately release the cache
+  // pool for this render.
+  releaseRootPooledCache(root, remainingLanes);
+  if (__DEV__) {
+    nestedPassiveUpdateCount = 0;
+    rootWithPassiveNestedUpdates = null;
+  }
+}
+
+// Read this again, since an effect might have updated it
+remainingLanes = root.pendingLanes;
+
+// Check if there's remaining work on this root
+// TODO: This is part of the 'componentDidCatch' implementation. Its purpose
+// is to detect whether something might have called setState inside
+// 'componentDidCatch'. The mechanism is known to be flawed because 'setState'
+// inside 'componentDidCatch' is itself flawed — that's why we recommend
+// 'getDerivedStateFromError' instead. However, it could be improved by
+// checking if remainingLanes includes Sync work, instead of whether there's
+// any work remaining at all (which would also include stuff like Suspense
+// retries or transitions). It's been like this for a while, though, so fixing
+// it probably isn't that urgent.
+// 性能优化相关
+if (remainingLanes === NoLanes) {
+  // If there's no remaining work, we can clear the set of already failed
+  // error boundaries.
+  legacyErrorBoundariesThatAlreadyFailed = null;
+}
+
+if (__DEV__) {
+  if (!rootDidHavePassiveEffects) {
+    commitDoubleInvokeEffectsInDEV(root, false);
+  }
+}
+
+onCommitRootDevTools(finishedWork.stateNode, renderPriorityLevel);
+
+//性能优化相关
+if (enableUpdaterTracking) {
+  if (isDevToolsPresent) {
+    root.memoizedUpdaters.clear();
+  }
+}
+
+if (__DEV__) {
+  onCommitRootTestSelector();
+}
+
+// Always call this before exiting 'commitRoot', to ensure that any
+// additional work on this root is scheduled.
+// 触发一次新的调度，确保附加的任务被调度
+ensureRootIsScheduled(root, now());
+
+if (recoverableErrors !== null) {
+  // There were errors during this render, but recovered from them without
+  // needing to surface it to the UI. We log them here.
+  const onRecoverableError = root.onRecoverableError;
+  for (let i = 0; i < recoverableErrors.length; i++) {
+    const recoverableError = recoverableErrors[i];
+    const errorInfo = makeErrorInfo(
+      recoverableError.digest,
+      recoverableError.stack,
+    );
+    onRecoverableError(recoverableError.value, errorInfo);
+  }
+}
+
+if (hasUncaughtError) {
+  hasUncaughtError = false;
+  const error = firstUncaughtError;
+  firstUncaughtError = null;
+  throw error;
+}
+
+// If the passive effects are the result of a discrete render, flush them
+// synchronously at the end of the current task so that the result is
+// immediately observable. Otherwise, we assume that they are not
+// order-dependent and do not need to be observed by external systems, so we
+// can wait until after paint.
+// TODO: We can optimize this by not scheduling the callback earlier. Since we
+// currently schedule the callback in multiple places, will wait until those
+// are consolidated.
+if (
+  includesSomeLane(pendingPassiveEffectsLanes, SyncLane) &&
+  root.tag !== LegacyRoot
+) {
+  flushPassiveEffects();
+}
+
+// Read this again, since a passive effect might have updated it
+remainingLanes = root.pendingLanes;
+if (includesSomeLane(remainingLanes, (SyncLane: Lane))) {
+  if (enableProfilerTimer && enableProfilerNestedUpdatePhase) {
+    markNestedUpdateScheduled();
+  }
+
+  // Count the number of times the root synchronously re-renders without
+  // finishing. If there are too many, it indicates an infinite update loop.
+  if (root === rootWithNestedUpdates) {
+    nestedUpdateCount++;
+  } else {
+    nestedUpdateCount = 0;
+    rootWithNestedUpdates = root;
+  }
+} else {
+  nestedUpdateCount = 0;
+}
+
+// If layout work was scheduled, flush it now.
+// 执行同步任务，例如useLayoutEffect
+flushSyncCallbacks();
+\`\`\``;
+
+export const BEFORE_MUTATION = `\`\`\`js
+const prevTransition = ReactCurrentBatchConfig.transition;
+ReactCurrentBatchConfig.transition = null;
+// 保存之前的优先级，以同步优先级执行，执行完毕后恢复之前优先级
+const previousPriority = getCurrentUpdatePriority();
+setCurrentUpdatePriority(DiscreteEventPriority);
+
+// 将当前上下文标记为CommitContext，作为commit阶段的标志
+const prevExecutionContext = executionContext;
+executionContext |= CommitContext;
+
+// Reset this to null before calling lifecycles
+ReactCurrentOwner.current = null;
+
+// The commit phase is broken into several sub-phases. We do a separate pass
+// of the effect list for each phase: all mutation effects come before all
+// layout effects, and so on.
+
+// The first phase a "before mutation" phase. We use this phase to read the
+// state of the host tree right before we mutate it. This is where
+// getSnapshotBeforeUpdate is called.
+// beforeMutation阶段的主函数
+const shouldFireAfterActiveInstanceBlur = commitBeforeMutationEffects(
+  root,
+  finishedWork,
+)
+\`\`\`
+`;
+
+export const COMMIT_BEFORE_MUTATION_EFFECTS = `\`\`\`js
+let focusedInstanceHandle: null | Fiber = null;
+let shouldFireAfterActiveInstanceBlur: boolean = false;
+
+export function commitBeforeMutationEffects(
+  root: FiberRoot,
+  firstChild: Fiber,
+): boolean {
+  // 处理focus状态
+  focusedInstanceHandle = prepareForCommit(root.containerInfo);
+
+  nextEffect = firstChild;
+  commitBeforeMutationEffects_begin();
+
+  // We no longer need to track the active instance fiber
+  const shouldFire = shouldFireAfterActiveInstanceBlur;
+  shouldFireAfterActiveInstanceBlur = false;
+  
+  focusedInstanceHandle = null;
+
+  return shouldFire;
+}
+
+function commitBeforeMutationEffects_begin() {
+  while (nextEffect !== null) {
+    const fiber = nextEffect;
+
+    // This phase is only used for beforeActiveInstanceBlur.
+    // Let's skip the whole loop if it's off.
+    if (enableCreateEventHandleAPI) {
+      // TODO: Should wrap this in flags check, too, as optimization
+      const deletions = fiber.deletions;
+      if (deletions !== null) {
+        for (let i = 0; i < deletions.length; i++) {
+          const deletion = deletions[i];
+          commitBeforeMutationEffectsDeletion(deletion);
+        }
+      }
+    }
+
+    const child = fiber.child;
+    if (
+      (fiber.subtreeFlags & BeforeMutationMask) !== NoFlags &&
+      child !== null
+    ) {
+      child.return = fiber;
+      nextEffect = child;
+    } else {
+      commitBeforeMutationEffects_complete();
+    }
+  }
+}
+
+function commitBeforeMutationEffects_complete() {
+  while (nextEffect !== null) {
+    const fiber = nextEffect;
+    setCurrentDebugFiberInDEV(fiber);
+    try {
+      // 根据fiber类型处理
+      commitBeforeMutationEffectsOnFiber(fiber);
+    } catch (error) {
+      captureCommitPhaseError(fiber, fiber.return, error);
+    }
+    resetCurrentDebugFiberInDEV();
+
+    const sibling = fiber.sibling;
+    if (sibling !== null) {
+      sibling.return = fiber.return;
+      nextEffect = sibling;
+      return;
+    }
+
+    nextEffect = fiber.return;
+  }
+}
+\`\`\``;
+
+export const FUNCTION_COMPONENT = `\`\`\`\js
+case FunctionComponent: {
+  if (enableUseEventHook) {
+    if ((flags & Update) !== NoFlags) {
+      // 调度useEffect
+      commitUseEventMount(finishedWork);
+    }
+  }
+  break;
+}
+
+function commitUseEventMount(finishedWork: Fiber) {
+  const updateQueue: FunctionComponentUpdateQueue | null = (finishedWork.updateQueue: any);
+  const eventPayloads = updateQueue !== null ? updateQueue.events : null;
+  if (eventPayloads !== null) {
+    for (let ii = 0; ii < eventPayloads.length; ii++) {
+      //将nextImpl即回调函数赋值给ref.impl
+      const {ref, nextImpl} = eventPayloads[ii];
+      ref.impl = nextImpl;
+    }
+  }
+}
+\`\`\``;
+
+export const CLASS_COMPONENT = `\`\`\`\js
+case ClassComponent: {
+  if ((flags & Snapshot) !== NoFlags) {
+    if (current !== null) {
+      const prevProps = current.memoizedProps;
+      const prevState = current.memoizedState;
+      const instance = finishedWork.stateNode;
+      // ...省略
+      // 调用getSnapshotBeforeUpdate
+      const snapshot = instance.getSnapshotBeforeUpdate(
+        finishedWork.elementType === finishedWork.type
+          ? prevProps
+          : resolveDefaultProps(finishedWork.type, prevProps),
+        prevState,
+      );
+      // ...省略
+      instance.__reactInternalSnapshotBeforeUpdate = snapshot;
+    }
+  }
+  break;
+}
+\`\`\``;
+
+export const COMMIT_MUTATION_EFFECTS = `\`\`\`js
+export function commitMutationEffects(
+  root: FiberRoot,
+  finishedWork: Fiber,
+  committedLanes: Lanes,
+) {
+  inProgressLanes = committedLanes;
+  inProgressRoot = root;
+
+  setCurrentDebugFiberInDEV(finishedWork);
+  commitMutationEffectsOnFiber(finishedWork, root, committedLanes);
+  setCurrentDebugFiberInDEV(finishedWork);
+
+  inProgressLanes = null;
+  inProgressRoot = null;
+}
+
+function recursivelyTraverseMutationEffects(
+  root: FiberRoot,
+  parentFiber: Fiber,
+  lanes: Lanes,
+) {
+  // Deletions effects can be scheduled on any fiber type. They need to happen
+  // before the children effects hae fired.
+  const deletions = parentFiber.deletions;
+  if (deletions !== null) {
+    for (let i = 0; i < deletions.length; i++) {
+      const childToDelete = deletions[i];
+      try {
+        commitDeletionEffects(root, parentFiber, childToDelete);
+      } catch (error) {
+        captureCommitPhaseError(childToDelete, parentFiber, error);
+      }
+    }
+  }
+
+  const prevDebugFiber = getCurrentDebugFiberInDEV();
+  if (parentFiber.subtreeFlags & MutationMask) {
+    let child = parentFiber.child;
+    while (child !== null) {
+      setCurrentDebugFiberInDEV(child);
+      commitMutationEffectsOnFiber(child, root, lanes);
+      child = child.sibling;
+    }
+  }
+  setCurrentDebugFiberInDEV(prevDebugFiber);
+}
+
+function commitReconciliationEffects(finishedWork: Fiber) {
+  // Placement effects (insertions, reorders) can be scheduled on any fiber
+  // type. They needs to happen after the children effects have fired, but
+  // before the effects on this fiber have fired.
+  const flags = finishedWork.flags;
+  // 如果flag包含Placement，说明有DOM节点需要插入
+  if (flags & Placement) {
+    try {
+      commitPlacement(finishedWork);
+    } catch (error) {
+      captureCommitPhaseError(finishedWork, finishedWork.return, error);
+    }
+    // Clear the "placement" from effect tag so that we know that this is
+    // inserted, before any life-cycles like componentDidMount gets called.
+    // TODO: findDOMNode doesn't rely on this any more but isMounted does
+    // and isMounted is deprecated anyway so we should be able to kill this.
+    finishedWork.flags &= ~Placement;
+  }
+  if (flags & Hydrating) {
+    finishedWork.flags &= ~Hydrating;
+  }
+}
+
+function commitMutationEffectsOnFiber(
+  finishedWork: Fiber,
+  root: FiberRoot,
+  lanes: Lanes,
+) {
+  const current = finishedWork.alternate;
+  const flags = finishedWork.flags;
+
+  // The effect flag should be checked *after* we refine the type of fiber,
+  // because the fiber tag is more specific. An exception is any flag related
+  // to reconciliation, because those can be set on all fiber types.
+  switch (finishedWork.tag) {
+    case FunctionComponent:
+    case ForwardRef:
+    case MemoComponent:
+    case SimpleMemoComponent: {
+      // 递归执行commitMutationEffectsOnFiber
+      recursivelyTraverseMutationEffects(root, finishedWork, lanes);
+      // 如果flag包含Placement，说明有DOM节点需要插入
+      commitReconciliationEffects(finishedWork);
+
+      if (flags & Update) {
+        try {
+          commitHookEffectListUnmount(
+            HookInsertion | HookHasEffect,
+            finishedWork,
+            finishedWork.return,
+          );
+          commitHookEffectListMount(
+            HookInsertion | HookHasEffect,
+            finishedWork,
+          );
+        } catch (error) {
+          captureCommitPhaseError(finishedWork, finishedWork.return, error);
+        }
+        // Layout effects are destroyed during the mutation phase so that all
+        // destroy functions for all fibers are called before any create functions.
+        // This prevents sibling component effects from interfering with each other,
+        // e.g. a destroy function in one component should never override a ref set
+        // by a create function in another component during the same commit.
+        if (shouldProfile(finishedWork)) {
+          try {
+            startLayoutEffectTimer();
+            commitHookEffectListUnmount(
+              HookLayout | HookHasEffect,
+              finishedWork,
+              finishedWork.return,
+            );
+          } catch (error) {
+            captureCommitPhaseError(finishedWork, finishedWork.return, error);
+          }
+          recordLayoutEffectDuration(finishedWork);
+        } else {
+          try {
+            commitHookEffectListUnmount(
+              HookLayout | HookHasEffect,
+              finishedWork,
+              finishedWork.return,
+            );
+          } catch (error) {
+            captureCommitPhaseError(finishedWork, finishedWork.return, error);
+          }
+        }
+      }
+      return;
+    }
+    // ...省略其他case
+  }
+\`\`\`
+`;
+
+export const PARENT_FIBER = `\`\`\`js
+const parentFiber = getHostParentFiber(finishedWork);
+// 父级DOM节点
+const parentStateNode = parentFiber.stateNode;
+\`\`\`
+`
+
+export const SIBILING = `\`\`\`js
+const before = getHostSibling(finishedWork);
+\`\`\`
+`
+
+export const INSERT = `\`\`\`js
+const {tag} = node;
+const isHost = tag === HostComponent || tag === HostText;
+if (isHost) {
+  const stateNode = node.stateNode;
+  // 如果兄弟节点存在，就调用insertBefore
+  if (before) {
+    insertBefore(parent, stateNode, before);
+  } else {
+    appendChild(parent, stateNode);
+  }
+}
+\`\`\`
+`
