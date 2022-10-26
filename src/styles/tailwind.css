@@ -607,6 +607,10 @@ video {
   }
 }
 
+.visible {
+  visibility: visible;
+}
+
 .relative {
   position: relative;
 }
