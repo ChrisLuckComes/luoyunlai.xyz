@@ -83,6 +83,12 @@ const routers = [
         name: 'Commit',
         element: lazy(() => import('@/pages/react/commit'))
       },
+      {
+        key: 'diff',
+        path: '/react/diff',
+        name: 'Diff',
+        element: lazy(() => import('@/pages/react/diff'))
+      },
     ]
   },
   {

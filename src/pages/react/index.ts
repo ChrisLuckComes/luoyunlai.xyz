@@ -1406,7 +1406,7 @@ function commitHookEffectListMount(flags: HookFlags, finishedWork: Fiber) {
     } while (effect !== firstEffect);
   }
 }
-\`\`\``
+\`\`\``;
 
 export const COMMIT_UPDATE = `\`\`\`js 
 export function commitUpdate(
@@ -1426,7 +1426,6 @@ export function commitUpdate(
   updateFiberProps(domElement, newProps);
 }
 \`\`\``;
-
 
 export const COMMIT_DELETION_EFFECTS = `\`\`\`js 
 // These are tracked on the stack as we recursively traverse a
@@ -1499,7 +1498,7 @@ function commitDeletionEffects(
 
   detachFiberMutation(deletedFiber);
 }
-\`\`\``
+\`\`\``;
 
 export const COMMIT_LAYOUT_EFFECT = `\`\`\`js
 export function commitLayoutEffects(
@@ -1516,9 +1515,9 @@ export function commitLayoutEffects(
   inProgressLanes = null;
   inProgressRoot = null;
 }
-\`\`\``
+\`\`\``;
 
-export const COMMIT_LAYOUT_EFFECT_ON_FIBER =`\`\`\`js
+export const COMMIT_LAYOUT_EFFECT_ON_FIBER = `\`\`\`js
 function commitLayoutEffectOnFiber(
   finishedRoot: FiberRoot,
   current: Fiber | null,
@@ -1585,7 +1584,7 @@ function commitLayoutEffectOnFiber(
     }
     // ...省略其他tag
 }
-\`\`\``
+\`\`\``;
 
 export const COMMIT_ATTACH_REF = `\`\`\`js
 function commitAttachRef(finishedWork: Fiber) {
@@ -1645,6 +1644,508 @@ function commitAttachRef(finishedWork: Fiber) {
     }
   }
 }
-\`\`\``
+\`\`\``;
 
-export const CHANGE_CURRENT_ROOT = `\`root.current = finishedWork;\``
+export const CHANGE_CURRENT_ROOT = `\`root.current = finishedWork;\``;
+
+export const RECONCILE_CHILD_FIBERS = `\`\`\`js
+// This API will tag the children with the side-effect of the reconciliation
+// itself. They will be added to the side-effect list as we pass through the
+// children and the parent.
+// 根据newChild类型来处理
+function reconcileChildFibers(
+  returnFiber: Fiber,
+  currentFirstChild: Fiber | null,
+  newChild: any,
+  lanes: Lanes,
+): Fiber | null {
+  // This function is not recursive.
+  // If the top level item is an array, we treat it as a set of children,
+  // not as a fragment. Nested arrays on the other hand will be treated as
+  // fragment nodes. Recursion happens at the normal flow.
+
+  // Handle top level unkeyed fragments as if they were arrays.
+  // This leads to an ambiguity between <>{[...]}</> and <>...</>.
+  // We treat the ambiguous cases above the same.
+  const isUnkeyedTopLevelFragment =
+    typeof newChild === 'object' &&
+    newChild !== null &&
+    newChild.type === REACT_FRAGMENT_TYPE &&
+    newChild.key === null;
+  if (isUnkeyedTopLevelFragment) {
+    newChild = newChild.props.children;
+  }
+
+  // Handle object types
+  if (typeof newChild === 'object' && newChild !== null) {
+    switch (newChild.$$typeof) {
+      case REACT_ELEMENT_TYPE:
+        return placeSingleChild(
+          reconcileSingleElement(
+            returnFiber,
+            currentFirstChild,
+            newChild,
+            lanes,
+          ),
+        );
+      case REACT_PORTAL_TYPE:
+        return placeSingleChild(
+          reconcileSinglePortal(
+            returnFiber,
+            currentFirstChild,
+            newChild,
+            lanes,
+          ),
+        );
+      case REACT_LAZY_TYPE:
+        const payload = newChild._payload;
+        const init = newChild._init;
+        // TODO: This function is supposed to be non-recursive.
+        return reconcileChildFibers(
+          returnFiber,
+          currentFirstChild,
+          init(payload),
+          lanes,
+        );
+    }
+
+    if (isArray(newChild)) {
+      return reconcileChildrenArray(
+        returnFiber,
+        currentFirstChild,
+        newChild,
+        lanes,
+      );
+    }
+
+    if (getIteratorFn(newChild)) {
+      return reconcileChildrenIterator(
+        returnFiber,
+        currentFirstChild,
+        newChild,
+        lanes,
+      );
+    }
+
+    throwOnInvalidObjectType(returnFiber, newChild);
+  }
+
+  if (
+    (typeof newChild === 'string' && newChild !== '') ||
+    typeof newChild === 'number'
+  ) {
+    // 文本节点 
+    return placeSingleChild(
+      reconcileSingleTextNode(
+        returnFiber,
+        currentFirstChild,
+        '' + newChild,
+        lanes,
+      ),
+    );
+  }
+
+  if (__DEV__) {
+    if (typeof newChild === 'function') {
+      warnOnFunctionType(returnFiber);
+    }
+  }
+
+  // 以上情况都没有命中，删除节点
+  // Remaining cases are all treated as empty.
+  return deleteRemainingChildren(returnFiber, currentFirstChild);
+}
+\`\`\``;
+
+export const RECONCILE_SINGLE_ELEMENT = `\`\`\`js
+function reconcileSingleElement(
+  returnFiber: Fiber,
+  currentFirstChild: Fiber | null,
+  element: ReactElement,
+  lanes: Lanes,
+): Fiber {
+  const key = element.key;
+  let child = currentFirstChild;
+  // 首先判断是否存在对应DOM节点，如果存在判断是否可复用
+  while (child !== null) {
+    // TODO: If key === null and child.key === null, then this only applies to
+    // the first item in the list.
+    // 比较key是否相同
+    if (child.key === key) {
+      const elementType = element.type;
+      if (elementType === REACT_FRAGMENT_TYPE) {
+        if (child.tag === Fragment) {
+          deleteRemainingChildren(returnFiber, child.sibling);
+          const existing = useFiber(child, element.props.children);
+          existing.return = returnFiber;
+          if (__DEV__) {
+            existing._debugSource = element._source;
+            existing._debugOwner = element._owner;
+          }
+          return existing;
+        }
+      } else {
+        if (
+          child.elementType === elementType ||
+          // Keep this check inline so it only runs on the false path:
+          (__DEV__
+            ? isCompatibleFamilyForHotReloading(child, element)
+            : false) ||
+          // Lazy types should reconcile their resolved type.
+          // We need to do this after the Hot Reloading check above,
+          // because hot reloading has different semantics than prod because
+          // it doesn't resuspend. So we can't let the call below suspend.
+          (typeof elementType === 'object' &&
+            elementType !== null &&
+            elementType.$$typeof === REACT_LAZY_TYPE &&
+            resolveLazy(elementType) === child.type)
+        ) {
+          // 类型相同，复用
+          deleteRemainingChildren(returnFiber, child.sibling);
+          const existing = useFiber(child, element.props);
+          existing.ref = coerceRef(returnFiber, child, element);
+          existing.return = returnFiber;
+          if (__DEV__) {
+            existing._debugSource = element._source;
+            existing._debugOwner = element._owner;
+          }
+          // 返回复用的fiber
+          return existing;
+        }
+      }
+      // Didn't match.
+      // key相同但是type不同，将该fiber和兄弟fiber标记为删除
+      deleteRemainingChildren(returnFiber, child);
+      break;
+    } else {
+      // key不同，将该fiber标记为删除
+      deleteChild(returnFiber, child);
+    }
+    child = child.sibling;
+  }
+
+  // 创建新fiber并返回
+  if (element.type === REACT_FRAGMENT_TYPE) {
+    const created = createFiberFromFragment(
+      element.props.children,
+      returnFiber.mode,
+      lanes,
+      element.key,
+    );
+    created.return = returnFiber;
+    return created;
+  } else {
+    const created = createFiberFromElement(element, returnFiber.mode, lanes);
+    created.ref = coerceRef(returnFiber, currentFirstChild, element);
+    created.return = returnFiber;
+    return created;
+  }
+}
+\`\`\``;
+
+export const UPDATE_SLOT = `\`\`\`js
+function updateSlot(
+  returnFiber: Fiber,
+  oldFiber: Fiber | null,
+  newChild: any,
+  lanes: Lanes,
+): Fiber | null {
+  // Update the fiber if the keys match, otherwise return null.
+
+  const key = oldFiber !== null ? oldFiber.key : null;
+
+  if (
+    (typeof newChild === 'string' && newChild !== '') ||
+    typeof newChild === 'number'
+  ) {
+    // Text nodes don't have keys. If the previous node is implicitly keyed
+    // we can continue to replace it without aborting even if it is not a text
+    // node.
+    if (key !== null) {
+      return null;
+    }
+    return updateTextNode(returnFiber, oldFiber, '' + newChild, lanes);
+  }
+
+  if (typeof newChild === 'object' && newChild !== null) {
+    switch (newChild.$$typeof) {
+      case REACT_ELEMENT_TYPE: {
+        if (newChild.key === key) {
+          return updateElement(returnFiber, oldFiber, newChild, lanes);
+        } else {
+          return null;
+        }
+      }
+      case REACT_PORTAL_TYPE: {
+        if (newChild.key === key) {
+          return updatePortal(returnFiber, oldFiber, newChild, lanes);
+        } else {
+          return null;
+        }
+      }
+      case REACT_LAZY_TYPE: {
+        const payload = newChild._payload;
+        const init = newChild._init;
+        return updateSlot(returnFiber, oldFiber, init(payload), lanes);
+      }
+    }
+
+    if (isArray(newChild) || getIteratorFn(newChild)) {
+      if (key !== null) {
+        return null;
+      }
+
+      return updateFragment(returnFiber, oldFiber, newChild, lanes, null);
+    }
+
+    throwOnInvalidObjectType(returnFiber, newChild);
+  }
+
+  if (__DEV__) {
+    if (typeof newChild === 'function') {
+      warnOnFunctionType(returnFiber);
+    }
+  }
+
+  return null;
+}
+\`\`\``;
+
+export const RECONCILE_CHILDEN_ARRAY = `\`\`\`js
+function reconcileChildrenArray(
+  returnFiber: Fiber,
+  currentFirstChild: Fiber | null,
+  newChildren: Array<any>,
+  lanes: Lanes,
+): Fiber | null {
+  // This algorithm can't optimize by searching from both ends since we
+  // don't have backpointers on fibers. I'm trying to see how far we can get
+  // with that model. If it ends up not being worth the tradeoffs, we can
+  // add it later.
+
+  // Even with a two ended optimization, we'd want to optimize for the case
+  // where there are few changes and brute force the comparison instead of
+  // going for the Map. It'd like to explore hitting that path first in
+  // forward-only mode and only go for the Map once we notice that we need
+  // lots of look ahead. This doesn't handle reversal as well as two ended
+  // search but that's unusual. Besides, for the two ended optimization to
+  // work on Iterables, we'd need to copy the whole set.
+
+  // In this first iteration, we'll just live with hitting the bad case
+  // (adding everything to a Map) in for every insert/move.
+
+  // If you change this code, also update reconcileChildrenIterator() which
+  // uses the same algorithm.
+
+  if (__DEV__) {
+    // First, validate keys.
+    let knownKeys = null;
+    for (let i = 0; i < newChildren.length; i++) {
+      const child = newChildren[i];
+      knownKeys = warnOnInvalidKey(child, knownKeys, returnFiber);
+    }
+  }
+
+  let resultingFirstChild: Fiber | null = null;
+  let previousNewFiber: Fiber | null = null;
+
+  let oldFiber = currentFirstChild;
+  let lastPlacedIndex = 0;
+  let newIdx = 0;
+  let nextOldFiber = null;
+  // 开始第一轮遍历
+  for (; oldFiber !== null && newIdx < newChildren.length; newIdx++) {
+    // 旧节点遍历完成，oldFiber置为空
+    if (oldFiber.index > newIdx) {
+      nextOldFiber = oldFiber;
+      oldFiber = null;
+    } else {
+      nextOldFiber = oldFiber.sibling;
+    }
+    // 是否可复用，不可复用newFiber为null
+    const newFiber = updateSlot(
+      returnFiber,
+      oldFiber,
+      newChildren[newIdx],
+      lanes,
+    );
+    if (newFiber === null) {
+      // TODO: This breaks on empty slots like null children. That's
+      // unfortunate because it triggers the slow path all the time. We need
+      // a better way to communicate whether this was a miss or null,
+      // boolean, undefined, etc.
+      // 如果不可复用直接中断循环
+      if (oldFiber === null) {
+        oldFiber = nextOldFiber;
+      }
+      break;
+    }
+    if (shouldTrackSideEffects) {
+      if (oldFiber && newFiber.alternate === null) {
+        // We matched the slot, but we didn't reuse the existing fiber, so we
+        // need to delete the existing child.
+        deleteChild(returnFiber, oldFiber);
+      }
+    }
+    lastPlacedIndex = placeChild(newFiber, lastPlacedIndex, newIdx);
+    if (previousNewFiber === null) {
+      // TODO: Move out of the loop. This only happens for the first run.
+      resultingFirstChild = newFiber;
+    } else {
+      // TODO: Defer siblings if we're not at the right index for this slot.
+      // I.e. if we had null values before, then we want to defer this
+      // for each null value. However, we also don't want to call updateSlot
+      // with the previous one.
+      previousNewFiber.sibling = newFiber;
+    }
+    previousNewFiber = newFiber;
+    oldFiber = nextOldFiber;
+  }
+
+  if (newIdx === newChildren.length) {
+    // We've reached the end of the new children. We can delete the rest.
+    // 新节点已遍历完，删除剩余的旧节点
+    deleteRemainingChildren(returnFiber, oldFiber);
+    if (getIsHydrating()) {
+      const numberOfForks = newIdx;
+      pushTreeFork(returnFiber, numberOfForks);
+    }
+    return resultingFirstChild;
+  }
+
+  if (oldFiber === null) {
+    // If we don't have any more existing children we can choose a fast path
+    // since the rest will all be insertions.
+    // 旧节点已遍历完，剩余新节点直接插入
+    for (; newIdx < newChildren.length; newIdx++) {
+      const newFiber = createChild(returnFiber, newChildren[newIdx], lanes);
+      if (newFiber === null) {
+        continue;
+      }
+      lastPlacedIndex = placeChild(newFiber, lastPlacedIndex, newIdx);
+      if (previousNewFiber === null) {
+        // TODO: Move out of the loop. This only happens for the first run.
+        resultingFirstChild = newFiber;
+      } else {
+        previousNewFiber.sibling = newFiber;
+      }
+      previousNewFiber = newFiber;
+    }
+    if (getIsHydrating()) {
+      const numberOfForks = newIdx;
+      pushTreeFork(returnFiber, numberOfForks);
+    }
+    return resultingFirstChild;
+  }
+
+  // 剩下的旧节点生成map
+  // Add all children to a key map for quick lookups.
+  const existingChildren = mapRemainingChildren(returnFiber, oldFiber);
+
+  // Keep scanning and use the map to restore deleted items as moves.
+  for (; newIdx < newChildren.length; newIdx++) {
+    const newFiber = updateFromMap(
+      existingChildren,
+      returnFiber,
+      newIdx,
+      newChildren[newIdx],
+      lanes,
+    );
+    if (newFiber !== null) {
+      // map中找到了可以复用的节点
+      if (shouldTrackSideEffects) {
+        if (newFiber.alternate !== null) {
+          // The new fiber is a work in progress, but if there exists a
+          // current, that means that we reused the fiber. We need to delete
+          // it from the child list so that we don't add it to the deletion
+          // list.
+          // 在map中删除
+          existingChildren.delete(
+            newFiber.key === null ? newIdx : newFiber.key,
+          );
+        }
+      }
+      lastPlacedIndex = placeChild(newFiber, lastPlacedIndex, newIdx);
+      if (previousNewFiber === null) {
+        resultingFirstChild = newFiber;
+      } else {
+        previousNewFiber.sibling = newFiber;
+      }
+      previousNewFiber = newFiber;
+    }
+  }
+
+  if (shouldTrackSideEffects) {
+    // Any existing children that weren't consumed above were deleted. We need
+    // to add them to the deletion list.
+    existingChildren.forEach(child => deleteChild(returnFiber, child));
+  }
+
+  if (getIsHydrating()) {
+    const numberOfForks = newIdx;
+    pushTreeFork(returnFiber, numberOfForks);
+  }
+  return resultingFirstChild;
+}
+\`\`\``;
+
+export const MAP_REMAINING_CHILDREN = `\`\`\`js
+// Add all children to a key map for quick lookups.
+const existingChildren = mapRemainingChildren(returnFiber, oldFiber);
+
+function mapRemainingChildren(
+  returnFiber: Fiber,
+  currentFirstChild: Fiber,
+): Map<string | number, Fiber> {
+  // Add the remaining children to a temporary map so that we can find them by
+  // keys quickly. Implicit (null) keys get added to this set with their index
+  // instead.
+  const existingChildren: Map<string | number, Fiber> = new Map();
+
+  let existingChild: null | Fiber = currentFirstChild;
+  while (existingChild !== null) {
+    if (existingChild.key !== null) {
+      existingChildren.set(existingChild.key, existingChild);
+    } else {
+      existingChildren.set(existingChild.index, existingChild);
+    }
+    existingChild = existingChild.sibling;
+  }
+  return existingChildren;
+}
+\`\`\``;
+
+export const PLACE_CHILD = `\`\`\`js
+function placeChild(
+  newFiber: Fiber,
+  lastPlacedIndex: number, //上次复用过的index
+  newIndex: number,
+): number {
+  newFiber.index = newIndex;
+  if (!shouldTrackSideEffects) {
+    // During hydration, the useId algorithm needs to know which fibers are
+    // part of a list of children (arrays, iterators).
+    newFiber.flags |= Forked;
+    return lastPlacedIndex;
+  }
+  const current = newFiber.alternate;
+  if (current !== null) {
+    const oldIndex = current.index;  //在旧节点中的index
+    if (oldIndex < lastPlacedIndex) {
+      // This is a move.
+      // 如果oldIndex比lastPlacedIndex小，说明需要右移
+      newFiber.flags |= Placement | PlacementDEV;
+      return lastPlacedIndex;
+    } else {
+      // This item can stay in place.
+      // b不需要移动
+      return oldIndex;
+    }
+  } else {
+    // This is an insertion.
+    // 如果current为空直接插入新节点
+    newFiber.flags |= Placement | PlacementDEV;
+    return lastPlacedIndex;
+  }
+}
+\`\`\``;
