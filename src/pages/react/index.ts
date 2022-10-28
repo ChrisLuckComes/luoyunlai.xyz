@@ -2149,3 +2149,67 @@ function placeChild(
   }
 }
 \`\`\``;
+
+export const HOOK = `\`\`\`js
+const hook: Hook = {
+  memoizedState: null,
+
+  baseState: null,
+  baseQueue: null,
+  queue: null,
+
+  next: null,
+};
+\`\`\``;
+
+export const PUSH_EFFECT = `\`\`\`js
+// NOTE: defining two versions of this function to avoid size impact when this feature is disabled.
+// Previously this function was inlined, the additional 'memoCache' property makes it not inlined.
+let createFunctionComponentUpdateQueue: () => FunctionComponentUpdateQueue;
+if (enableUseMemoCacheHook) {
+  createFunctionComponentUpdateQueue = () => {
+    return {
+      lastEffect: null,
+      events: null,
+      stores: null,
+      memoCache: null,
+    };
+  };
+} else {
+  createFunctionComponentUpdateQueue = () => {
+    return {
+      lastEffect: null,
+      events: null,
+      stores: null,
+    };
+  };
+}
+
+function pushEffect(tag, create, destroy, deps: Array<mixed> | void | null) {
+  const effect: Effect = {
+    tag,
+    create,
+    destroy,
+    deps,
+    // Circular
+    next: (null: any),
+  };
+  let componentUpdateQueue: null | FunctionComponentUpdateQueue = (currentlyRenderingFiber.updateQueue: any);
+  if (componentUpdateQueue === null) {
+    componentUpdateQueue = createFunctionComponentUpdateQueue();
+    currentlyRenderingFiber.updateQueue = (componentUpdateQueue: any);
+    componentUpdateQueue.lastEffect = effect.next = effect;
+  } else {
+    const lastEffect = componentUpdateQueue.lastEffect;
+    if (lastEffect === null) {
+      componentUpdateQueue.lastEffect = effect.next = effect;
+    } else {
+      const firstEffect = lastEffect.next;
+      lastEffect.next = effect;
+      effect.next = firstEffect;
+      componentUpdateQueue.lastEffect = effect;
+    }
+  }
+  return effect;
+}
+\`\`\``;

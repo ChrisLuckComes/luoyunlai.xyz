@@ -89,6 +89,12 @@ const routers = [
         name: 'Diff',
         element: lazy(() => import('@/pages/react/diff'))
       },
+      {
+        key: 'hook',
+        path: '/react/hook',
+        name: 'Hook',
+        element: lazy(() => import('@/pages/react/hook'))
+      }
     ]
   },
   {
