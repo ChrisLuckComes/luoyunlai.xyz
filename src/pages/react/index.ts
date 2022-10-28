@@ -2213,3 +2213,60 @@ function pushEffect(tag, create, destroy, deps: Array<mixed> | void | null) {
   return effect;
 }
 \`\`\``;
+
+export const DISPATCHER = `\`\`\`js
+// mount时的Dispatcher
+const HooksDispatcherOnMount: Dispatcher = {
+  readContext,
+
+  useCallback: mountCallback,
+  useContext: readContext,
+  useEffect: mountEffect,
+  useImperativeHandle: mountImperativeHandle,
+  useLayoutEffect: mountLayoutEffect,
+  useInsertionEffect: mountInsertionEffect,
+  useMemo: mountMemo,
+  useReducer: mountReducer,
+  useRef: mountRef,
+  useState: mountState,
+  useDebugValue: mountDebugValue,
+  useDeferredValue: mountDeferredValue,
+  useTransition: mountTransition,
+  useMutableSource: mountMutableSource,
+  useSyncExternalStore: mountSyncExternalStore,
+  useId: mountId,
+
+  unstable_isNewReconciler: enableNewReconciler,
+};
+
+// update时的Dispatcher
+const HooksDispatcherOnUpdate: Dispatcher = {
+  readContext,
+
+  useCallback: updateCallback,
+  useContext: readContext,
+  useEffect: updateEffect,
+  useImperativeHandle: updateImperativeHandle,
+  useInsertionEffect: updateInsertionEffect,
+  useLayoutEffect: updateLayoutEffect,
+  useMemo: updateMemo,
+  useReducer: updateReducer,
+  useRef: updateRef,
+  useState: updateState,
+  useDebugValue: updateDebugValue,
+  useDeferredValue: updateDeferredValue,
+  useTransition: updateTransition,
+  useMutableSource: updateMutableSource,
+  useSyncExternalStore: updateSyncExternalStore,
+  useId: updateId,
+
+  unstable_isNewReconciler: enableNewReconciler,
+};
+\`\`\``
+
+export const DISPATCHER_SET = `\`\`\`js
+ReactCurrentDispatcher.current =
+current === null || current.memoizedState === null
+  ? HooksDispatcherOnMount
+  : HooksDispatcherOnUpdate;
+\`\`\``
