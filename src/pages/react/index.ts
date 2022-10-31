@@ -2262,11 +2262,266 @@ const HooksDispatcherOnUpdate: Dispatcher = {
 
   unstable_isNewReconciler: enableNewReconciler,
 };
-\`\`\``
+\`\`\``;
 
 export const DISPATCHER_SET = `\`\`\`js
 ReactCurrentDispatcher.current =
 current === null || current.memoizedState === null
   ? HooksDispatcherOnMount
   : HooksDispatcherOnUpdate;
-\`\`\``
+\`\`\``;
+
+export const APP_1 = `\`\`\`jsx
+function App() {
+  const [state, dispatch] = useReducer(reducer, {a: 1});
+
+  const [num, updateNum] = useState(0);
+  
+  return (
+    <div>
+      <button onClick={() => dispatch({type: 'a'})}>{state.a}</button>  
+      <button onClick={() => updateNum(num => num + 1)}>{num}</button>  
+    </div>
+  )
+}
+\`\`\``;
+
+export const USE_STATE_REDUCER = `\`\`\`jsx
+export function useState<S>(
+  initialState: (() => S) | S,
+): [S, Dispatch<BasicStateAction<S>>] {
+  const dispatcher = resolveDispatcher();
+  return dispatcher.useState(initialState);
+}
+
+export function useReducer<S, I, A>(
+  reducer: (S, A) => S,
+  initialArg: I,
+  init?: I => S,
+): [S, Dispatch<A>] {
+  const dispatcher = resolveDispatcher();
+  return dispatcher.useReducer(reducer, initialArg, init);
+}
+\`\`\``;
+
+export const MOUNT_STATE_REDUCER = `\`\`\`jsx
+function mountState<S>(
+  initialState: (() => S) | S,
+): [S, Dispatch<BasicStateAction<S>>] {
+  // 创建当前hook
+  const hook = mountWorkInProgressHook();
+  if (typeof initialState === 'function') {
+    // $FlowFixMe: Flow doesn't like mixed types
+    initialState = initialState();
+  }
+  hook.memoizedState = hook.baseState = initialState;
+  // 创建queue
+  const queue: UpdateQueue<S, BasicStateAction<S>> = {
+    pending: null, // 保存update对象
+    lanes: NoLanes, 
+    dispatch: null, // 保存dispatchAction.bind()的值
+    lastRenderedReducer: basicStateReducer, // 上一次render时使用的reducer
+    lastRenderedState: (initialState: any),// 上一次render时的state
+  };
+  hook.queue = queue;
+  // 创建dispatch
+  const dispatch: Dispatch<
+    BasicStateAction<S>,
+  > = (queue.dispatch = (dispatchSetState.bind(
+    null,
+    currentlyRenderingFiber,
+    queue,
+  ): any));
+  return [hook.memoizedState, dispatch];
+}
+
+function mountReducer<S, I, A>(
+  reducer: (S, A) => S,
+  initialArg: I,
+  init?: I => S,
+): [S, Dispatch<A>] {
+  // 创建当前hook
+  const hook = mountWorkInProgressHook();
+  let initialState;
+  if (init !== undefined) {
+    initialState = init(initialArg);
+  } else {
+    initialState = ((initialArg: any): S);
+  }
+  hook.memoizedState = hook.baseState = initialState;
+  // 创建queue
+  const queue: UpdateQueue<S, A> = {
+    pending: null,
+    lanes: NoLanes,
+    dispatch: null,
+    lastRenderedReducer: reducer,
+    lastRenderedState: (initialState: any),
+  };
+  hook.queue = queue;
+  // 创建dispatch
+  const dispatch: Dispatch<A> = (queue.dispatch = (dispatchReducerAction.bind(
+    null,
+    currentlyRenderingFiber,
+    queue,
+  ): any));
+  return [hook.memoizedState, dispatch];
+}
+\`\`\``;
+
+export const BASIC_STATE_ROUTER = `\`\`\`js
+function basicStateReducer<S>(state: S, action: BasicStateAction<S>): S {
+  // $FlowFixMe: Flow doesn't like mixed types
+  return typeof action === 'function' ? action(state) : action;
+}
+\`\`\``;
+
+export const UPDATE_REDUCER = `\`\`\`js
+function updateReducer<S, I, A>(
+  reducer: (S, A) => S,
+  initialArg: I,
+  init?: I => S,
+): [S, Dispatch<A>] {
+  // 获取当前hook
+  const hook = updateWorkInProgressHook();
+  const queue = hook.queue;
+  
+  queue.lastRenderedReducer = reducer;
+
+  // ...同update与updateQueue类似的更新逻辑
+
+  const dispatch: Dispatch<A> = (queue.dispatch: any);
+  return [hook.memoizedState, dispatch];
+}
+\`\`\``;
+
+export const DISPATCH_STATE = `\`\`\`js
+function dispatchSetState<S, A>(
+  fiber: Fiber,
+  queue: UpdateQueue<S, A>,
+  action: A,
+) {
+  if (__DEV__) {
+    if (typeof arguments[3] === 'function') {
+      console.error(
+        "State updates from the useState() and useReducer() Hooks don't support the " +
+          'second callback argument. To execute a side effect after ' +
+          'rendering, declare it in the component body with useEffect().',
+      );
+    }
+  }
+
+  const lane = requestUpdateLane(fiber);
+
+  // 创建update
+  const update: Update<S, A> = {
+    lane,
+    action,
+    hasEagerState: false,
+    eagerState: null,
+    next: (null: any),
+  };
+
+  // 将update加入queue.pending
+
+  if (isRenderPhaseUpdate(fiber)) {
+    enqueueRenderPhaseUpdate(queue, update);
+  } else {
+    const alternate = fiber.alternate;
+    if (
+      fiber.lanes === NoLanes &&
+      (alternate === null || alternate.lanes === NoLanes)
+    ) {
+      // The queue is currently empty, which means we can eagerly compute the
+      // next state before entering the render phase. If the new state is the
+      // same as the current state, we may be able to bail out entirely.
+      // 队列为空，不需要进入声明阶段再计算state
+      const lastRenderedReducer = queue.lastRenderedReducer;
+      if (lastRenderedReducer !== null) {
+        let prevDispatcher;
+        if (__DEV__) {
+          prevDispatcher = ReactCurrentDispatcher.current;
+          ReactCurrentDispatcher.current = InvalidNestedHooksDispatcherOnUpdateInDEV;
+        }
+        try {
+          const currentState: S = (queue.lastRenderedState: any);
+          const eagerState = lastRenderedReducer(currentState, action);
+          // Stash the eagerly computed state, and the reducer used to compute
+          // it, on the update object. If the reducer hasn't changed by the
+          // time we enter the render phase, then the eager state can be used
+          // without calling the reducer again.
+          // 使用之前的reducer函数计算state
+          update.hasEagerState = true;
+          update.eagerState = eagerState;
+          if (is(eagerState, currentState)) {
+            // Fast path. We can bail out without scheduling React to re-render.
+            // It's still possible that we'll need to rebase this update later,
+            // if the component re-renders for a different reason and by that
+            // time the reducer has changed.
+            // TODO: Do we still need to entangle transitions in this case?
+            // 如果state相同，不需要再开启一次调度
+            enqueueConcurrentHookUpdateAndEagerlyBailout(fiber, queue, update);
+            return;
+          }
+        } catch (error) {
+          // Suppress the error. It will throw again in the render phase.
+        } finally {
+          if (__DEV__) {
+            ReactCurrentDispatcher.current = prevDispatcher;
+          }
+        }
+      }
+    }
+
+    const root = enqueueConcurrentHookUpdate(fiber, queue, update, lane);
+    if (root !== null) {
+      const eventTime = requestEventTime();
+      scheduleUpdateOnFiber(root, fiber, lane, eventTime);
+      entangleTransitionUpdate(root, queue, lane);
+    }
+  }
+
+  markUpdateInDevTools(fiber, lane, action);
+}
+\`\`\``;
+
+export const FLUSH_PASSIVE_EFFECTS = `\`\`\`js
+export function flushPassiveEffects(): boolean {
+  // Returns whether passive effects were flushed.
+  // TODO: Combine this check with the one in flushPassiveEFfectsImpl. We should
+  // probably just combine the two functions. I believe they were only separate
+  // in the first place because we used to wrap it with
+  // 'Scheduler.runWithPriority', which accepts a function. But now we track the
+  // priority within React itself, so we can mutate the variable directly.
+  if (rootWithPendingPassiveEffects !== null) {
+    // Cache the root since rootWithPendingPassiveEffects is cleared in
+    // flushPassiveEffectsImpl
+    const root = rootWithPendingPassiveEffects;
+    // Cache and clear the remaining lanes flag; it must be reset since this
+    // method can be called from various places, not always from commitRoot
+    // where the remaining lanes are known
+    const remainingLanes = pendingPassiveEffectsRemainingLanes;
+    pendingPassiveEffectsRemainingLanes = NoLanes;
+
+    const renderPriority = lanesToEventPriority(pendingPassiveEffectsLanes);
+    const priority = lowerEventPriority(DefaultEventPriority, renderPriority);
+    const prevTransition = ReactCurrentBatchConfig.transition;
+    const previousPriority = getCurrentUpdatePriority();
+
+    try {
+      ReactCurrentBatchConfig.transition = null;
+      setCurrentUpdatePriority(priority);
+      return flushPassiveEffectsImpl();
+    } finally {
+      setCurrentUpdatePriority(previousPriority);
+      ReactCurrentBatchConfig.transition = prevTransition;
+
+      // Once passive effects have run for the tree - giving components a
+      // chance to retain cache instances they use - release the pooled
+      // cache at the root (if there is one)
+      releaseRootPooledCache(root, remainingLanes);
+    }
+  }
+  return false;
+}
+\`\`\``;
+

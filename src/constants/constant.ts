@@ -9,5 +9,6 @@ export const classMap = {
   href: 'href',
   ul: 'ul',
   assist: 'assist',
-  markdown: 'markdown-container'
+  markdown: 'markdown-container',
+  h4: 'block text-16 my-10'
 };

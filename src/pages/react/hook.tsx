@@ -1,14 +1,37 @@
 import { classMap } from '@/constants/constant';
 import { Anchor, Alert } from 'antd';
 import { useMarkDown } from '@/hooks/useMarkdown';
-import { DISPATCHER, DISPATCHER_SET, HOOK, PUSH_EFFECT } from '.';
+import {
+  APP_1,
+  BASIC_STATE_ROUTER,
+  COMMIT_HOOK_EFFECT_LIST_MOUNT,
+  COMMIT_HOOK_EFFECT_LIST_UNMOUNT,
+  DISPATCHER,
+  DISPATCHER_SET,
+  DISPATCH_STATE,
+  FLUSH_PASSIVE_EFFECTS,
+  HOOK,
+  MOUNT_STATE_REDUCER,
+  PUSH_EFFECT,
+  UPDATE_REDUCER,
+  USE_STATE_REDUCER
+} from '.';
 const { Link } = Anchor;
 
 export default function Index() {
   const hook = useMarkDown(HOOK),
     pushEffect = useMarkDown(PUSH_EFFECT),
     dispatcher = useMarkDown(DISPATCHER),
-    dispatcherSet = useMarkDown(DISPATCHER_SET);
+    dispatcherSet = useMarkDown(DISPATCHER_SET),
+    app_1 = useMarkDown(APP_1),
+    useState_Reducer = useMarkDown(USE_STATE_REDUCER),
+    mountStateReducer = useMarkDown(MOUNT_STATE_REDUCER),
+    basicStateReducer = useMarkDown(BASIC_STATE_ROUTER),
+    updateReducer = useMarkDown(UPDATE_REDUCER),
+    dispatch = useMarkDown(DISPATCH_STATE),
+    flushPassiveEffects = useMarkDown(FLUSH_PASSIVE_EFFECTS),
+    commitHookEffectListUnmount = useMarkDown(COMMIT_HOOK_EFFECT_LIST_UNMOUNT),
+    commitHookEffectListMount = useMarkDown(COMMIT_HOOK_EFFECT_LIST_MOUNT);
 
   return (
     <article id="root" className={classMap.article}>
@@ -86,6 +109,96 @@ export default function Index() {
       然后将不同情况的<code>dispatcher</code>赋值给全局变量<code>ReactCurrentDispatcher.current</code>
       {dispatcherSet}
       执行<code>render</code>的时候，从<code>ReactCurrentDispatcher.current</code>中寻找需要的hook
+      <h2 id="detail" className={classMap.articleTitle}>
+        具体实现
+      </h2>
+      <h3 id="useState" className={classMap.articleSubTitle}>
+        useState和useReducer
+      </h3>
+      它们的工作流程分为<code>声明阶段</code>和<code>调用阶段</code>
+      举个栗子，有如下函数组件：
+      {app_1}
+      <ul>
+        <li>
+          <code>声明阶段</code>： <code>App</code>调用时，依次执行<code>useReducer</code>和<code>useState</code>
+        </li>
+        <li>
+          <code>调用阶段</code>： 点击按钮后，<code>dispatch</code>或<code>updateNum</code>
+        </li>
+      </ul>
+      <h3 id="define" className={classMap.articleSubTitle}>
+        <strong>声明阶段</strong>
+      </h3>
+      函数组件进入<code>render</code>,调用<code>beginWork</code>，会调用<code>renderWithHooks</code>。
+      <br />
+      内部会执行<code>FunctionComponent</code>对应函数。
+      <code>useState</code>和<code>useReducer</code>源码如下：
+      <br />
+      <div className={classMap.assist}>packages\react\src\ReactHooks.js</div>
+      {useState_Reducer}
+      <strong className={classMap.h4}>mount时</strong>
+      <code>mount时</code>，<code>useReducer</code>会调用<code>mountReducer</code>，<code>useState</code>会调用
+      <code>mountState</code>
+      <div className={classMap.assist}>packages\react-reconciler\src\ReactFiberHooks.new.js</div>
+      {mountStateReducer}
+      <code>mountWorkInProgressHook</code>方法会创建并返回对应<code>hook</code>，可以看到，两个hook唯一区别是
+      <code>lastRenderedReducer</code>字段。
+      <code>useReducer</code>的<code>lastRenderedReducer</code>为传入的<code>reducer</code>参数。<code>useState</code>的
+      <code>lastRenderedReducer</code>为<code>basicStateReducer</code>
+      <br />
+      <code>basicStateReducer</code>代码如下：
+      {basicStateReducer}
+      所以，<code>useState</code>就是<code>reducer</code>为<code>basicStateReducer</code>的<code>useReducer</code>
+      <strong className={classMap.h4}>update时</strong>
+      <code>mount时</code>还有微小的差别，而
+      <code>update</code>时，<code>useReducer</code>和<code>useState</code>调用的是同一个函数<code>updateReducer</code>
+      {updateReducer}
+      <code>mount</code>时获取当前<code>hook</code>使用的是<code>mountWorkInProgressHook</code>，而<code>update</code>
+      时使用的是<code>updateWorkInProgressHook</code>，原因是：
+      <ul className={classMap.ul}>
+        <li>
+          <code>mount</code>时可以确定是调用<code>ReactDOM.render</code>产生的初始化更新，只会执行一次。
+        </li>
+        <li>
+          <code>update</code>可能是事件回调或副作用中触发的更新，也有可能是<code>render</code>
+          阶段触发的更新，为了避免无限循环更新，后者需要区别对待。
+        </li>
+      </ul>
+      <code>React</code>使用变量<code>didScheduleRenderPhaseUpdate</code>判断是否是<code>render</code>阶段的更新。
+      <h3 id="call" className={classMap.articleSubTitle}>
+        <strong>调用阶段</strong>
+      </h3>
+      调用阶段会执行<code>dispatchAction</code>，此时该函数组件对应的<code>fiber</code>,<code>hook.queue</code>已经通过
+      <code>bind</code>方法预先作为参数传入。
+      {dispatch}
+      整个过程可以概括为：创建<code>update</code>，将<code>update</code>加入<code>queue.pending</code>，并开启调度。
+      <h3 id="useEffect" className={classMap.articleSubTitle}>
+        useEffect
+      </h3>
+      深入<code>flushPassiveEffects</code>方法看<code>useEffect</code>的工作原理。
+      <strong className={classMap.h4}>flushPassiveEffectsImpl</strong>
+      <code>flushPassiveEffects</code>内部设置优先级，执行<code>flushPassiveEffectsImpl</code>
+      {flushPassiveEffects}
+      <code>flushPassiveEffectsImpl</code>主要做三件事：
+      <ul className={classMap.ul}>
+        <li>
+          调用<code>useEffect</code>在上一次<code>render</code>的销毁函数
+        </li>
+        <li>
+          调用<code>useEffect</code>本次<code>render</code>的回调函数
+        </li>
+        <li>如果存在同步任务，不需要等待下次事件循环的宏任务，提前执行</li>
+      </ul>
+      <code>v16.13.1</code>之前第一步是同步执行的，之后都改为异步执行了。
+      <strong className={classMap.h4}>阶段一：销毁函数的执行</strong>
+      <code>useEffect</code>需要所有组件的<code>useEffect</code>的销毁函数都执行完后才能执行任意一个
+      <code>useEffect</code>的回调函数， 因为多个组件可能共用同一个ref，<code>useLayoutEffect</code>也是一样。 
+      <br />
+      <br />
+      在阶段一，会遍历并执行所有<code>useEffect</code>的销毁函数
+      {commitHookEffectListUnmount}
+      <strong className={classMap.h4}>阶段二：回调函数的执行</strong>
+      {commitHookEffectListMount}
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
         <Link href="#hooks" title="Hooks"></Link>
         <Link href="#dataStructure" title="数据结构">
@@ -93,7 +206,10 @@ export default function Index() {
           <Link href="#dispatcher" title="dispatcher"></Link>
         </Link>
         <Link href="#detail" title="具体实现">
-          <Link href="#useState" title="useState和useReducer"></Link>
+          <Link href="#useState" title="useState和useReducer">
+            <Link href="#define" title="声明阶段"></Link>
+            <Link href="#call" title="调用阶段"></Link>
+          </Link>
           <Link href="#useEffect" title="useEffect"></Link>
           <Link href="#useRef" title="useRef"></Link>
           <Link href="#useMemo" title="useMemo和useCallback"></Link>

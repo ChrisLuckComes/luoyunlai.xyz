@@ -615,6 +615,11 @@ video {
   position: relative;
 }
 
+.my-10 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .mr-8 {
   margin-right: 8px;
 }
