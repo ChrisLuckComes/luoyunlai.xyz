@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@main
       # 安装使用 node:10
       - name: use Node.js 14
-        uses: actions/setup-node@v1
+        uses: actions/deploy@v1
         with:
           node-version: 14.16.1
       # 运行命令，npm install && npm run build
