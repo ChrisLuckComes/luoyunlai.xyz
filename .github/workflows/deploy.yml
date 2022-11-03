@@ -9,7 +9,7 @@ on: # 此CI/CD触发时的事件
 # 一个 CI/CD 的工作流有许多 jobs 组成，比如最典型的 job 是 lint，test，build。
 jobs: 
   build: # 构建job
-    runs-on: ubuntu-latest # 跑workflow的服务器系统
+    runs-on: centos-latest # 跑workflow的服务器系统
     steps: # job的一系列动作
       # 切换分支获取源码
       - name: Checkout # step的名称，将会在 github action 的控制台中显示
