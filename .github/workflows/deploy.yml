@@ -1,10 +1,10 @@
 # 一个workflow，名为deploy to tengxunyun
-name: deploy to tengxunyun
+name: deploy to tencent cloud
 
 on: # 此CI/CD触发时的事件
   push: # 在代码提交时自动触发
     branches:
-      - master
+      - main
 
 # 一个 CI/CD 的工作流有许多 jobs 组成，比如最典型的 job 是 lint，test，build。
 jobs: 
