@@ -35,21 +35,27 @@ const routers = [
     children: [
       {
         key: 'tailwindcss',
-        path: '/experience/tailwindcss',
+        path: '/project/tailwindcss',
         name: '来不及了，快上车tailwindcss🚘',
         element: lazy(() => import('@/pages/project/tailwindcss'))
       },
       {
         key: 'http2',
-        path: '/experience/http2',
+        path: '/project/http2',
         name: 'http=>https=>http2',
         element: lazy(() => import('@/pages/project/http2'))
       },
       {
         key: 'vite',
-        path: '/react/vite',
+        path: '/project/vite',
         name: '2022年还在用webpack?快上Vite！',
         element: lazy(() => import('@/pages/project/vite'))
+      },
+      {
+        key: 'workflow',
+        path: '/project/workflow',
+        name: '不会还有人在手动发版吧？',
+        element: lazy(() => import('@/pages/project/workflow'))
       }
     ]
   },
