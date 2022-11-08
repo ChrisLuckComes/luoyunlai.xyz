@@ -1,6 +1,6 @@
 import { classMap } from '@/constants/constant';
 import { Alert, Anchor } from 'antd';
-import { useMarkDown } from '@/hooks/useMarkdown';
+import { UseMarkDown } from '@/hooks/useMarkdown';
 const { Link } = Anchor;
 
 import NVM from '@/images/node/nvm.png';
@@ -13,8 +13,6 @@ export PATH=$N_PREFIX/bin:$PATH
 \`\`\``;
 
 export default function Index() {
-  const path = useMarkDown(PATH);
-
   return (
     <article id="root" className={classMap.article}>
       <h2 className={classMap.articleTitle}>光速切换Node.js版本</h2>
@@ -78,7 +76,7 @@ export default function Index() {
         环境变量
       </h3>
       <code>vim ~/.bash_profile</code>，修改末尾代码设置环境变量
-      {path}
+      <UseMarkDown markdown={PATH}></UseMarkDown>
       <code>source ~/.bash_profile</code>，执行使变量生效
       <h3 id="change" className={classMap.articleSubTitle}>
         切换版本

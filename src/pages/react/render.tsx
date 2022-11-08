@@ -21,10 +21,27 @@ import FIBER_1 from '@/images/fiber.png';
 import BEGINWORK from '@/images/beginWork.png';
 import SUBTREE_FLAGS from '@/images/subTreeFlags.png';
 import EFFECT_LIST_PNG from '@/images/effectList.png';
+import { UseMarkDown } from '@/hooks/useMarkdown';
 
 const { Link } = Anchor;
 
 export default function Render() {
+  const beginWork = <UseMarkDown markdown={BEGIN_WORK}></UseMarkDown>,
+    beginWorkParams = <UseMarkDown markdown={BEGIN_WORK_PARAMS}></UseMarkDown>,
+    checkUpdate = <UseMarkDown markdown={CHECK_UPDATE}></UseMarkDown>,
+    completeWork = <UseMarkDown markdown={COMPLETE_WORK}></UseMarkDown>,
+    diffProp = <UseMarkDown markdown={DIFF_PROP}></UseMarkDown>,
+    effectList = <UseMarkDown markdown={EFFECT_LIST}></UseMarkDown>,
+    fiberExample = <UseMarkDown markdown={FIBER_EXAMPLE}></UseMarkDown>,
+    flags = <UseMarkDown markdown={FLAGS}></UseMarkDown>,
+    hostComponent = <UseMarkDown markdown={HOST_COMPONENT}></UseMarkDown>,
+    hostUpdate = <UseMarkDown markdown={HOST_UPDATE}></UseMarkDown>,
+    mountComponent = <UseMarkDown markdown={MOUNT_COMPONENT}></UseMarkDown>,
+    reconcileChildren = <UseMarkDown markdown={RECONCILER_CHILDREN}></UseMarkDown>,
+    updateComponent = <UseMarkDown markdown={UPDATE_COMPONENT}></UseMarkDown>,
+    workLoop = <UseMarkDown markdown={WORK_LOOP}></UseMarkDown>,
+    workLoopConcurrent = <UseMarkDown markdown={WORK_LOOP_CONCUNCURRENT}></UseMarkDown>;
+
   return (
     <article id="root" className={classMap.article}>
       <h2 id="flow" className={classMap.articleTitle}>
@@ -33,8 +50,9 @@ export default function Render() {
       <code>render阶段</code>开始于<code>performSyncWorkOnRoot</code>或<code>performConcurrentWorkOnRoot</code>
       。取决于本次更新是同步更新还是异步更新 它们会调用如下两个方法
       <div className={classMap.assist}>packages\react-reconciler\src\ReactFiberWorkLoop.new.js</div>
-      <div className={classMap.markdown}>{WORK_LOOP}</div>
-      <div className={classMap.markdown}>{WORK_LOOP_CONCUNCURRENT}</div>
+      {workLoop}
+      <br />
+      {workLoopConcurrent}
       它们唯一的区别就是调用<code>shouldYield</code>，如果当前浏览器帧没有剩余时间，<code>shouldYield</code>
       会中止循环，直到浏览器有空闲时间后再继续遍历。
       <br />
@@ -67,7 +85,7 @@ export default function Render() {
       向上和向下会交错执行直到向上回到<code>rootFiber</code>，至此，<code>rennder</code>阶段结束.
       <br />
       还是之前的栗子
-      <div className={classMap.markdown}>{FIBER_EXAMPLE}</div>
+      {fiberExample}
       <img src={FIBER_1} />
       <code>render阶段</code>会依次执行
       <div className={classMap.markdown}>
@@ -92,7 +110,7 @@ export default function Render() {
       <h3 id="beginWorkParams" className={classMap.articleSubTitle}>
         传入参数
       </h3>
-      <div className={classMap.markdown}>{BEGIN_WORK_PARAMS}</div>
+      {beginWorkParams}
       <ul className={classMap.ul}>
         <li>
           current: 当前组件对应的<code>Fiber节点</code>在上一次更新时的<code>Fiber节点</code>
@@ -115,7 +133,7 @@ export default function Render() {
         </li>
       </ul>
       <div className={classMap.assist}>packages\react-reconciler\src\ReactFiberBeginWork.new.js</div>
-      <div className={classMap.markdown}>{BEGIN_WORK}</div>
+      {beginWork}
       <h3 id="update" className={classMap.articleSubTitle}>
         update时
       </h3>
@@ -130,7 +148,7 @@ export default function Render() {
           调用
           <code>checkScheduledUpdateOrContext</code>，检查当前节点优先级。如果优先级不够
           <code>hasScheduledUpdateOrContext</code>为false
-          <div className={classMap.markdown}>{CHECK_UPDATE}</div>
+          {checkUpdate}
         </li>
       </ul>
       <h3 id="update" className={classMap.articleSubTitle}>
@@ -154,7 +172,7 @@ export default function Render() {
           <code>Diff</code>），将比较的结果生成新的节点
         </li>
       </ul>
-      <div className={classMap.markdown}>{RECONCILER_CHILDREN}</div>
+      {reconcileChildren}
       从代码可以看出，和<code>beginWork</code>一样，它也是通过<code>current===null</code>来区分<code>mount</code>和
       <code>update</code>
       <br />
@@ -168,7 +186,8 @@ export default function Render() {
       <h3 id="effectTag" className={classMap.articleSubTitle}>
         effectTag
       </h3>
-      DOM操作的具体类型就保存在<code>fiber.effectTag</code>中<div className={classMap.markdown}>{FLAGS}</div>
+      DOM操作的具体类型就保存在<code>fiber.effectTag</code>中
+      {flags}
       <div className={classMap.assist}>
         通过二进制表示可以更方便的用位操作为<code>fiber.effectTag</code>来赋值
       </div>
@@ -194,7 +213,7 @@ export default function Render() {
       </h2>
       类似<code>beginWork</code>，<code>completeWork</code>也是根据不同的<code>fiber.tag</code>
       调用不同的处理逻辑，以渲染页面必须的<code>HostComponent</code>（即原生DOM组件对应的fiber节点）为例。
-      <div className={classMap.markdown}>{COMPLETE_WORK}</div>
+      {completeWork}
       <h3 id="hostComponent" className={classMap.articleSubTitle}>
         HostComponent
       </h3>
@@ -202,7 +221,7 @@ export default function Render() {
       <br />
       同时针对<code>HostComponent</code>，判断<code>update</code>时还要考虑<code>workInProgress.stateNode!==null</code>
       ，也就是该<code>fiber节点</code>是否存在对应的DOM节点
-      <div className={classMap.markdown}>{HOST_COMPONENT}</div>
+      {hostComponent}
       <h3 id="hostUpdate" className={classMap.articleSubTitle}>
         update时
       </h3>
@@ -223,13 +242,13 @@ export default function Render() {
         </li>
       </ul>
       最主要的逻辑就是调用了<code>updateHostComponent</code>
-      <div className={classMap.markdown}>{HOST_UPDATE}</div>
+      {hostUpdate}
       <code>updateHostComponent</code>将props处理完后，赋值给<code>workInProgress.updateQueue</code>，最终会在
       <code>commit阶段</code>被渲染到页面上
-      <div className={classMap.markdown}>{UPDATE_COMPONENT}</div>
+      {updateComponent}
       <code>uploadPayload</code>是数组，它的偶数索引的值为变化的<code>prop key</code>，奇数索引的值为变化的
       <code>prop value</code>
-      <div className={classMap.markdown}>{DIFF_PROP}</div>
+      {diffProp}
       <h3 id="hostMount" className={classMap.articleSubTitle}>
         mount时
       </h3>
@@ -245,7 +264,7 @@ export default function Render() {
       </ul>
       每次向上阶段都会调用<code>appendAllChildren</code>插入子孙节点至当前生成的DOM节点下，那么到顶部
       <code>rootFiber时</code>，DOM树就构建完成了。
-      <div className={classMap.markdown}>{MOUNT_COMPONENT}</div>
+      {mountComponent}
       <h3 id="effectList" className={classMap.articleSubTitle}>
         effectList
       </h3>
@@ -264,7 +283,8 @@ export default function Render() {
       <br />
       类似于<code>appendAllChildren</code>，在向上阶段，所有有<code>effectTag</code>
       的节点都会被追加在effectList中，最终形成一条以<code>rootFiber.firstEffect</code>为起点的单向链表。
-      <div className={classMap.markdown}>{EFFECT_LIST}</div>在<code>commit阶段</code>只需要遍历<code>effectList</code>
+      {effectList}
+      在<code>commit阶段</code>只需要遍历<code>effectList</code>
       就能执行所有<code>effect</code>了
       <img src={EFFECT_LIST_PNG} />
       但是从react16.14开始，effectList被重构了，改用<strong>SubtreeFlags</strong>
@@ -285,7 +305,8 @@ export default function Render() {
       <h3 id="Suspense" className={classMap.articleSubTitle}>
         Suspense
       </h3>
-      根据<code>Suspense</code>的理念，如果子孙组件有异步加载的内容，只会先渲染fallback。为了实现这一点，需要改变commit阶段遍历的方式，所以重构为subtreeFlags。
+      根据<code>Suspense</code>
+      的理念，如果子孙组件有异步加载的内容，只会先渲染fallback。为了实现这一点，需要改变commit阶段遍历的方式，所以重构为subtreeFlags。
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
         <Link href="#flow" title="Render阶段流程">
           <Link href="#traverseDown" title="向下阶段"></Link>

@@ -1,9 +1,13 @@
 import { classMap } from '@/constants/constant';
+import { UseMarkDown } from '@/hooks/useMarkdown';
 import { Anchor } from 'antd';
 import { FLAGS, WORK_LOOP_CONCUNCURRENT } from '.';
 const { Link } = Anchor;
 
 export default function Thinking() {
+  const workLoopConcurrent = <UseMarkDown markdown={WORK_LOOP_CONCUNCURRENT}></UseMarkDown>,
+    flags = <UseMarkDown markdown={FLAGS}></UseMarkDown>;
+
   return (
     <article id="root" className={classMap.article}>
       <h2 id="thinking" className={classMap.articleTitle}>
@@ -128,17 +132,20 @@ export default function Thinking() {
       <br />
       更新工作改写成了可以中断的循环过程。每次循环都会调用<code>shouldYield</code>判断是否有剩余时间
       <div className={classMap.assist}>packages\react-reconciler\src\ReactFiberWorkLoop.new.js</div>
-      <div className={classMap.markdown}>{WORK_LOOP_CONCUNCURRENT}</div>
+      {workLoopConcurrent}
       另外，<strong>Reconciler</strong>和<strong>Renderer</strong>不再是交替工作。当<strong>Scheduler</strong>将任务交给
       <strong>Reconciler</strong>后，<strong>Reconciler</strong>会为有变化的vDom打上effectTag,如下：
       <div className={classMap.assist}>packages\react-reconciler\src\ReactFiberFlags.js</div>
-      <div className={classMap.markdown}>{FLAGS}</div>
-      整个<strong>Scheduler</strong>和<strong>Reconciler</strong>的工作都在内存中进行，所有组件都完成<strong>Reconciler</strong>的工作，才会统一交给renderer
+      {flags}
+      整个<strong>Scheduler</strong>和<strong>Reconciler</strong>的工作都在内存中进行，所有组件都完成
+      <strong>Reconciler</strong>的工作，才会统一交给renderer
       <h3 id="newRenderer" className={classMap.articleSubTitle}>
-      Renderer（渲染器）
+        Renderer（渲染器）
       </h3>
       <strong>Renderer</strong>根据<strong>Reconciler</strong>标记的effectTag，同步执行对应的DOM操作
-      <h2 id='summary' className={classMap.articleTitle}>总结</h2>
+      <h2 id="summary" className={classMap.articleTitle}>
+        总结
+      </h2>
       <code>React16</code>采用了新的<code>Reconciler</code>,其内部采用了<code>Fiber</code>架构
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
         <Link href="#thinking" title="理念"></Link>

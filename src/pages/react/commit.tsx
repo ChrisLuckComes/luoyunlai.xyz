@@ -21,29 +21,29 @@ import {
   PARENT_FIBER,
   SIBILING
 } from '.';
-import { useMarkDown } from '@/hooks/useMarkdown';
+import { UseMarkDown } from '@/hooks/useMarkdown';
 const { Link } = Anchor;
 
 export default function Index() {
-  const commitRoot = useMarkDown(COMMIT_ROOT),
-    BeforeMutation = useMarkDown(BEFORE_MUTATION),
-    layoutAfter = useMarkDown(LAYOUT_AFTER),
-    beforeMutationBefore = useMarkDown(BEFORE_MUTATION_BEFORE),
-    beforeMutationEffects = useMarkDown(COMMIT_BEFORE_MUTATION_EFFECTS),
-    functionComponent = useMarkDown(FUNCTION_COMPONENT),
-    classComponent = useMarkDown(CLASS_COMPONENT),
-    commitMutationEffects = useMarkDown(COMMIT_MUTATION_EFFECTS),
-    parentFiber = useMarkDown(PARENT_FIBER),
-    sibling = useMarkDown(SIBILING),
-    insert = useMarkDown(INSERT),
-    commitHookEffectListUnmount = useMarkDown(COMMIT_HOOK_EFFECT_LIST_UNMOUNT),
-    destroyFunc = useMarkDown(DESTROY_FUNC),
-    commitHookEffectListMount = useMarkDown(COMMIT_HOOK_EFFECT_LIST_MOUNT),
-    commitUpdate = useMarkDown(COMMIT_UPDATE),
-    commitLayoutEffects = useMarkDown(COMMIT_LAYOUT_EFFECT),
-    commitLayoutEffectOnFiber = useMarkDown(COMMIT_LAYOUT_EFFECT_ON_FIBER),
-    commitAttachRef = useMarkDown(COMMIT_ATTACH_REF),
-    changeCurrentRoot = useMarkDown(CHANGE_CURRENT_ROOT);
+  const commitRoot = <UseMarkDown markdown={COMMIT_ROOT} />,
+    BeforeMutation = <UseMarkDown markdown={BEFORE_MUTATION} />,
+    layoutAfter = <UseMarkDown markdown={LAYOUT_AFTER} />,
+    beforeMutationBefore = <UseMarkDown markdown={BEFORE_MUTATION_BEFORE} />,
+    beforeMutationEffects = <UseMarkDown markdown={COMMIT_BEFORE_MUTATION_EFFECTS} />,
+    functionComponent = <UseMarkDown markdown={FUNCTION_COMPONENT} />,
+    classComponent = <UseMarkDown markdown={CLASS_COMPONENT} />,
+    commitMutationEffects = <UseMarkDown markdown={COMMIT_MUTATION_EFFECTS} />,
+    parentFiber = <UseMarkDown markdown={PARENT_FIBER} />,
+    sibling = <UseMarkDown markdown={SIBILING} />,
+    insert = <UseMarkDown markdown={INSERT} />,
+    commitHookEffectListUnmount = <UseMarkDown markdown={COMMIT_HOOK_EFFECT_LIST_UNMOUNT} />,
+    destroyFunc = <UseMarkDown markdown={DESTROY_FUNC} />,
+    commitHookEffectListMount = <UseMarkDown markdown={COMMIT_HOOK_EFFECT_LIST_MOUNT} />,
+    commitUpdate = <UseMarkDown markdown={COMMIT_UPDATE} />,
+    commitLayoutEffects = <UseMarkDown markdown={COMMIT_LAYOUT_EFFECT} />,
+    commitLayoutEffectOnFiber = <UseMarkDown markdown={COMMIT_LAYOUT_EFFECT_ON_FIBER} />,
+    commitAttachRef = <UseMarkDown markdown={COMMIT_ATTACH_REF} />,
+    changeCurrentRoot = <UseMarkDown markdown={CHANGE_CURRENT_ROOT} />;
 
   return (
     <article id="root" className={classMap.article}>

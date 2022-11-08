@@ -1,6 +1,6 @@
 import { classMap } from '@/constants/constant';
 import { Anchor } from 'antd';
-import { useMarkDown } from '@/hooks/useMarkdown';
+import { UseMarkDown } from '@/hooks/useMarkdown';
 const { Link } = Anchor;
 
 import CREATE_SSH from '@/images/createSSH.jpg';
@@ -60,7 +60,7 @@ jobs:
 \`\`\``;
 
 export default function Index() {
-  const myWorkflow = useMarkDown(MY_WORKFLOW);
+  const myWorkflow = <UseMarkDown markdown={MY_WORKFLOW}></UseMarkDown>;
 
   return (
     <article id="root" className={classMap.article}>
@@ -113,7 +113,6 @@ export default function Index() {
       <br />
       <br />
       <img src={WORKFLOW} />
-
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
         <Link href="#ssh" title="SSH"></Link>
         <Link href="#workflow" title="workflow"></Link>

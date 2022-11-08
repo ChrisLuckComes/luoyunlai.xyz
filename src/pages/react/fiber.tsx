@@ -7,9 +7,16 @@ import ALTERNATE_IMG from '@/images/alternate.png';
 import CURRENT from '@/images/current.png';
 import UPDATE_IMG from '@/images/update.png';
 import CURRENT_UPDATE from '@/images/currentUpdate.png';
+import { UseMarkDown } from '@/hooks/useMarkdown';
 const { Link } = Anchor;
 
 export default function Fiber() {
+  const alternate = <UseMarkDown markdown={ALTERNATE}></UseMarkDown>,
+    fiberExample = <UseMarkDown markdown={FIBER_EXAMPLE}></UseMarkDown>,
+    fiberNode = <UseMarkDown markdown={FIBER_NODE}></UseMarkDown>,
+    mountExample = <UseMarkDown markdown={MOUNT_EXAMPLE}></UseMarkDown>,
+    rootNode = <UseMarkDown markdown={ROOT_NODE}></UseMarkDown>;
+
   return (
     <article id="root" className={classMap.article}>
       <h2 id="idea" className={classMap.articleTitle}>
@@ -39,9 +46,9 @@ export default function Fiber() {
         结构
       </h3>
       <div className={classMap.assist}>packages\react-reconciler\src\ReactFiber.new.js</div>
-      <div className={classMap.markdown}>{FIBER_NODE}</div>
+      {fiberNode}
       举个栗子，如下组件
-      <div className={classMap.markdown}>{FIBER_EXAMPLE}</div>
+      {fiberExample}
       <img src={FIBER_1} />
       <div className={classMap.assist}>
         那么为什么父级指针叫return不叫parent呢？<code>return</code>指的是执行完<code>completeWork</code>
@@ -64,7 +71,8 @@ export default function Fiber() {
       <br />
       <br />
       currentFiber和workInProgressFiber通过<code>alternate</code>属性连接
-      <div className={classMap.markdown}>{ALTERNATE}</div>当<code>workInProgress Fiber树</code>构建完成交给
+      {alternate}
+      当<code>workInProgress Fiber树</code>构建完成交给
       <code>Renderer</code>渲染在页面上后，应用根节点的<code>current</code>指针指向<code>workInProgress Fiber树</code>
       ，此时<code>workInProgress Fiber树</code>就变为<code>current Fiber树</code>
       <br />
@@ -75,7 +83,7 @@ export default function Fiber() {
       <h3 id="mount" className={classMap.articleSubTitle}>
         mount时
       </h3>
-      <div className={classMap.markdown}>{MOUNT_EXAMPLE}</div>
+      {mountExample}
       <ul>
         <li>
           1.首次执行<code>ReactDOM.render</code>会创建fiberRootNode和rootFiber,<code>fiberRootNode</code>
@@ -88,7 +96,7 @@ export default function Fiber() {
           <code>fiberRootNode</code>的<code>current</code>会指向当前页面上已渲染内容对应的<code>Fiber树</code>,即
           <code>current Fiber树</code>
           <img src={FIBER_2} />
-          <div className={classMap.markdown}>{ROOT_NODE}</div>
+          {rootNode}
           由于是首屏渲染，页面中还没有挂载任何DOM,所以fiberRootNode.current指向的rootFiber没有子fiber节点
         </li>
         <li>
@@ -120,8 +128,9 @@ export default function Fiber() {
           对应的节点数据，决定是否复用的过程就是<strong>diff算法</strong>
         </li>
         <li>
-            2. <code>workInProgress树</code>在<code>render阶段</code>完成构建后进入<code>commit阶段</code>渲染到页面上。渲染完成后，<code>workInProgress树</code>变为<code>current树</code>
-            <img src={CURRENT_UPDATE} />
+          2. <code>workInProgress树</code>在<code>render阶段</code>完成构建后进入<code>commit阶段</code>
+          渲染到页面上。渲染完成后，<code>workInProgress树</code>变为<code>current树</code>
+          <img src={CURRENT_UPDATE} />
         </li>
       </ul>
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>

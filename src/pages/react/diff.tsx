@@ -1,16 +1,16 @@
 import { classMap } from '@/constants/constant';
 import { Anchor } from 'antd';
-import { useMarkDown } from '@/hooks/useMarkdown';
+import { UseMarkDown } from '@/hooks/useMarkdown';
 import { MAP_REMAINING_CHILDREN, PLACE_CHILD, RECONCILE_CHILD_FIBERS, RECONCILE_SINGLE_ELEMENT, UPDATE_SLOT } from '.';
 import DIFF_SINGLE from '@/images/reconcileSingleElement.png';
 const { Link } = Anchor;
 
 export default function Index() {
-  const reconcileChildFibers = useMarkDown(RECONCILE_CHILD_FIBERS),
-    reconcileSingleElement = useMarkDown(RECONCILE_SINGLE_ELEMENT),
-    updateSlot = useMarkDown(UPDATE_SLOT),
-    mapRemainingChildren = useMarkDown(MAP_REMAINING_CHILDREN),
-    placeChild = useMarkDown(PLACE_CHILD);
+  const reconcileChildFibers = <UseMarkDown markdown={RECONCILE_CHILD_FIBERS} />,
+    reconcileSingleElement = <UseMarkDown markdown={RECONCILE_SINGLE_ELEMENT} />,
+    updateSlot = <UseMarkDown markdown={UPDATE_SLOT} />,
+    mapRemainingChildren = <UseMarkDown markdown={MAP_REMAINING_CHILDREN} />,
+    placeChild = <UseMarkDown markdown={PLACE_CHILD} />;
 
   return (
     <article id="root" className={classMap.article}>
@@ -98,7 +98,9 @@ export default function Index() {
         <li>
           2. 生成map，开始遍历剩余newChildren <code>[c,d,b]</code>
         </li>
-        <li>3. 节点c，oldIndex为2,，<code>oldIndex &gt; lastPlacedIndex</code>，c不动，lastPlacedIndex=2</li>
+        <li>
+          3. 节点c，oldIndex为2,，<code>oldIndex &gt; lastPlacedIndex</code>，c不动，lastPlacedIndex=2
+        </li>
         <li>
           4. 节点d，oldIndex为3，<code>oldIndex &gt; lastPlacedIndex</code>，d不动，lastPlacedIndex=3
         </li>

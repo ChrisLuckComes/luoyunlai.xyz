@@ -1,6 +1,6 @@
 import { classMap } from '@/constants/constant';
 import { Anchor, Alert } from 'antd';
-import { useMarkDown } from '@/hooks/useMarkdown';
+import { UseMarkDown } from '@/hooks/useMarkdown';
 import {
   APP_1,
   BASIC_STATE_ROUTER,
@@ -19,19 +19,19 @@ import {
 const { Link } = Anchor;
 
 export default function Index() {
-  const hook = useMarkDown(HOOK),
-    pushEffect = useMarkDown(PUSH_EFFECT),
-    dispatcher = useMarkDown(DISPATCHER),
-    dispatcherSet = useMarkDown(DISPATCHER_SET),
-    app_1 = useMarkDown(APP_1),
-    useState_Reducer = useMarkDown(USE_STATE_REDUCER),
-    mountStateReducer = useMarkDown(MOUNT_STATE_REDUCER),
-    basicStateReducer = useMarkDown(BASIC_STATE_ROUTER),
-    updateReducer = useMarkDown(UPDATE_REDUCER),
-    dispatch = useMarkDown(DISPATCH_STATE),
-    flushPassiveEffects = useMarkDown(FLUSH_PASSIVE_EFFECTS),
-    commitHookEffectListUnmount = useMarkDown(COMMIT_HOOK_EFFECT_LIST_UNMOUNT),
-    commitHookEffectListMount = useMarkDown(COMMIT_HOOK_EFFECT_LIST_MOUNT);
+  const hook = <UseMarkDown markdown={HOOK} />,
+    pushEffect = <UseMarkDown markdown={PUSH_EFFECT} />,
+    dispatcher = <UseMarkDown markdown={DISPATCHER} />,
+    dispatcherSet = <UseMarkDown markdown={DISPATCHER_SET} />,
+    app_1 = <UseMarkDown markdown={APP_1} />,
+    useState_Reducer = <UseMarkDown markdown={USE_STATE_REDUCER} />,
+    mountStateReducer = <UseMarkDown markdown={MOUNT_STATE_REDUCER} />,
+    basicStateReducer = <UseMarkDown markdown={BASIC_STATE_ROUTER} />,
+    updateReducer = <UseMarkDown markdown={UPDATE_REDUCER} />,
+    dispatch = <UseMarkDown markdown={DISPATCH_STATE} />,
+    flushPassiveEffects = <UseMarkDown markdown={FLUSH_PASSIVE_EFFECTS} />,
+    commitHookEffectListUnmount = <UseMarkDown markdown={COMMIT_HOOK_EFFECT_LIST_UNMOUNT} />,
+    commitHookEffectListMount = <UseMarkDown markdown={COMMIT_HOOK_EFFECT_LIST_MOUNT} />;
 
   return (
     <article id="root" className={classMap.article}>
@@ -192,7 +192,7 @@ export default function Index() {
       <code>v16.13.1</code>之前第一步是同步执行的，之后都改为异步执行了。
       <strong className={classMap.h4}>阶段一：销毁函数的执行</strong>
       <code>useEffect</code>需要所有组件的<code>useEffect</code>的销毁函数都执行完后才能执行任意一个
-      <code>useEffect</code>的回调函数， 因为多个组件可能共用同一个ref，<code>useLayoutEffect</code>也是一样。 
+      <code>useEffect</code>的回调函数， 因为多个组件可能共用同一个ref，<code>useLayoutEffect</code>也是一样。
       <br />
       <br />
       在阶段一，会遍历并执行所有<code>useEffect</code>的销毁函数
@@ -215,7 +215,6 @@ export default function Index() {
           <Link href="#useMemo" title="useMemo和useCallback"></Link>
         </Link>
       </Anchor>
-      
     </article>
   );
 }

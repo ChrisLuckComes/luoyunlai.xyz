@@ -1,4 +1,5 @@
-export const WORK_LOOP_CONCUNCURRENT = `/** @noinline */
+export const WORK_LOOP_CONCUNCURRENT = `\`\`\`js
+/** @noinline */
 function workLoopConcurrent() {
   // Perform work until Scheduler asks us to yield
 
@@ -17,15 +18,16 @@ function workLoopConcurrent() {
     // $FlowFixMe[incompatible-call] found when upgrading Flow
     performUnitOfWork(workInProgress);
   }
-}`;
+}\`\`\``;
 
-export const FLAGS = `// You can change the rest (and add more).
+export const FLAGS = `\`\`\`js // You can change the rest (and add more).
 export const Placement = /*                    */ 0b00000000000000000000000010;
 export const Update = /*                       */ 0b00000000000000000000000100;
 export const ChildDeletion = /*                */ 0b00000000000000000000001000;
-export const ContentReset = /*                 */ 0b00000000000000000000010000;`;
+export const ContentReset = /*                 */ 0b00000000000000000000010000;\`\`\``;
 
-export const FIBER_NODE = `function FiberNode(
+export const FIBER_NODE = `\`\`\`js
+function FiberNode(
   tag: WorkTag,
   pendingProps: mixed,
   key: null | string,
@@ -114,30 +116,34 @@ export const FIBER_NODE = `function FiberNode(
       Object.preventExtensions(this);
     }
   }
-}`;
+}\`\`\``;
 
-export const FIBER_EXAMPLE = `function App() {
+export const FIBER_EXAMPLE = `\`\`\`jsx
+function App() {
   return (
     <div>
       i am
       <span>luoyunlai</span>
     </div>
   )
-}`;
+}\`\`\``;
 
-export const ALTERNATE = `workInProgress.alternate = current;
-current.alternate = workInProgress;`;
+export const ALTERNATE = `\`\`\`js
+workInProgress.alternate = current;
+current.alternate = workInProgress;\`\`\``;
 
-export const MOUNT_EXAMPLE = `function App() {
+export const MOUNT_EXAMPLE = `\`\`\`jsx
+function App() {
   const [num, add] = useState(0);
   return (
     <p onClick={() => add(num + 1)}>{num}</p>
   )
 }
 
-ReactDOM.render(<App/>, document.getElementById('root'));`;
+ReactDOM.render(<App/>, document.getElementById('root'));\`\`\``;
 
-export const ROOT_NODE = `  const root: FiberRoot = (new FiberRootNode(
+export const ROOT_NODE = `\`\`\`js  
+const root: FiberRoot = (new FiberRootNode(
   containerInfo,
   tag,
   hydrate,
@@ -146,9 +152,10 @@ export const ROOT_NODE = `  const root: FiberRoot = (new FiberRootNode(
 ): any);
 root.current = uninitializedFiber;
 uninitializedFiber.stateNode = root;
-`;
+\`\`\``;
 
-export const WORK_LOOP = `function workLoopSync() {
+export const WORK_LOOP = `\`\`\`js
+function workLoopSync() {
   // Perform work without checking if we need to yield between fiber.
 
   if (workInProgressIsSuspended) {
@@ -165,17 +172,19 @@ export const WORK_LOOP = `function workLoopSync() {
   while (workInProgress !== null) {
     performUnitOfWork(workInProgress);
   }
-}`;
+}\`\`\``;
 
-export const BEGIN_WORK_PARAMS = `function beginWork(
+export const BEGIN_WORK_PARAMS = `\`\`\`js
+function beginWork(
   current: Fiber | null,
   workInProgress: Fiber,
   renderLanes: Lanes,
 ): Fiber | null {
   // ...省略函数体
-}`;
+}\`\`\``;
 
-export const BEGIN_WORK = `function beginWork(
+export const BEGIN_WORK = `\`\`\`js
+function beginWork(
   current: Fiber | null,
   workInProgress: Fiber,
   renderLanes: Lanes,
@@ -435,7 +444,8 @@ export const BEGIN_WORK = `function beginWork(
   }
 }`;
 
-export const CHECK_UPDATE = `function checkScheduledUpdateOrContext(
+export const CHECK_UPDATE = `\`\`\`js
+function checkScheduledUpdateOrContext(
   current: Fiber,
   renderLanes: Lanes,
 ): boolean {
@@ -454,9 +464,10 @@ export const CHECK_UPDATE = `function checkScheduledUpdateOrContext(
     }
   }
   return false;
-}`;
+}\`\`\``;
 
-export const RECONCILER_CHILDREN = `export function reconcileChildren(
+export const RECONCILER_CHILDREN = `\`\`\`js 
+export function reconcileChildren(
   current: Fiber | null,
   workInProgress: Fiber,
   nextChildren: any,
@@ -489,9 +500,10 @@ export const RECONCILER_CHILDREN = `export function reconcileChildren(
       renderLanes,
     );
   }
-}`;
+}\`\`\``;
 
-export const COMPLETE_WORK = `function completeWork(
+export const COMPLETE_WORK = `\`\`\`js
+function completeWork(
   current: Fiber | null,
   workInProgress: Fiber,
   renderLanes: Lanes,
@@ -525,9 +537,10 @@ export const COMPLETE_WORK = `function completeWork(
     case HostComponent: {
       // ...省略
       return null;
-    }`;
+    }\`\`\``;
 
-export const HOST_COMPONENT = `case HostComponent: {
+export const HOST_COMPONENT = `\`\`\`js
+case HostComponent: {
   popHostContext(workInProgress);
   const rootContainerInstance = getRootHostContainer();
   const type = workInProgress.type;
@@ -540,9 +553,10 @@ export const HOST_COMPONENT = `case HostComponent: {
     // ...省略
   }
   return null;
-}`;
+}\`\`\``;
 
-export const HOST_UPDATE = `if (current !== null && workInProgress.stateNode != null) {
+export const HOST_UPDATE = `\`\`\`js
+if (current !== null && workInProgress.stateNode != null) {
   // update的情况
   updateHostComponent(
     current,
@@ -551,9 +565,10 @@ export const HOST_UPDATE = `if (current !== null && workInProgress.stateNode != 
     newProps,
     rootContainerInstance,
   );
-}`;
+}\`\`\``;
 
-export const UPDATE_COMPONENT = `updateHostComponent = function(
+export const UPDATE_COMPONENT = `\`\`\`js
+updateHostComponent = function(
   current: Fiber,
   workInProgress: Fiber,
   type: Type,
@@ -591,9 +606,10 @@ export const UPDATE_COMPONENT = `updateHostComponent = function(
   if (updatePayload) {
     markUpdate(workInProgress);
   }
-};`;
+};\`\`\``;
 
-export const MOUNT_COMPONENT = `// ...省略服务端渲染相关逻辑
+export const MOUNT_COMPONENT = `\`\`\`js
+// ...省略服务端渲染相关逻辑
 
 const currentHostContext = getHostContext();
 // 为fiber创建对应DOM节点
@@ -620,7 +636,7 @@ if (
   )
 ) {
   markUpdate(workInProgress);
-}`;
+}\`\`\``;
 
 export const DIFF_PROP = `(updatePayload = updatePayload || []).push(propKey, nextProp);`;
 
@@ -2524,4 +2540,3 @@ export function flushPassiveEffects(): boolean {
   return false;
 }
 \`\`\``;
-
