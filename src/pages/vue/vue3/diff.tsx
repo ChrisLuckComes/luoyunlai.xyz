@@ -1,9 +1,14 @@
 import { classMap } from '@/constants/constant';
+import { UseMarkDown } from '@/hooks/useMarkdown';
 import { Anchor } from 'antd';
 import { PATCH, PATCH_CHILDREN, PATCH_KEYED_CHILDREN_SEQUENCE } from '.';
 const { Link } = Anchor;
 
 export default function Index() {
+  const patch = <UseMarkDown markdown={PATCH}></UseMarkDown>,
+    patchChildren = <UseMarkDown markdown={PATCH_CHILDREN}></UseMarkDown>,
+    patchKeyedChildren = <UseMarkDown markdown={PATCH_KEYED_CHILDREN_SEQUENCE}></UseMarkDown>;
+
   return (
     <article id="root" className={classMap.article}>
       <h1 className={classMap.pageTitle}>Vue3 - diff</h1>
@@ -32,7 +37,7 @@ export default function Index() {
         </li>
       </ul>
       <div className={classMap.assist}>packages\runtime-core\src\renderer.ts</div>
-      <div className={classMap.markdown}>{PATCH}</div>
+      {patch}
       <h2 id="patchChildren" className={classMap.articleTitle}>
         patchChildren
       </h2>
@@ -49,7 +54,7 @@ export default function Index() {
           ，类型不一致基本都是卸载旧节点使用新节点
         </li>
       </ul>
-      <div className={classMap.markdown}>{PATCH_CHILDREN}</div>
+      {patchChildren}
       <br />
       <h2 id="patchKeyedChildren" className={classMap.articleTitle}>
         patchKeyedChildren
@@ -82,7 +87,8 @@ export default function Index() {
         </li>
         <li>
           3. 新旧节点都没遍历完
-          <br /><br />
+          <br />
+          <br />
           遍历剩余新节点构建<code>key:index keyToNewIndexMap</code>
           ,新增数组 <code>newIndexToOldIndexMap</code>{' '}
           数组长度为e2-s2+1,即未遍历完的新数组，初始值设为0，用于标记处理过的次数。
@@ -93,38 +99,42 @@ export default function Index() {
           然后判断旧节点是否有key，则从keyToNewIndexMap中取出key对应的index;
           <br />
           否则只能顺序寻找是否有同类型节点，找到记录下标
-          <br /><br />
+          <br />
+          <br />
           如果newIndex没有找到，直接卸载该节点
           <br />
           找到了就判断<code>newIndex &gt;=maxNewIndexSoFar</code>,记录maxNewIndexSoFar和标记moved
           <div className={classMap.assist}>newIndex比maxIndex要小，节点肯定要移动</div>
-
           然后patch
-          <br /><br />
+          <br />
+          <br />
           如果moved为true，那就需要移动节点，并挂载新增节点，到了这一步就要根据newIndexToOldIndexMap获取最长递增子序列
-          <div className={classMap.assist}>
-            对于序列[1,3,2,3,5,1,66,777]的最长递增子序列是[1,2,3,5,66,777]
-          </div>
+          <div className={classMap.assist}>对于序列[1,3,2,3,5,1,66,777]的最长递增子序列是[1,2,3,5,66,777]</div>
           然后倒序遍历newIndexToOldIndexMap，每次遍历取c2[nextIndex+1]的节点作为锚点
           <br />
-          如果newIndexToOldIndexMap[i]为0说明是新增节点，直接patch
-          只有在 <code>j &lt; 0 || i !== increasingNewIndexSequence[j]</code>才会真正移动节点
-          举个栗子
+          如果newIndexToOldIndexMap[i]为0说明是新增节点，直接patch 只有在{' '}
+          <code>j &lt; 0 || i !== increasingNewIndexSequence[j]</code>才会真正移动节点 举个栗子
           <br />
           a b [c d e] f g <br />
           a b [e d c h] f g <br />
-
-          newIndexToOldIndexMap=[4,3,2,0],increasingNewIndexSequence=[2],j=0
-          过程如下
+          newIndexToOldIndexMap=[4,3,2,0],increasingNewIndexSequence=[2],j=0 过程如下
           <ul>
-              <li>i=3,j=0: <code>newIndexToOldIndexMap[i]===0</code> h节点是新节点 patch(h) 真实节点变为a b [c d e] h f g</li>
-              <li>i=2,j=0: <code>i === increasingNewIndexSequence[j]</code>c节点不移动，j--</li>
-              <li>i=1,j=-1: <code>j &lt; 0</code> d节点需要移动，以c为锚点move d节点，真实节点变为a b [d c e] h f g</li>
-              <li>i=0,j=-1: <code>j &lt; 0</code> e节点需要移动，以d为锚点move e节点，真实节点变为a b [e d c] h f g</li>
+            <li>
+              i=3,j=0: <code>newIndexToOldIndexMap[i]===0</code> h节点是新节点 patch(h) 真实节点变为a b [c d e] h f g
+            </li>
+            <li>
+              i=2,j=0: <code>i === increasingNewIndexSequence[j]</code>c节点不移动，j--
+            </li>
+            <li>
+              i=1,j=-1: <code>j &lt; 0</code> d节点需要移动，以c为锚点move d节点，真实节点变为a b [d c e] h f g
+            </li>
+            <li>
+              i=0,j=-1: <code>j &lt; 0</code> e节点需要移动，以d为锚点move e节点，真实节点变为a b [e d c] h f g
+            </li>
           </ul>
         </li>
       </ul>
-      <div className={classMap.markdown}>{PATCH_KEYED_CHILDREN_SEQUENCE}</div>
+      {patchKeyedChildren}
       <div className="flex-between relative">
         <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
           <Link href="#diff" title="diff">

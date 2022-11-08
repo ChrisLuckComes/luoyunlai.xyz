@@ -132,12 +132,15 @@ pnpm-lock.yaml
 cypress.json
 tsconfig.json`;
 
-export const indexCss = `/* index.css */
+export const INDEX_CSS = `\`\`\`css
+/* index.css */
 @tailwind base;
 @tailwind components;
-@tailwind utilities;`;
+@tailwind utilities;
+\`\`\``;
 
-export const postcss = `// postcss.config.js
+export const POSTCSS = `\`\`\`js
+// postcss.config.js
 const tailwindcss = require("tailwindcss");
 
 module.exports = {
@@ -151,9 +154,10 @@ module.exports = {
     require("postcss-apply")
   ],
 }
-`;
+\`\`\``;
 
-export const tailwind = `// tailwind.config.js
+export const TAILWIND = `\`\`\`js
+// tailwind.config.js
 module.exports = {
   mode: "jit",
   content: [
@@ -163,14 +167,17 @@ module.exports = {
   ],
   theme: {},
   plugins: [],
-};`;
+};\`\`\``;
 
-export const scripts = `"scripts":{
+export const SCRIPTS = `\`\`\`json
+"scripts":{
   "start:css": "tailwindcss -o src/styles/tailwind.css --watch",
   "start": "concurrently \"npm run start:css\" \"node scripts/start.js\"",
-}`;
+}
+\`\`\``;
 
-export const html = `const classMap = {
+export const HTML = `\`\`\`js
+const classMap = {
   layout: "h-content",
   content: "h-full pl-content bg-white overflow-y-auto",
   sider: "bg-white",
@@ -182,4 +189,5 @@ return (
     </Sider>
     <Content className={classMap.content}></Content>
   </Layout>
-);`;
+);
+\`\`\``;

@@ -106,7 +106,7 @@ export default function Index() {
         代码
       </h2>
       {myWorkflow}
-      <h2 id="code" className={classMap.articleTitle}>
+      <h2 id="result" className={classMap.articleTitle}>
         Jobs
       </h2>
       点击工作流可以查看jobs执行情况，到此就大功告成了，从此无需再手动打包复制文件。

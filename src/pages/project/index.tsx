@@ -1,4 +1,5 @@
-export const VITE_CONFIG = `import { defineConfig } from "vite";
+export const VITE_CONFIG = `\`\`\`ts
+import { defineConfig } from "vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
@@ -7,9 +8,9 @@ export default defineConfig({
   },
   plugins: [tsConfigPaths()]
 });
-`;
+\`\`\``;
 
-export const NGINX = `server {
+export const NGINX = `\`\`\`json server {
   listen       80;
   server_name luoyunlai.xyz;
   rewrite ^/(.*) https://$server_name$request_uri? permanent;
@@ -28,4 +29,4 @@ server {
 
       ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;
       ssl_prefer_server_ciphers on;
-}`
+}\`\`\``

@@ -1,5 +1,5 @@
-import React from 'react';
 import { classMap } from '@/constants/constant';
+import { UseMarkDown } from '@/hooks/useMarkdown';
 import { Anchor } from 'antd';
 import {
   BASE_CREATE_RENDERER,
@@ -23,6 +23,24 @@ import {
 const { Link } = Anchor;
 
 export default function Global() {
+  const baseCreateRenderer = <UseMarkDown markdown={BASE_CREATE_RENDERER}></UseMarkDown>,
+    createApp = <UseMarkDown markdown={CREATE_APP}></UseMarkDown>,
+    createAppAPI = <UseMarkDown markdown={CREATE_APP_API}></UseMarkDown>,
+    createAppContext = <UseMarkDown markdown={CREATE_APP_CONTEXT}></UseMarkDown>,
+    createBaseVNode = <UseMarkDown markdown={CREATE_BASE_VNODE}></UseMarkDown>,
+    createRenderer = <UseMarkDown markdown={CREATE_RENDERER}></UseMarkDown>,
+    createVNode = <UseMarkDown markdown={CREATE_VNODE}></UseMarkDown>,
+    defineComponent = <UseMarkDown markdown={DEFINE_COMPONENT}></UseMarkDown>,
+    effect = <UseMarkDown markdown={EFFECT}></UseMarkDown>,
+    ensureRenderer = <UseMarkDown markdown={ENSURE_RENDERER}></UseMarkDown>,
+    flushJobs = <UseMarkDown markdown={FLUSH_JOBS}></UseMarkDown>,
+    h = <UseMarkDown markdown={H}></UseMarkDown>,
+    nextTick = <UseMarkDown markdown={NEXTTICK}></UseMarkDown>,
+    queueFlush = <UseMarkDown markdown={QUEUE_FLUSH}></UseMarkDown>,
+    queueJob = <UseMarkDown markdown={QUEUE_JOB}></UseMarkDown>,
+    ReactiveEffect = <UseMarkDown markdown={REACTIVE_EFFECT}></UseMarkDown>,
+    triggerEffect = <UseMarkDown markdown={TRIGGER_EFFECT}></UseMarkDown>;
+
   return (
     <article id="root" className={classMap.article}>
       <h1 className={classMap.pageTitle}>Vue3全局概览</h1>
@@ -33,23 +51,24 @@ export default function Global() {
           </h2>
           <code>createApp</code>是vue3的启动函数，返回一个应用实例，它做了啥？
           <div className={classMap.assist}>packages\runtime-dom\src\index.ts</div>
-          <div className={classMap.markdown}>{CREATE_APP}</div>
-          重点在于第一句<code>ensureRenderer</code> <div className={classMap.markdown}>{ENSURE_RENDERER}</div>
+          {baseCreateRenderer}
+          重点在于第一句<code>ensureRenderer</code> 
+          {ensureRenderer}
           调用<code>createRenderer</code>
-          <div className={classMap.markdown}>{CREATE_RENDERER}</div>
+          {createRenderer}
           <div className={classMap.assist}>packages\runtime-core\src\renderer.ts</div>
           调用<code>baseCreateRenderer</code>,<code>baseCreateRenderer</code>
           ,diff,patch都在这个函数中实现，先看他最后返回值
-          <div className={classMap.markdown}>{BASE_CREATE_RENDERER}</div>
+          {baseCreateRenderer}
           <code>baseCreateRenderer</code>最终返回<code>render hydrate createApp</code>3个函数，然后将
           <code>render hydrate</code>传给<code>createAppAPI</code>,它是真正的createApp方法
           <br />
           <br />
           <div className={classMap.assist}>packages\runtime-core\src\apiCreateApp.ts</div>
           可以看到很多都是眼熟的方法
-          <div className={classMap.markdown}>{CREATE_APP_API}</div>
+          {createAppAPI}
           <code>createAppContext</code>实现
-          <div className={classMap.markdown}>{CREATE_APP_CONTEXT}</div>
+          {createAppContext}
           到此整个<code>createApp</code>流程就结束了
           <br />
           <br />
@@ -58,7 +77,7 @@ export default function Global() {
           </h2>
           <div className={classMap.assist}>packages\runtime-core\src\apiDefineComponent.ts</div>
           Vue3用它来定义组件，代码返回了传入的对象并人工加上了类型，主要是为了更好的TSX/IDE支持
-          <div className={classMap.markdown}>{DEFINE_COMPONENT}</div>
+          {defineComponent}
           <br />
           <br />
           <h2 id="h" className={classMap.articleTitle}>
@@ -71,12 +90,12 @@ export default function Global() {
             <li>Children 子节点</li>
           </ul>
           <div className={classMap.assist}>packages\runtime-core\src\h.ts</div>
-          <div className={classMap.markdown}>{H}</div>
+          {h}
           <code>createVNode</code>主要做的是props,class,style标准化
           <div className={classMap.assist}>packages\runtime-core\src\vnode.ts</div>
-          <div className={classMap.markdown}>{CREATE_VNODE}</div>
+          {createVNode}
           <code>CreateBaseVNode</code>创建<code>VNode</code>,并打上编码标记
-          <div className={classMap.markdown}>{CREATE_BASE_VNODE}</div>
+          {createBaseVNode}
           <br />
           <br />
           <h2 id="nextTick" className={classMap.articleTitle}>
@@ -95,28 +114,28 @@ export default function Global() {
           它利用了js的EventLoop执行机制，在call stack执行完后检查task queue。Vue3中的实现是直接使用promise新增微任务
           <div className={classMap.assist}>packages\runtime-core\src\scheduler.ts</div>
           可以看到代码非常简单，就是新增promise
-          <div className={classMap.markdown}>{NEXTTICK}</div>
+          {nextTick}
           来看一下vue3是如何处理任务队列的
           <strong>queueJob queuePostFlushCb</strong>
           <code>queueJob</code>维护job队列，每次调用执行<code>queueFlush</code>
           <code>queuePostFlushCb </code>维护cb队列，每次调用执行<code>queueFlush</code>
-          <div className={classMap.markdown}>{QUEUE_JOB}</div>
+          {queueJob}
           <strong>queueFlush</strong>
           <code>Promise.then</code>执行<code>flushJobs</code>，此处就实现了把flushJobs添加到微任务
-          <div className={classMap.markdown}>{QUEUE_FLUSH}</div>
+          {queueFlush}
           <br />
           <strong>flushJobs</strong>
           对队列排序，执行queue中的job，处理完后再调用<code>postFlushCbs</code>，如果队列不为空则递归调用
           <code>flushJobs</code>
-          <div className={classMap.markdown}>{FLUSH_JOBS}</div>
+          {flushJobs}
           这也没看出来哪儿调用了queueJob啊？不着急，接着往下看
           <div className={classMap.assist}>packages\runtime-core\src\renderer.ts</div>
           当响应式触发后，执行effect，如果有 <code>scheduler</code>属性，就执行<code>scheduler</code>，
           <code>ReactiveEffect</code>第二个参数就是scheduler，可以看到它传的就是<code>()=&gt;queueJob(update)</code>
-          <div className={classMap.markdown}>{EFFECT}</div>
+          {effect}
           <div className={classMap.assist}>packages\runtime-core\src\effect.ts</div>
-          <div className={classMap.markdown}>{REACTIVE_EFFECT}</div>
-          <div className={classMap.markdown}>{TRIGGER_EFFECT}</div>
+          {ReactiveEffect}
+          {triggerEffect}
         </div>
         <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
           <Link href="#createApp" title="createApp"></Link>

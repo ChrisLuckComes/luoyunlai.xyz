@@ -1,4 +1,3 @@
-import React from 'react';
 import { classMap } from '@/constants/constant';
 import { Anchor } from 'antd';
 import {
@@ -19,9 +18,27 @@ import {
   TRACK,
   TRIGGER
 } from '.';
+import { UseMarkDown } from '@/hooks/useMarkdown';
 
 const { Link } = Anchor;
 export default function Index() {
+  const computed = <UseMarkDown markdown={COMPUTED}></UseMarkDown>,
+    computedRefImpl = <UseMarkDown markdown={COMPUTED_REF_IMPL}></UseMarkDown>,
+    createReactiveObject = <UseMarkDown markdown={CREATE_REACTIVE_OBJECT}></UseMarkDown>,
+    createRef = <UseMarkDown markdown={CREATE_REF}></UseMarkDown>,
+    effect = <UseMarkDown markdown={EFFECT_1}></UseMarkDown>,
+    mutableGet = <UseMarkDown markdown={MUTABLE_GET}></UseMarkDown>,
+    mutableHandlers = <UseMarkDown markdown={MUTABLE_HANDLERS}></UseMarkDown>,
+    mutableOther = <UseMarkDown markdown={MUTABLE_OTHER}></UseMarkDown>,
+    mutableSet = <UseMarkDown markdown={MUTABLE_SET}></UseMarkDown>,
+    reactive = <UseMarkDown markdown={REACTIVE}></UseMarkDown>,
+    reactiveEffect = <UseMarkDown markdown={REACTIVE_EFFECT}></UseMarkDown>,
+    recordEffectScope = <UseMarkDown markdown={RECORD_EFFECT_SCOPE}></UseMarkDown>,
+    ref = <UseMarkDown markdown={REF}></UseMarkDown>,
+    targetTypeMap = <UseMarkDown markdown={TARGET_TYPE_MAP}></UseMarkDown>,
+    track = <UseMarkDown markdown={TRACK}></UseMarkDown>,
+    trigger = <UseMarkDown markdown={TRIGGER}></UseMarkDown>;
+
   return (
     <article id="root" className={classMap.article}>
       <h1 className={classMap.pageTitle}>Vue3响应式系统</h1>
@@ -32,9 +49,9 @@ export default function Index() {
       <br />
       Vue3中响应式数据核心是<code>reactive</code>，它由<code>proxy</code>+<code>effect</code>组合
       <div className={classMap.assist}>packages\reactivity\src\reactive.ts</div>
-      <div className={classMap.markdown}>{REACTIVE}</div>
+      {reactive}
       再进入<code>createReactiveObject</code>
-      <div className={classMap.markdown}>{CREATE_REACTIVE_OBJECT}</div>
+      {createReactiveObject}
       函数先是做了一些判断，如下情况会直接返回<code>target</code>
       <ul className={classMap.ul}>
         <li>不是对象</li>
@@ -43,7 +60,7 @@ export default function Index() {
           对象类型是否能被代理
           <br />
           <code>getTargetType</code>判断是否满足如下条件
-          <div className={classMap.markdown}>{TARGET_TYPE_MAP}</div>
+          {targetTypeMap}
           <ul>
             <li>1.没有__v_skip标记</li>
             <li>2.没有被冻结</li>
@@ -59,7 +76,7 @@ export default function Index() {
       <code>reactive</code> 的变形，用于解决值类型的数据响应，如果传入ref的是对象，会调用<code>reactive</code>
       <br />
       <div className={classMap.assist}>packages\reactivity\src\ref.ts</div>
-      <div className={classMap.markdown}>{REF}</div>
+      {ref}
       <br />
       <code>ref</code>调用<code>createRef</code>，判断value是不是ref，如果不是调用<code>new RefImpl</code>
       <br />
@@ -69,7 +86,7 @@ export default function Index() {
       <code>RefImpl</code>类定义了私有属性_value,_rawValue,对外提供get
       set来读写，所以ref需要使用.value属性操作，这样可以避免直接修改。
       <br />
-      <div className={classMap.markdown}>{CREATE_REF}</div>
+      {createRef}
       <br />
       <h2 id="baseHandlers" className={classMap.articleTitle}>
         baseHandlers
@@ -86,14 +103,14 @@ export default function Index() {
       <h3 id="mutableHandlers" className={classMap.articleSubTitle}>
         mutableHandlers
       </h3>
-      <div className={classMap.markdown}>{MUTABLE_HANDLERS}</div>
+      {mutableHandlers}
       <br />
       <code id="get">get</code>
-      <div className={classMap.markdown}>{MUTABLE_GET}</div>
+      {mutableGet}
       <code id="set">set</code>
-      <div className={classMap.markdown}>{MUTABLE_SET}</div>
+      {mutableSet}
       <code id="other">deleteProperty has ownKeys</code>
-      <div className={classMap.markdown}>{MUTABLE_OTHER}</div>
+      {mutableOther}
       其中多次出现的两个函数
       <ul>
         <li>
@@ -114,21 +131,21 @@ export default function Index() {
         <li>options 参数</li>
       </ul>
       <div className={classMap.assist}>packages\reactivity\src\effect.ts</div>
-      <div className={classMap.markdown}>{EFFECT_1}</div>
+      {effect}
       又回到了<code>reactiveEffect</code>
-      <div className={classMap.markdown}>{REACTIVE_EFFECT}</div>
+      {reactiveEffect}
       构造函数调用 <code>recordEffectScope</code>
-      <div className={classMap.markdown}>{RECORD_EFFECT_SCOPE}</div>
+      {recordEffectScope}
       <br />
       那么<code>effect</code>是如何收集和触发依赖的呢？接下来就来看看<code>track</code>和<code>trigger</code>
       <h3 id="track" className={classMap.articleSubTitle}>
         track
       </h3>
-      <div className={classMap.markdown}>{TRACK}</div>
+      {track}
       <h3 id="trigger" className={classMap.articleSubTitle}>
         trigger
       </h3>
-      <div className={classMap.markdown}>{TRIGGER}</div>
+      {trigger}
       <br />
       <h2 id="computed" className={classMap.articleTitle}>
         computed
@@ -139,16 +156,22 @@ export default function Index() {
       <br />
       可能会依赖其他<code>reactive</code>的值，同时会延迟和缓存计算值
       <div className={classMap.assist}>packages\reactivity\src\computed.ts</div>
-      <div className={classMap.markdown}>{COMPUTED}</div>
+      {computed}
       调用<code>ComputedRefImpl</code>
-      <div className={classMap.markdown}>{COMPUTED_REF_IMPL}</div>
+      {computedRefImpl}
       <h2 id="summary" className={classMap.articleTitle}>
         总结
       </h2>
       <ul>
-        <li><code>ref,reactive</code> proxy监听属性get,set操作</li>
-        <li>访问属性，触发get,调用<code>track</code>收集依赖</li>
-        <li>修改属性，触发set，调用<code>trigger</code>effect.run</li>
+        <li>
+          <code>ref,reactive</code> proxy监听属性get,set操作
+        </li>
+        <li>
+          访问属性，触发get,调用<code>track</code>收集依赖
+        </li>
+        <li>
+          修改属性，触发set，调用<code>trigger</code>effect.run
+        </li>
       </ul>
       <div className="flex-between relative">
         <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>

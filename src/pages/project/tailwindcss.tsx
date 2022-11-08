@@ -4,9 +4,16 @@ const { Link } = Anchor;
 import { classMap, imgFallback } from '@/constants/constant';
 
 import touDa from '@/images/头大.webp';
-import { indexCss, tailwind, scripts, html, postcss } from '../experiences/index';
+import { INDEX_CSS, TAILWIND, SCRIPTS, HTML, POSTCSS } from '../experiences/index';
+import { UseMarkDown } from '@/hooks/useMarkdown';
 
 export default function Tailwind() {
+  const indexCss = <UseMarkDown markdown={INDEX_CSS}></UseMarkDown>,
+    tailwind = <UseMarkDown markdown={TAILWIND}></UseMarkDown>,
+    scripts = <UseMarkDown markdown={SCRIPTS}></UseMarkDown>,
+    html = <UseMarkDown markdown={HTML}></UseMarkDown>,
+    postcss = <UseMarkDown markdown={POSTCSS}></UseMarkDown>;
+
   return (
     <article className={classMap.article}>
       <h1 className={classMap.pageTitle}>来不及了，快上车tailwindcss🚘</h1>
@@ -55,7 +62,7 @@ export default function Tailwind() {
         </li>
         <li>
           在根目录新增postcss.config.js、tailwind.config.js
-          <div className="markdown-container">{postcss}</div>
+          {postcss}
           <div className="markdown-container">{tailwind}</div>
         </li>
         <li>

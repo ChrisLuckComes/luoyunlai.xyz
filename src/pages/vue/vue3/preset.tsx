@@ -1,10 +1,15 @@
-import React from 'react';
 import { classMap } from '@/constants/constant';
+import { UseMarkDown } from '@/hooks/useMarkdown';
 import { Anchor } from 'antd';
 import { DEFINE_PROPERTY, VUE2_2WAY_BIND, VUE_ARRAY_METHODS_TO_PATCH, VUE_SET } from '.';
 
 const { Link } = Anchor;
 export default function Preset() {
+  const defineProperty = <UseMarkDown markdown={DEFINE_PROPERTY}></UseMarkDown>,
+    vue2Bind = <UseMarkDown markdown={VUE2_2WAY_BIND}></UseMarkDown>,
+    vueArrayMethodsToPatch = <UseMarkDown markdown={VUE_ARRAY_METHODS_TO_PATCH}></UseMarkDown>,
+    vueSet = <UseMarkDown markdown={VUE_SET}></UseMarkDown>;
+
   return (
     <article id="root" className={classMap.article}>
       <h1 className={classMap.pageTitle}>Vue3前置知识</h1>
@@ -27,10 +32,10 @@ export default function Preset() {
             <li>Prop 要定义或修改属性的名称</li>
             <li>Descriptor 要定义或修改的属性描述符</li>
           </ul>
-          <div className="markdown-container">{DEFINE_PROPERTY}</div>
+          {defineProperty}
           vue2实现双向绑定的核心代码如下
           <div className={classMap.assist}>src\core\observer\index.ts</div>
-          <div className="markdown-container">{VUE2_2WAY_BIND}</div>
+          {vue2Bind}
           <h3 id="definePropertyProblem" className={classMap.articleSubTitle}>
             Object.defineProperty存在的问题
           </h3>
@@ -41,13 +46,13 @@ export default function Preset() {
               因为<code>observer</code>监听数据的时候，当时并没有这个属性，所以后续添加的属性不会触发更新，需要手动调用
               <code>vue.$set</code>来新增，本质上是手动调用<code>defineReactive</code>
               <div className={classMap.assist}>src\core\observer\index.ts</div>
-              <div className="markdown-container">{VUE_SET}</div>
+              {vueSet}
             </li>
             <li>
               <strong>通过索引设置数组项时不能触发更新</strong>
               出于数组可能长度很长的考虑，不会对数组的每一个元素进行监听。同时defineProperty也没法新增索引，所以vue选择监听原生数组的方法，涉及到push,unshift,splice等会新增索引的方法，手动触发更新。
               <div className={classMap.assist}>src\core\observer\array.ts</div>
-              <div className="markdown-container">{VUE_ARRAY_METHODS_TO_PATCH}</div>
+              {vueArrayMethodsToPatch}
             </li>
           </ul>
           <h3 id="proxySummary" className={classMap.articleSubTitle}>
@@ -81,7 +86,9 @@ export default function Preset() {
           <div className={classMap.assist}>
             弱引用是指不能确保引用的对象不回被垃圾回收期回收的引用。就是可能在任意时间被回收
           </div>
-          <h3 id="map" className={classMap.articleSubTitle}>Map</h3>
+          <h3 id="map" className={classMap.articleSubTitle}>
+            Map
+          </h3>
           ES6之前，只有<code>Array,Object</code>两种集合，通常使用Object模拟Map，它有如下缺陷
           <ul className={classMap.ul}>
             <li>key必须是string,限制了key的数据类型</li>
@@ -89,7 +96,9 @@ export default function Preset() {
             <li>无序</li>
           </ul>
           <code>Map</code>会保留所有元素的顺序
-          <h3 id='weakMap' className={classMap.articleSubTitle}>WeakMap</h3>
+          <h3 id="weakMap" className={classMap.articleSubTitle}>
+            WeakMap
+          </h3>
           跟<code>WeakSet</code>一样，没有遍历方法
         </div>
         <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>

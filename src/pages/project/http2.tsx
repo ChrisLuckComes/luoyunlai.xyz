@@ -1,7 +1,6 @@
 import { classMap } from '@/constants/constant';
-import React from 'react';
 import { Anchor } from 'antd';
-import HTTP_CONNECT from '@/images/http-connect.png';
+
 import HTTP_LISTEN from '@/images/http-listen.png';
 import HTTP_CHANGE from '@/images/http-change.png';
 import HTTP_FISH from '@/images/http-fish.png';
@@ -10,6 +9,7 @@ import HTTPS_INSTRUCTION from '@/images/https-instruction.png';
 import HTTP2_FRAME from '@/images/http2-frame.png';
 import HTTP2_STREAM from '@/images/http2-stream.jpg';
 import { NGINX } from '.';
+import { UseMarkDown } from '@/hooks/useMarkdown';
 const { Link } = Anchor;
 
 export default function Index() {
@@ -18,7 +18,6 @@ export default function Index() {
       <h1 className={classMap.pageTitle}>http=&gt;https=&gt;http2</h1>
       <div className="flex-between relative">
         <div>
-          {/* <img src={HTTP_CONNECT} alt="connect" /> */}
           <h2 id="httpDisAdv" className={classMap.articleTitle}>
             http的不足
           </h2>
@@ -110,8 +109,9 @@ export default function Index() {
           <h2 id="nginx" className={classMap.articleTitle}>
             nginx配置
           </h2>
-          开启http2非常简单，在listen 443 ssl后面追加http2就行，需要有 <code>http_v2_module</code> 模块，否则需要重新安装更高版本的nginx
-          <div className="markdown-container">{NGINX}</div>
+          开启http2非常简单，在listen 443 ssl后面追加http2就行，需要有 <code>http_v2_module</code>{' '}
+          模块，否则需要重新安装更高版本的nginx
+          <UseMarkDown markdown={NGINX}></UseMarkDown>
         </div>
 
         <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>

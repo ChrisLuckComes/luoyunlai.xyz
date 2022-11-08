@@ -6,9 +6,9 @@ import VITE_ADV_3 from '@/images/vite-adv-3.png';
 import MAX_AGE from '@/images/max-age.png';
 import VITE_DEPS from '@/images/vite-deps.png';
 import VITE_RESOURCE from '@/images/vite-resource.png';
-import React from 'react';
 import { VITE_CONFIG } from '.';
 import { Anchor } from 'antd';
+import { UseMarkDown } from '@/hooks/useMarkdown';
 const { Link } = Anchor;
 export default function Vite() {
   return (
@@ -111,7 +111,7 @@ export default function Vite() {
             <br />
             <br />
             新增&nbsp;<code>vite.config.ts</code>
-            <div className="markdown-container">{VITE_CONFIG}</div>
+            <UseMarkDown markdown={VITE_CONFIG}></UseMarkDown>
             <br />
             大功告成，可以pnpm start启动了，最后移除react-scripts&nbsp;<code>pnpm remove react-scripts</code>
           </p>

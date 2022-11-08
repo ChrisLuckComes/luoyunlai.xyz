@@ -1,4 +1,5 @@
-export const DEFINE_PROPERTY = `const obj = {}
+export const DEFINE_PROPERTY = `\`\`\`js 
+const obj = {}
 Object.defineProperty(obj, "a", {
   value : 1,
   writable : false, // 是否可写 
@@ -11,9 +12,10 @@ delete obj.a // 无效
 for(key in obj){
   console.log(key) // 无效 
 }
-`;
+\`\`\``;
 
-export const VUE2_2WAY_BIND = `Object.defineProperty(obj, key, {
+export const VUE2_2WAY_BIND = `\`\`\`js 
+Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
     get: function reactiveGetter () {
@@ -30,9 +32,10 @@ export const VUE2_2WAY_BIND = `Object.defineProperty(obj, key, {
       dep.notify()
     }
   })
-`;
+\`\`\``;
 
-export const VUE_SET = `function set (target: Array<any> | Object, key: any, val: any): any {
+export const VUE_SET = `\`\`\`js 
+function set (target: Array<any> | Object, key: any, val: any): any {
     // ....
     if (!ob) {
       target[key] = val
@@ -42,9 +45,10 @@ export const VUE_SET = `function set (target: Array<any> | Object, key: any, val
     ob.dep.notify()
     return val
 }
-`;
+\`\`\``;
 
-export const VUE_ARRAY_METHODS_TO_PATCH = `const methodsToPatch = [
+export const VUE_ARRAY_METHODS_TO_PATCH = `\`\`\`js 
+const methodsToPatch = [
     'push',
     'pop',
     'shift',
@@ -80,9 +84,10 @@ export const VUE_ARRAY_METHODS_TO_PATCH = `const methodsToPatch = [
       ob.dep.notify()
       return result
     })})
-`;
+    \`\`\``;
 
-export const CREATE_APP = `export const createApp = ((...args) => {
+export const CREATE_APP = `\`\`\`js 
+export const createApp = ((...args) => {
       const app = ensureRenderer().createApp(...args)
     
       if (__DEV__) {
@@ -125,9 +130,10 @@ export const CREATE_APP = `export const createApp = ((...args) => {
       }
       return app
     }) as CreateAppFunction<Element>
-`;
+    \`\`\``;
 
-export const ENSURE_RENDERER = `const rendererOptions = /*#__PURE__*/ extend({ patchProp }, nodeOps)
+export const ENSURE_RENDERER = `\`\`\`ts 
+const rendererOptions = /*#__PURE__*/ extend({ patchProp }, nodeOps)
 
 // lazy create the renderer - this makes core renderer logic tree-shakable
 // in case the user only imports reactivity utilities from Vue.
@@ -138,16 +144,18 @@ function ensureRenderer() {
     renderer ||
     (renderer = createRenderer<Node, Element | ShadowRoot>(rendererOptions))
   )
-}`;
+}\`\`\``;
 
-export const CREATE_RENDERER = `export function createRenderer<
+export const CREATE_RENDERER = `\`\`\`js 
+export function createRenderer<
   HostNode = RendererNode,
   HostElement = RendererElement
 >(options: RendererOptions<HostNode, HostElement>) {
   return baseCreateRenderer<HostNode, HostElement>(options)
-}`;
+}\`\`\``;
 
-export const BASE_CREATE_RENDERER = `function baseCreateRenderer(
+export const BASE_CREATE_RENDERER = `\`\`\`js 
+function baseCreateRenderer(
       options: RendererOptions,
       createHydrationFns?: typeof createHydrationFunctions
     ): any {
@@ -180,9 +188,10 @@ export const BASE_CREATE_RENDERER = `function baseCreateRenderer(
         render,
         hydrate,
         createApp: createAppAPI(render, hydrate)
-      }`;
+      }\`\`\``;
 
-export const CREATE_APP_API = `export function createAppAPI<HostElement>(
+export const CREATE_APP_API = `\`\`\`js 
+export function createAppAPI<HostElement>(
       render: RootRenderFunction<HostElement>,
       hydrate?: RootHydrateFunction
     ): CreateAppFunction<HostElement> {
@@ -232,9 +241,10 @@ export const CREATE_APP_API = `export function createAppAPI<HostElement>(
         }
         return app
       }
-    }`;
+    }\`\`\``;
 
-export const CREATE_APP_CONTEXT = `export function createAppContext(): AppContext {
+export const CREATE_APP_CONTEXT = `\`\`\`js 
+export function createAppContext(): AppContext {
       return {
         app: null as any,
         config: {
@@ -254,14 +264,16 @@ export const CREATE_APP_CONTEXT = `export function createAppContext(): AppContex
         propsCache: new WeakMap(),
         emitsCache: new WeakMap()
       }
-    }`;
+    }\`\`\``;
 
-export const DEFINE_COMPONENT = `// implementation, close to no-op
+export const DEFINE_COMPONENT = `\`\`\`js 
+// implementation, close to no-op
 export function defineComponent(options: unknown) {
   return isFunction(options) ? { setup: options, name: options.name } : options
-}`;
+}\`\`\``;
 
-export const H = `/ Actual implementation
+export const H = `\`\`\`js 
+// Actual implementation
 export function h(type: any, propsOrChildren?: any, children?: any): VNode {
   const l = arguments.length
   if (l === 2) {
@@ -284,9 +296,10 @@ export function h(type: any, propsOrChildren?: any, children?: any): VNode {
     }
     return createVNode(type, propsOrChildren, children)
   }
-}`;
+}\`\`\``;
 
-export const CREATE_VNODE = `export const createVNode = (
+export const CREATE_VNODE = `\`\`\`js 
+export const createVNode = (
       __DEV__ ? createVNodeWithArgsTransform : _createVNode
     ) as typeof _createVNode
     
@@ -380,9 +393,10 @@ export const CREATE_VNODE = `export const createVNode = (
         isBlockNode,
         true
       )
-    }`;
+    }\`\`\``;
 
-export const CREATE_BASE_VNODE = `function createBaseVNode(
+export const CREATE_BASE_VNODE = `\`\`\`js 
+function createBaseVNode(
       type: VNodeTypes | ClassComponent | typeof NULL_DYNAMIC_COMPONENT,
       props: (Data & VNodeProps) | null = null,
       children: unknown = null,
@@ -461,17 +475,18 @@ export const CREATE_BASE_VNODE = `function createBaseVNode(
         defineLegacyVNodeProperties(vnode)
       }
       return vnode
-    }`;
+    }\`\`\``;
 
-export const NEXTTICK = `export function nextTick<T = void>(
+export const NEXTTICK = `\`\`\`js 
+export function nextTick<T = void>(
       this: T,
       fn?: (this: T) => void
     ): Promise<void> {
       const p = currentFlushPromise || resolvedPromise
       return fn ? p.then(this ? fn.bind(this) : fn) : p
-    }`;
+    }\`\`\``;
 
-export const QUEUE_JOB = `export function queueJob(job: SchedulerJob) {
+export const QUEUE_JOB = `\`\`\`js export function queueJob(job: SchedulerJob) {
           // the dedupe search uses the startIndex argument of Array.includes()
           // by default the search index includes the current job that is being run
           // so it cannot recursively trigger itself again.
@@ -511,16 +526,18 @@ export const QUEUE_JOB = `export function queueJob(job: SchedulerJob) {
             pendingPostFlushCbs.push(...cb)
           }
           queueFlush()
-        }`;
+}\`\`\``;
 
-export const QUEUE_FLUSH = `function queueFlush() {
+export const QUEUE_FLUSH = `\`\`\`js 
+function queueFlush() {
               if (!isFlushing && !isFlushPending) {
                 isFlushPending = true
                 currentFlushPromise = resolvedPromise.then(flushJobs)
               }
-            }`;
+}\`\`\``;
 
-export const FLUSH_JOBS = `function flushJobs(seen?: CountMap) {
+export const FLUSH_JOBS = `\`\`\`js 
+function flushJobs(seen?: CountMap) {
       isFlushPending = false
       isFlushing = true
       if (__DEV__) {
@@ -566,16 +583,18 @@ export const FLUSH_JOBS = `function flushJobs(seen?: CountMap) {
           flushJobs(seen)
         }
       }
-    }`;
+}\`\`\``;
 
-export const EFFECT = `    // create reactive effect for rendering
+export const EFFECT = `\`\`\`js 
+    // create reactive effect for rendering
     const effect = (instance.effect = new ReactiveEffect(
       componentUpdateFn,
       () => queueJob(update),
       instance.scope // track it in component's effect scope
-    ))`;
+    ))\`\`\``;
 
-export const REACTIVE_EFFECT = `export class ReactiveEffect<T = any> {
+export const REACTIVE_EFFECT = `\`\`\`js 
+export class ReactiveEffect<T = any> {
     constructor(
         public fn: () => T,
         public scheduler: EffectScheduler | null = null,
@@ -584,9 +603,10 @@ export const REACTIVE_EFFECT = `export class ReactiveEffect<T = any> {
         recordEffectScope(this, scope)
       }
     }
-`;
+    \`\`\``;
 
-export const TRIGGER_EFFECT = `export function triggerEffects(
+export const TRIGGER_EFFECT = `\`\`\`js
+export function triggerEffects(
     dep: Dep | ReactiveEffect[],
     debuggerEventExtraInfo?: DebuggerEventExtraInfo
   ) {
@@ -618,9 +638,10 @@ export const TRIGGER_EFFECT = `export function triggerEffects(
         effect.run()
       }
     }
-  }`;
+  }\`\`\``;
 
-export const REACTIVE = `export function reactive<T extends object>(target: T): UnwrapNestedRefs<T>
+export const REACTIVE = `\`\`\`js 
+export function reactive<T extends object>(target: T): UnwrapNestedRefs<T>
 export function reactive(target: object) {
   // if trying to observe a readonly proxy, return the readonly version.
   if (isReadonly(target)) {
@@ -633,9 +654,10 @@ export function reactive(target: object) {
     mutableCollectionHandlers,
     reactiveMap
   )
-}`;
+}\`\`\``;
 
-export const CREATE_REACTIVE_OBJECT = `function createReactiveObject(
+export const CREATE_REACTIVE_OBJECT = `\`\`\`js 
+function createReactiveObject(
       target: Target,
       isReadonly: boolean,
       baseHandlers: ProxyHandler<any>,
@@ -672,9 +694,10 @@ export const CREATE_REACTIVE_OBJECT = `function createReactiveObject(
       )
       proxyMap.set(target, proxy)
       return proxy
-    }`;
+}\`\`\``;
 
-export const TARGET_TYPE_MAP = `function targetTypeMap(rawType: string) {
+export const TARGET_TYPE_MAP = `\`\`\`js 
+function targetTypeMap(rawType: string) {
           switch (rawType) {
             case 'Object':
             case 'Array':
@@ -693,18 +716,20 @@ export const TARGET_TYPE_MAP = `function targetTypeMap(rawType: string) {
           return value[ReactiveFlags.SKIP] || !Object.isExtensible(value)
             ? TargetType.INVALID
             : targetTypeMap(toRawType(value))
-}`;
+}\`\`\``;
 
-export const REF = `export function ref<T extends object>(
+export const REF = `\`\`\`js 
+export function ref<T extends object>(
   value: T
 ): [T] extends [Ref] ? T : Ref<UnwrapRef<T>>
 export function ref<T>(value: T): Ref<UnwrapRef<T>>
 export function ref<T = any>(): Ref<T | undefined>
 export function ref(value?: unknown) {
   return createRef(value, false)
-}`;
+}\`\`\``;
 
-export const CREATE_REF = `function createRef(rawValue: unknown, shallow: boolean) {
+export const CREATE_REF = `\`\`\`js 
+function createRef(rawValue: unknown, shallow: boolean) {
   if (isRef(rawValue)) {//如果是ref类型直接返回
     return rawValue
   }
@@ -739,17 +764,19 @@ class RefImpl<T> {
       triggerRefValue(this, newVal) 
     }
   }
-}`;
+}\`\`\``;
 
-export const MUTABLE_HANDLERS = `export const mutableHandlers: ProxyHandler<object> = {
+export const MUTABLE_HANDLERS = `\`\`\`js 
+export const mutableHandlers: ProxyHandler<object> = {
   get, //拦截属性读取操作
   set, //拦截属性写操作
   deleteProperty, //拦截属性删除操作
   has, //检查是否拥有某个属性
   ownKeys // 针对 getOwnPropertyNames,  getOwnPropertySymbols, keys 的代理方法
-}`;
+}\`\`\``;
 
-export const MUTABLE_GET = `const get = /*#__PURE__*/ createGetter()
+export const MUTABLE_GET = `\`\`\`js 
+const get = /*#__PURE__*/ createGetter()
 
 function createGetter(isReadonly = false, shallow = false) {
   /**
@@ -851,8 +878,9 @@ function createArrayInstrumentations() {
   })
   return instrumentations
 }
-`;
-export const MUTABLE_SET = `const set = /*#__PURE__*/ createSetter()
+\`\`\``;
+export const MUTABLE_SET = `\`\`\`js
+const set = /*#__PURE__*/ createSetter()
 const shallowSet = /*#__PURE__*/ createSetter(true)
 
 function createSetter(shallow = false) {
@@ -904,8 +932,9 @@ function createSetter(shallow = false) {
     }
     return result
   }
-}`;
-export const MUTABLE_OTHER = `function deleteProperty(target: object, key: string | symbol): boolean {
+}\`\`\``;
+export const MUTABLE_OTHER = `\`\`\`js
+function deleteProperty(target: object, key: string | symbol): boolean {
   const hadKey = hasOwn(target, key)
   const oldValue = (target as any)[key]
   const result = Reflect.deleteProperty(target, key)
@@ -927,9 +956,10 @@ function has(target: object, key: string | symbol): boolean {
 function ownKeys(target: object): (string | symbol)[] {
   track(target, TrackOpTypes.ITERATE, isArray(target) ? 'length' : ITERATE_KEY)
   return Reflect.ownKeys(target)
-}`;
+}\`\`\``;
 
-export const EFFECT_1 = `export interface DebuggerOptions {
+export const EFFECT_1 = `\`\`\`js
+export interface DebuggerOptions {
   onTrack?: (event: DebuggerEvent) => void //追踪时触发
   onTrigger?: (event: DebuggerEvent) => void //触发回调时触发
 }
@@ -968,18 +998,20 @@ export function effect<T = any>(
   const runner = _effect.run.bind(_effect) as ReactiveEffectRunner
   runner.effect = _effect
   return runner
-}`;
+}\`\`\``;
 
-export const RECORD_EFFECT_SCOPE = `export function recordEffectScope(
+export const RECORD_EFFECT_SCOPE = `\`\`\`js
+export function recordEffectScope(
   effect: ReactiveEffect,
   scope: EffectScope | undefined = activeEffectScope
 ) {
   if (scope && scope.active) {
     scope.effects.push(effect)
   }
-}`;
+}\`\`\``;
 
-export const TRACK = `export function track(target: object, type: TrackOpTypes, key: unknown) {
+export const TRACK = `\`\`\`js
+export function track(target: object, type: TrackOpTypes, key: unknown) {
   if (shouldTrack && activeEffect) {
     // targetMap用于收集和触发依赖
     let depsMap = targetMap.get(target)
@@ -1027,9 +1059,10 @@ export function trackEffects(
       })
     }
   }
-}`;
+}\`\`\``;
 
-export const TRIGGER = `export function trigger(
+export const TRIGGER = `\`\`\`js
+export function trigger(
   target: object,
   type: TriggerOpTypes,
   key?: unknown,
@@ -1115,9 +1148,10 @@ export const TRIGGER = `export function trigger(
       triggerEffects(createDep(effects))
     }
   }
-}`;
+}\`\`\``;
 
-export const COMPUTED = `export function computed<T>(
+export const COMPUTED = `\`\`\`ts
+export function computed<T>(
   getterOrOptions: ComputedGetter<T> | WritableComputedOptions<T>,
   debugOptions?: DebuggerOptions,
   isSSR = false
@@ -1146,9 +1180,10 @@ export const COMPUTED = `export function computed<T>(
   }
 
   return cRef as any
-}`;
+}\`\`\``;
 
-export const COMPUTED_REF_IMPL = `export class ComputedRefImpl<T> {
+export const COMPUTED_REF_IMPL = `\`\`\`ts
+export class ComputedRefImpl<T> {
   public dep?: Dep = undefined
 
   private _value!: T
@@ -1193,9 +1228,10 @@ export const COMPUTED_REF_IMPL = `export class ComputedRefImpl<T> {
   set value(newValue: T) {
     this._setter(newValue)
   }
-}`;
+}\`\`\``;
 
-export const PATCH = `// Note: functions inside this closure should use 'const xxx = () => {}'
+export const PATCH = `\`\`\`ts
+// Note: functions inside this closure should use 'const xxx = () => {}'
 // style in order to prevent being inlined by minifiers.
 const patch: PatchFn = (
   n1, // 旧节点
@@ -1316,9 +1352,10 @@ const patch: PatchFn = (
   if (ref != null && parentComponent) {
     setRef(ref, n1 && n1.ref, parentSuspense, n2 || n1, !n2)
   }
-}`;
+}\`\`\``;
 
-export const PATCH_CHILDREN = `  const patchChildren: PatchChildrenFn = (
+export const PATCH_CHILDREN = `\`\`\`ts
+const patchChildren: PatchChildrenFn = (
   n1,
   n2,
   container,
@@ -1418,9 +1455,10 @@ export const PATCH_CHILDREN = `  const patchChildren: PatchChildrenFn = (
       }
     }
   }
-}`;
+}\`\`\``;
 
-export const PATCH_KEYED_CHILDREN_SEQUENCE = `  // can be all-keyed or mixed
+export const PATCH_KEYED_CHILDREN_SEQUENCE = `\`\`\`ts
+// can be all-keyed or mixed
 const patchKeyedChildren = (
   c1: VNode[],
   c2: VNodeArrayChildren,
@@ -1660,4 +1698,4 @@ const patchKeyedChildren = (
       }
     }
   }
-}`;
+}\`\`\``;
