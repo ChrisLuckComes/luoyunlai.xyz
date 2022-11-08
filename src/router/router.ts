@@ -134,6 +134,20 @@ const routers = [
         element: lazy(() => import('@/pages/vue/vue3/diff'))
       }
     ]
+  },
+  {
+    key: 'node',
+    path: 'node',
+    name: 'Node',
+    element: lazy(() => import('@/pages/index')),
+    children: [
+      {
+        key: 'changeVersion',
+        path: '/node/changeVersion',
+        name: '光速切换node版本',
+        element: lazy(() => import('@/pages/node/changeVersion'))
+      }
+    ]
   }
 ];
 
