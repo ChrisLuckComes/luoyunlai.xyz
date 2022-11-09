@@ -44,8 +44,12 @@
     "body": "<a className={classMap.href} target=\"_blank\" rel=\"noreferrer\" href=\"\"></a>",
     "description": "新窗口超链接"
   },
-  "useMarkdown":{
-	"prefix": "markdown",
-	"body": "<UseMarkDown markdown={}></UseMarkDown>"
+  "useMarkdown": {
+    "prefix": "markdown",
+    "body": "<UseMarkDown markdown={}></UseMarkDown>"
+  },
+  "lazy": {
+    "prefix": "lazy",
+    "body": "lazy(()=>import(''))"
   }
 }

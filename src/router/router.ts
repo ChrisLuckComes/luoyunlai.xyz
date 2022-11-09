@@ -56,6 +56,12 @@ const routers = [
         path: 'workflow',
         name: '不会还有人在手动发版吧？',
         element: lazy(() => import('@/pages/project/workflow'))
+      },
+      {
+        key: 'performance',
+        path: 'performance',
+        name: '虚空性能优化？从指标开始',
+        element: lazy(() => import('@/pages/project/performance'))
       }
     ]
   },
