@@ -1,4 +1,5 @@
-export const rollup = `import resolve from "@rollup/plugin-node-resolve";
+export const ROLLUP = `\`\`\`ts
+import resolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
 import commonjs from "@rollup/plugin-commonjs";
 
@@ -22,13 +23,15 @@ export default [
     plugins: [resolve(), commonjs(), typescript()],
   },
 ];
-`;
+\`\`\``;
 
-export const rollupScripts = `"dev": "rollup -w -c",
+export const ROLLUP_SCRIPTS = `\`\`\`json
+"dev": "rollup -w -c",
 "build": "rollup -c"
-`;
+\`\`\``;
 
-export const packageJson = `{
+export const PACKAGE_JSON = `\`\`\`json
+{
   "name": "dayjs-date-tools",
   "version": "1.0.7-alpha",
   "description": "基于dayjs的时间工具函数",
@@ -73,9 +76,11 @@ export const packageJson = `{
     "prettier": "^2.5.1",
     "rollup": "^2.70.0"
   }
-}`;
+}
+\`\`\``;
 
-export const tsConfig = `{
+export const TS_CONFIG = `\`\`\`json
+{
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
     /* Basic Options */
@@ -97,9 +102,11 @@ export const tsConfig = `{
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
   "include": ["src/", "cypress/"],
-}`;
+}
+\`\`\``;
 
-export const index = `import {
+export const INDEX = `\`\`\`ts
+import {
   getFirstDayAndEndDayOfWeek,
   getFirstDayAndEndDayOfMonth,
   isInRange,
@@ -117,12 +124,13 @@ export {
   isInRange,
   isSameOrBefore,
   isSameOrAfter,
-}`;
+}
+\`\`\``;
 
-export const gitignore = `/node_modules/
+export const GITIGNORE = `/node_modules/
 /dist/`;
 
-export const npmignore = `node_modules/
+export const NPMIGNORE = `node_modules/
 src/
 .babelrc
 .gitignore

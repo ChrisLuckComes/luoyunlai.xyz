@@ -1,8 +1,16 @@
-import React from 'react';
 import { classMap } from '@/constants/constant';
-import { gitignore, index, npmignore, packageJson, rollup, rollupScripts, tsConfig } from '.';
+import { UseMarkDown } from '@/hooks/useMarkdown';
+import { GITIGNORE, INDEX, NPMIGNORE, PACKAGE_JSON, ROLLUP, ROLLUP_SCRIPTS, TS_CONFIG } from '.';
 
 export default function Npm() {
+  const gitignore = <UseMarkDown markdown={GITIGNORE}></UseMarkDown>,
+    index = <UseMarkDown markdown={INDEX}></UseMarkDown>,
+    npmignore = <UseMarkDown markdown={NPMIGNORE}></UseMarkDown>,
+    packageJson = <UseMarkDown markdown={PACKAGE_JSON}></UseMarkDown>,
+    rollup = <UseMarkDown markdown={ROLLUP}></UseMarkDown>,
+    rollupScripts = <UseMarkDown markdown={ROLLUP_SCRIPTS}></UseMarkDown>,
+    tsConfig = <UseMarkDown markdown={TS_CONFIG}></UseMarkDown>;
+
   return (
     <article className={classMap.article}>
       <h1 className={classMap.pageTitle}>从0到1发布一个npm包</h1>
@@ -39,7 +47,6 @@ export default function Npm() {
             </a>
           </li>
           <li>
-            {' '}
             <code>git clone</code> 代码拉到本地
           </li>
         </ul>
@@ -50,18 +57,18 @@ export default function Npm() {
           <span>npm init 根据实际情况填写字段，完成后会生成一个初始化package.json</span>
         </li>
         <li>
-          安装必须的依赖rollup：{' '}
+          安装必须的依赖rollup：
           <span className={classMap.assist}>如果是纯js/ts可以不用rollup，实际上工程多多少少都有依赖，建议使用</span>
           <br />
           <code>pnpm add rollup @rollup/plugin-commonjs @rollup/plugin-node-resolve @rollup/plugin-typescript -D</code>
           <br />
           <br />
           新增<strong>rollup.config.js:</strong>
-          <div className="markdown-container">{rollup}</div>
+          {rollup}
           <br />
           package.json添加scripts:
           <br />
-          <div className="markdown-container">{rollupScripts}</div>
+          {rollupScripts}
         </li>
         <li>
           安装typescript:
@@ -69,17 +76,17 @@ export default function Npm() {
           <code>pnpm add typescript -D</code>
           <br /> <br />
           新增<strong>tsconfig.json</strong>
-          <div className="markdown-container">{tsConfig}</div>
+          {tsConfig}
         </li>
         <li>
           修改package.json;
-          <div className="markdown-container">{packageJson}</div>
+          {packageJson}
         </li>
       </ul>
       <h2 className={classMap.articleTitle}>编码</h2>
       <p>
         然后就可以新增src目录开始编码啦，最后只需要在index.ts中export所有成员就OK，/src/index.ts如下：
-        <div className="markdown-container">{index}</div>
+        {index}
       </p>
       <h2 className={classMap.articleTitle}>发布</h2>
       <ul className={classMap.ul}>
@@ -88,9 +95,9 @@ export default function Npm() {
           <br />
           <br />
           <code>.gitingore</code>
-          <div className="markdown-container">{gitignore}</div>
+          {gitignore}
           <code>.npmignore</code>
-          <div className="markdown-container">{npmignore}</div>
+          {npmignore}
         </li>
         <li>add commit push git三连提交代码</li>
         <li>
