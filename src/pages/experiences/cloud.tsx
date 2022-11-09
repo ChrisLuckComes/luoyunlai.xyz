@@ -1,5 +1,4 @@
 import { classMap } from "@/constants/constant";
-import React from "react";
 
 export default function Cloud() {
   return (

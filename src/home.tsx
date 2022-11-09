@@ -1,5 +1,3 @@
-import React from 'react';
-
 import githubLogo from '@/images/githubLogo.png';
 
 const classMap = {

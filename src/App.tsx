@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 import { Layout, Menu, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
@@ -40,7 +40,7 @@ export default function App() {
           </div>
           <span>Luoyunlai.xyz</span>
         </div>
-        <Menu className='min-w-header-menu' selectedKeys={selectedKeys} onClick={e => clickMenu(e)} mode="horizontal">
+        <Menu className="min-w-header-menu" selectedKeys={selectedKeys} onClick={e => clickMenu(e)} mode="horizontal">
           {routers.map(router => (
             <Menu.Item key={router.key}>{router.name}</Menu.Item>
           ))}
@@ -51,7 +51,7 @@ export default function App() {
           {routers.map(router => (
             <Route
               key={router.key}
-              path={router.path}
+              path={router.path + '/*'}
               element={
                 <Suspense fallback={<Spin indicator={<LoadingOutlined className="text-icon" spin />}></Spin>}>
                   <router.element menus={router.children as []} />
