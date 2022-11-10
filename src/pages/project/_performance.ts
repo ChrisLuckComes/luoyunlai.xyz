@@ -23,3 +23,27 @@ export const TIMING = `\`\`\`js
     "connectEnd": 1667977895145 // 浏览器和服务器建立连接结束时的时间戳，所有握手和认证过程全部结束。如果使用了持久连接，这个值会和fetchStart相同
 }
 \`\`\``;
+
+export const FP_FCP = `\`\`\`js
+performance.getEntries().filter(item => item.name === 'first-paint')[0];  // 获取 FP 时间
+
+performance.getEntries().filter(item => item.name === 'first-contentful-paint')[0];  // 获取 FCP 时间
+
+performance.getEntriesByName('first-paint'); // 获取 FP 时间
+
+performance.getEntriesByName('first-contentful-paint');  // 获取 FCP 时间
+
+// 也可以通过 performanceObserver 的方式获取
+var observer = new PerformanceObserver(function(list, obj) {
+    var entries = list.getEntries();
+    entries.forEach(item => {
+        if (item.name === 'first-paint') {
+            ...
+        }
+        if (item.name === 'first-contentful-paint') {
+            ...
+        }
+    })
+});
+observer.observe({type: 'paint'});
+\`\`\``;

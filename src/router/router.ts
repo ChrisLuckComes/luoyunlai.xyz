@@ -8,26 +8,6 @@ const routers = [
     element: lazy(() => import('@/home'))
   },
   {
-    key: 'experience',
-    path: '/experience',
-    name: '经验',
-    element: lazy(() => import('@/pages/index')),
-    children: [
-      {
-        key: 'npm',
-        path: 'npm',
-        name: '第一个npm包',
-        element: lazy(() => import('@/pages/experiences/npm'))
-      },
-      {
-        key: 'cloud',
-        path: 'cloud',
-        name: '作为一个前端好意思说没有个人网站？',
-        element: lazy(() => import('@/pages/experiences/cloud'))
-      }
-    ]
-  },
-  {
     key: 'project',
     path: '/project',
     name: '工程化',
@@ -152,6 +132,26 @@ const routers = [
         path: 'changeVersion',
         name: '光速切换node版本',
         element: lazy(() => import('@/pages/node/changeVersion'))
+      }
+    ]
+  },
+  {
+    key: 'experience',
+    path: '/experience',
+    name: '经验',
+    element: lazy(() => import('@/pages/index')),
+    children: [
+      {
+        key: 'npm',
+        path: 'npm',
+        name: '第一个npm包',
+        element: lazy(() => import('@/pages/experiences/npm'))
+      },
+      {
+        key: 'cloud',
+        path: 'cloud',
+        name: '作为一个前端好意思说没有个人网站？',
+        element: lazy(() => import('@/pages/experiences/cloud'))
       }
     ]
   }
