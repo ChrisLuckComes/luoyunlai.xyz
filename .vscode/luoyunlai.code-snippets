@@ -51,5 +51,9 @@
   "lazy": {
     "prefix": "lazy",
     "body": "lazy(()=>import(''))"
+  },
+  "svg": {
+    "prefix": "svg",
+    "body": "<embed src=\"\" type=\"image/svg+xml\" />"
   }
 }

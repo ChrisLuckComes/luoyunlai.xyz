@@ -40,7 +40,7 @@ const routers = [
       {
         key: 'performance',
         path: 'performance',
-        name: '虚空性能优化？从指标开始',
+        name: '性能优化？先从指标入手',
         element: lazy(() => import('@/pages/project/performance'))
       }
     ]

@@ -171,7 +171,6 @@ dependencies:
   use-immer: 0.6.0_immer@9.0.16+react@17.0.2
   vite: 3.1.8_less@4.1.3
   vite-tsconfig-paths: 3.5.2_vite@3.1.8
-  web-vitals: 2.1.4
   webpack: 5.74.0
   webpack-dev-server: 4.11.1_webpack@5.74.0
   webpack-manifest-plugin: 4.1.1_webpack@5.74.0
@@ -185,6 +184,7 @@ devDependencies:
   vite-plugin-eslint: 1.8.1_eslint@8.26.0+vite@3.1.8
   vite-plugin-imp: 2.3.0_vite@3.1.8
   vite-plugin-markdown: 2.1.0_vite@3.1.8
+  web-vitals: 2.1.4
 
 packages:
 
@@ -11860,7 +11860,7 @@ packages:
 
   /web-vitals/2.1.4:
     resolution: {integrity: sha512-sVWcwhU5mX6crfI5Vd2dC4qchyTqxV8URinzt25XqVh+bHEPGH4C3NPrNionCP7Obx59wrYEbNlw4Z8sjALzZg==}
-    dev: false
+    dev: true
 
   /webidl-conversions/4.0.2:
     resolution: {integrity: sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==}

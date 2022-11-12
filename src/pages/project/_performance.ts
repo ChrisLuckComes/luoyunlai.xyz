@@ -47,3 +47,62 @@ var observer = new PerformanceObserver(function(list, obj) {
 });
 observer.observe({type: 'paint'});
 \`\`\``;
+
+export const LCP = `\`\`\`js
+new PerformanceObserver((entryList) => {
+    for (const entry of entryList.getEntries()) {
+        console.log('LCP candidate:', entry.startTime, entry);
+    }
+}).observe({type: 'largest-contentful-paint', buffered: true});
+\`\`\``;
+
+export const FID = `\`\`\`js
+new PerformanceObserver((entryList) => {
+    for (const entry of entryList.getEntries()) {
+        console.log('FID candidate:', entry.startTime, entry);
+    }
+}).observe({type: 'first-paint', buffered: true});
+\`\`\``;
+
+export const LONG_TASK = `\`\`\`js
+new PerformanceObserver(function(list) {
+    let perfEntries = list.getEntries();
+    for (let i = 0; i < perfEntries.length; i++) {
+        //...
+    }
+}).observe({ type: 'longtask'});
+\`\`\``;
+
+export const CLS_CODE = `\`\`\`js
+new PerformanceObserver(function(list) {
+    let perfEntries = list.getEntries();
+    for (let i = 0; i < perfEntries.length; i++) {
+        //...
+    }
+})observe({type: 'layout-shift', buffered: true});
+\`\`\``;
+
+export const SENTRY_INIT = `\`\`\`ts
+import * as Sentry from '@sentry/react';
+import { BrowserTracing } from '@sentry/tracing';
+
+Sentry.init({
+    dsn: 'https://test123456@0o.ingest.sentry.io/666',
+    integrations: [
+      new BrowserTracing({
+        routingInstrumentation: Sentry.reactRouterV6Instrumentation(
+          React.useEffect,
+          useLocation,
+          useNavigationType,
+          createRoutesFromChildren,
+          matchRoutes
+        )
+      })
+    ],
+  
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 0.7
+  });
+\`\`\``;
