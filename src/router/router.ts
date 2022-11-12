@@ -40,7 +40,7 @@ const routers = [
       {
         key: 'performance',
         path: 'performance',
-        name: '性能优化？先从指标入手',
+        name: '连指标都不知道还敢说懂性能优化？',
         element: lazy(() => import('@/pages/project/performance'))
       }
     ]
@@ -132,6 +132,12 @@ const routers = [
         path: 'changeVersion',
         name: '光速切换node版本',
         element: lazy(() => import('@/pages/node/changeVersion'))
+      },
+      {
+        key: 'nodeJs',
+        path: 'nodeJs',
+        name: 'Node.js',
+        element: lazy(() => import('@/pages/node/node'))
       }
     ]
   },

@@ -60,7 +60,7 @@ export default function Index() {
 
   return (
     <article id="root" className={classMap.article}>
-      <div className={classMap.articleTitle}>性能优化？先从指标入手</div>
+      <div className={classMap.articleTitle}>连指标都不知道还敢说懂性能优化？</div>
       <h2 id="header" className={classMap.articleTitle}>
         前言
       </h2>
