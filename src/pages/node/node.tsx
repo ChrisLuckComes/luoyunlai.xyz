@@ -41,9 +41,8 @@ export default function Index() {
         allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
         sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
       ></iframe>
-      <img src={NODE_DEPS} />
       <br />
-      图中是nodejs所用到的依赖，可以看到一些很常见或者听说过的名称，例如<code>v8</code>等。核心依赖项如下：
+      Node.js核心依赖项如下：
       <strong>类库</strong>：
       <ul className={classMap.ul}>
         <li>
