@@ -3,7 +3,9 @@ import { Anchor } from 'antd';
 import { UseMarkDown } from '@/hooks/useMarkdown';
 
 import NODE_DEPS from '@/images/node/nodeJs.png';
-import NODE_MODEL from '@/images/node/nodeModel.jpeg';
+import NODE_MODEL from '@/images/node/nodeModel.png';
+import LIBUV from '@/images/node/libuv.webp';
+import BRAINLESS from '@/images/brainless.webp';
 import { HELLO_NODE } from './_node';
 
 const { Link } = Anchor;
@@ -25,8 +27,21 @@ export default function Index() {
       <strong>
         它最特别的优势就是前端同学们👨‍💻👩‍💻都熟js，不需要学习新语言就可以写服务端的代码。只需要几行代码就可以启动一个服务，如下
       </strong>
-      {helloNode}
-      <img src={NODE_DEPS} width={1000} height={600} />
+      <iframe
+        src="https://codesandbox.io/embed/relaxed-shaw-5u3725?fontsize=14&hidenavigation=1&theme=dark"
+        style={{
+          width: '100%',
+          height: '500px',
+          border: 0,
+          borderRadius: '4px',
+          overflow: 'hidden',
+          margin:'10px 0'
+        }}
+        title="relaxed-shaw-5u3725"
+        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+      ></iframe>
+      <img src={NODE_DEPS} />
       <br />
       图中是nodejs所用到的依赖，可以看到一些很常见或者听说过的名称，例如<code>v8</code>等。核心依赖项如下：
       <strong>类库</strong>：
@@ -120,6 +135,64 @@ export default function Index() {
       <br />
       那么这些技术是如何组合的呢？如下是node.js的架构图
       <img src={NODE_MODEL} />
+      <ul className={classMap.ul}>
+        <li>最上层是Node API，可以直接js调用</li>
+        <li>
+          中间<code>node bindings</code>，js通过它可以和C/C++通信
+        </li>
+        <li>最底层向node bindings提供api服务</li>
+      </ul>
+      <h2 id="bindings" className={classMap.articleTitle}>
+        Node bindings
+      </h2>
+      C/C++有很多功能js是没有的，例如文件系统，http等，但js不能直接调用C++的库，所以需要一个中间人，Node
+      bindings就是这个中间人。
+      <br />
+      Node.js是这样处理的：
+      <ul className={classMap.ul}>
+        <li>将库用C++封装，文件类型为xxx.cpp</li>
+        <li>编译为.node文件</li>
+        <li>
+          js可以直接<code>require</code>这个<code>.node</code>文件
+        </li>
+      </ul>
+      示例代码见
+      <a
+        className={classMap.href}
+        target="_blank"
+        rel="noreferrer"
+        href="https://github.com/nodejs/node-addon-examples"
+      >
+        Node.js C++ addon examples 官方示例仓库
+      </a>
+      ，拉到本地从hello world开始看
+      <br />
+      <br />
+      <img src={BRAINLESS} />
+      <h2 id="v8" className={classMap.articleTitle}>
+        V8
+      </h2>
+      <code>V8</code>是谷歌开源的高性能js引擎，用C++写的，功能如下
+      <ul className={classMap.ul}>
+        <li>编译并运行js代码</li>
+        <li>管理内存</li>
+        <li>垃圾收集</li>
+        <li>实现ECMA标准中的类型、运算符、对象和函数</li>
+      </ul>
+      <h2 id="libuv" className={classMap.articleTitle}>
+        libuv
+      </h2>
+      libuv是一个C库，它支持多平台的异步I/O操作，啥是I/O？
+      <ul className={classMap.ul}>
+        <li>文件</li>
+        <li>网络</li>
+        <li>线程池</li>
+        <li>...更多，如下图</li>
+      </ul>
+      <img src={LIBUV} />
+      <h2 id="workflow" className={classMap.articleTitle}>
+        工作流程
+      </h2>
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
         <Link href="intro" title="Node.js"></Link>
         <Link href="bindings" title="Node bindings"></Link>
