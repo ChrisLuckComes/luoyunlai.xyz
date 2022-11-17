@@ -2,16 +2,18 @@ import { classMap } from '@/constants/constant';
 import { Anchor } from 'antd';
 import { UseMarkDown } from '@/hooks/useMarkdown';
 
-import NODE_DEPS from '@/images/node/nodeJs.png';
 import NODE_MODEL from '@/images/node/nodeModel.png';
 import LIBUV from '@/images/node/libuv.webp';
 import BRAINLESS from '@/images/brainless.webp';
-import { HELLO_NODE } from './_node';
+import FLOW from '@/images/node/flow.png';
+
+import { EVENT_LOOP, TIMER } from './_node';
 
 const { Link } = Anchor;
 
 export default function Index() {
-  const helloNode = <UseMarkDown markdown={HELLO_NODE}></UseMarkDown>;
+  const eventLoop = <UseMarkDown markdown={EVENT_LOOP}></UseMarkDown>,
+    timer = <UseMarkDown markdown={TIMER}></UseMarkDown>;
 
   return (
     <article id="root" className={classMap.article}>
@@ -35,7 +37,7 @@ export default function Index() {
           border: 0,
           borderRadius: '4px',
           overflow: 'hidden',
-          margin:'10px 0'
+          margin: '10px 0'
         }}
         title="relaxed-shaw-5u3725"
         allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
@@ -43,6 +45,7 @@ export default function Index() {
       ></iframe>
       <br />
       Node.js核心依赖项如下：
+      <br />
       <strong>类库</strong>：
       <ul className={classMap.ul}>
         <li>
@@ -192,12 +195,110 @@ export default function Index() {
       <h2 id="workflow" className={classMap.articleTitle}>
         工作流程
       </h2>
+      <img src={FLOW} />
+      <br />
+      以读取文件为例：
+      <ul className={classMap.ul}>
+        <li>
+          <code>Application</code>就是代码，然后<code>V8运行代码</code>
+        </li>
+        <li>
+          运行代码到需要读取文件，<code>libuv</code>开一个线程读文件
+        </li>
+        <li>
+          读完文件后，操作系统返回事件给<code>event loop</code>，<code>event loop</code>把文件传回给<code>V8</code>
+        </li>
+      </ul>
+      <h3 id="eventLoop" className={classMap.articleSubTitle}>
+        事件循环(Event Loop)
+      </h3>
+      它是Node.js处理非阻塞I/O操作的机制，会把操作转移到系统内核中去。js是单线程没错，但是大多数系统内核都是多线程的，它们可以在后台处理多种操作，当一个操作完成的时候，内核通知Node.js将合适的回调函数添加到队列里等待时机执行。
+      <br />
+      <br />
+      当Node.js启动后，它会初始化<code>Event Loop</code>
+      ，处理已提供的输入脚本，它可能会调用一些异步的API、调度定时器，或者调用<code>process.nextTick</code>，然后开始处理
+      <code>Event Loop</code>，流程如下，它展示了操作顺序的简化概览：
+      {eventLoop}
+      <div className={classMap.assist}>每个框都是事件循环机制的一个阶段。</div>
+      <br />
+      每个阶段都有一个FIFO队列来执行回调。虽然每个阶段都是特殊的，但通常情况下，当事件循环进入给定的阶段时，它将执行特定于该阶段的任何操作，然后之心该阶段队列中的回调，直到队列用尽或已执行到最大的回调数。当执行完成后，事件循环将移动到下一阶段，以此类推。
+      <br />
+      <br />
+      <h3 id="stage" className={classMap.articleSubTitle}>
+        阶段概述
+      </h3>
+      <ul className={classMap.ul}>
+        <li>
+          <strong>timers(计时器)</strong>：本阶段执行已经被<code>setTimeout</code>和<code>setInterval</code>
+          的调度回调函数。
+          <br />
+          <br />
+          计时器可以指定阈值，而不是用户希望回调执行的确切时间。经过指定的时间间隔后，计时器回调将被尽可能早地运行，但是操作系统调度或其他正在运行的回调可能会延迟它们
+          (由轮询阶段控制)。举个例子，设置了一个100ms的定时器，假设读取文件需要95ms：
+          {timer}
+          当事件循环进入poll阶段时，它由一个空队列（此时<code>fs.readFile</code>
+          暂未完成），因此它将等待剩下的毫秒数，直到达到最快的一个计时器阈值为止。当它等待95ms后，
+          <code>fs.readFile</code>
+          完成，它的那个需要10毫秒才能完成的回调将被添加到轮询队列中并执行。当回调完成后，队列为空，此时事件循环机制发现计时器最快的阈值(100ms)已达到，将回到计时器阶段，执行计时器阶段。
+        </li>
+        <li>
+          <strong>I/O callbacks(待定回调)</strong>：执行延迟到下一个循环迭代的I/O回调
+          <br />
+          <br />
+          此阶段对某些系统操作（如TCP错误类型）执行回调。
+        </li>
+        <li>
+          <strong>idle,prepare</strong>：仅系统内部使用
+        </li>
+        <li>
+          <strong>poll(轮询)</strong>：检索新的I/O事件；执行与I/O相关的回调（除了关闭的回调函数、计时器和
+          <code>setImmediate</code>调度的之外），其余情况node将在适当的时候在此阻塞。
+          <br />
+          <br />
+          轮询阶段有两个重要的功能：
+          <ul>
+            <li>1. 计算应该阻塞和轮询I/O的时间</li>
+            <li>2. 处理轮询队列里的时间</li>
+          </ul>
+          当时间循环进入轮询阶段且没有被调度的计时器时，将发生以下两种情况：
+          <ul className={classMap.ul}>
+            <li>如果轮询队列不是空的，事件循环将循环访问回调队列并同步执行它们，直到队列为空，或者达到系统硬性限制</li>
+            <li>如果轮询队列是空的：
+              <ul className={classMap.ul}>
+                <li>如果脚本被<code>setImmediate</code>调度，则时间循环将结束轮询阶段，继续执行检查阶段</li>
+                <li>否则等待回调被添加到队列中并立即执行</li>
+              </ul>
+            </li>
+          </ul>
+          一旦轮询队列为空，事件循环将检查已达到时间阈值的计时器。如果有计时器已准备就绪，则事件循环将绕回计时器阶段执行这些计时器的回调。
+        </li>
+        <li>
+          <strong>check(检查)</strong>：<code>setImmediate</code>回调函数在这里执行
+          <br />
+          <br />
+          此阶段允许在轮询阶段完成后立即执行回调。如果轮询阶段变为空闲装后台，并且脚本使用<code>setImmediate</code>后被排列在队列中，则事件循环可能到检查阶段而不是等待。
+          <br />
+          <code>setImmediate</code>实际上是一个在事件循环的单独阶段运行的特殊计时器，它使用一个libuv API来安排回调在轮询阶段完成后执行。
+          <br />
+          通常在执行代码时，事件循环最终会进入轮询阶段。但是如果回调已使用<code>setImmediate</code>调度过，并且轮询阶段变为空闲状态，继续到检查阶段。
+        </li>
+        <li>
+          <strong>close callbacks(关闭的回调函数)</strong>；一些关闭的回调函数，如
+          <code>socket.on(&quot;close&quot;,...)</code>
+          <br />
+          <br />
+          如果socket或处理函数突然关闭(例如socket.destroy),则<code>close</code>事件将在这个阶段发出，否则通过<code>process.nextTick</code>发出。
+        </li>
+      </ul>
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
-        <Link href="intro" title="Node.js"></Link>
-        <Link href="bindings" title="Node bindings"></Link>
-        <Link href="v8" title="V8"></Link>
-        <Link href="libuv" title="libuv"></Link>
-        <Link href="workflow" title="工作流程"></Link>
+        <Link href="#intro" title="Node.js"></Link>
+        <Link href="#bindings" title="Node bindings"></Link>
+        <Link href="#v8" title="V8"></Link>
+        <Link href="#libuv" title="libuv"></Link>
+        <Link href="#workflow" title="工作流程">
+          <Link href="#eventLoop" title="事件循环(Event Loop)"></Link>
+          <Link href="#stage" title="阶段概述"></Link>
+        </Link>
       </Anchor>
     </article>
   );

@@ -15,3 +15,51 @@ server.listen(port, hostname, () => {
 });
 
 \`\`\``;
+
+export const EVENT_LOOP = `\`\`\`sql
+   ┌───────────────────────────┐
+┌─>           timers          
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+│  │     pending callbacks     
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+│  │       idle, prepare       
+│  └─────────────┬─────────────┘      ┌───────────────┐
+│  ┌─────────────┴─────────────┐      │   incoming:   │
+│  │           poll                                        <───┤  connections, │
+│  └─────────────┬─────────────┘      │   data, etc.  │
+│  ┌─────────────┴─────────────┐      └───────────────┘
+│  │           check           
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+└─      close callbacks      
+    └───────────────────────────┘
+\`\`\``;
+
+export const TIMER = `\`\`\`ts
+const fs = require('fs');
+
+function someAsyncOperation(callback) {
+  // 假设读取文件需要95ms
+  fs.readFile('/path/to/file', callback);
+}
+
+const timeoutScheduled = Date.now();
+
+setTimeout(() => {
+  const delay = Date.now() - timeoutScheduled;
+
+  console.log(delay + 'ms have passed since I was scheduled');
+}, 100);
+
+// 执行函数
+someAsyncOperation(() => {
+  const startCallback = Date.now();
+
+  // 空过，耗时10ms
+  while (Date.now() - startCallback < 10) {
+
+  }
+});
+\`\`\``;
