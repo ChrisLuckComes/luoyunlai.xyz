@@ -43,8 +43,8 @@ export default function Global() {
 
   return (
     <article id="root" className={classMap.article}>
-      <h1 className={classMap.pageTitle}>Vue3全局概览</h1>
-      <div className="flex-between relative">
+      <main className={classMap.content}>
+        <h1 className={classMap.pageTitle}>Vue3全局概览</h1>
         <div>
           <h2 id="createApp" className={classMap.articleTitle}>
             createApp
@@ -52,8 +52,7 @@ export default function Global() {
           <code>createApp</code>是vue3的启动函数，返回一个应用实例，它做了啥？
           <div className={classMap.assist}>packages\runtime-dom\src\index.ts</div>
           {baseCreateRenderer}
-          重点在于第一句<code>ensureRenderer</code> 
-          {ensureRenderer}
+          重点在于第一句<code>ensureRenderer</code> {ensureRenderer}
           调用<code>createRenderer</code>
           {createRenderer}
           <div className={classMap.assist}>packages\runtime-core\src\renderer.ts</div>
@@ -137,16 +136,16 @@ export default function Global() {
           {ReactiveEffect}
           {triggerEffect}
         </div>
-        <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
-          <Link href="#createApp" title="createApp"></Link>
-          <Link href="#defineComponent" title="defineComponent"></Link>
-          <Link href="#h" title="h"></Link>
-          <Link href="#nextTick" title="nextTick">
-            <Link href="#why" title="为什么需要nextTick"></Link>
-            <Link href="#how" title="nextTick实现"></Link>
-          </Link>
-        </Anchor>
-      </div>
+      </main>
+      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
+        <Link href="#createApp" title="createApp"></Link>
+        <Link href="#defineComponent" title="defineComponent"></Link>
+        <Link href="#h" title="h"></Link>
+        <Link href="#nextTick" title="nextTick">
+          <Link href="#why" title="为什么需要nextTick"></Link>
+          <Link href="#how" title="nextTick实现"></Link>
+        </Link>
+      </Anchor>
     </article>
   );
 }

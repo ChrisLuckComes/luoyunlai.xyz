@@ -64,55 +64,57 @@ export default function Index() {
 
   return (
     <article id="root" className={classMap.article}>
-      <h2 id="diff" className={classMap.articleTitle}>
-        不会还有人在手动发版吧？不会吧？手把手带你使用Github Actions完成CI/CD自动化部署
-      </h2>
-      <div className={classMap.assist}>以该repo为例子，部署在腾讯云</div>
-      <h2 id="ssh" className={classMap.articleTitle}>
-        SSH密钥
-      </h2>
-      首先需要在云服务器创建密钥，用于后续SSH远程登录
-      <img src={CREATE_SSH} />
-      <br />
-      然后进入github，路径：github/settings/Secrets，已存在的密钥会在这里展示，点击
-      <strong>new repository secret</strong>新增，也可以创建环境变量区分不同环境。
-      <br />
-      <br />
-      <img src={SETTINGS} />
-      <br />
-      <br />
-      输入名称和上一步新增的密钥，新增成功
-      <br />
-      <br />
-      <img src={NEW_SECRET} />
-      <h2 id="workflow" className={classMap.articleTitle}>
-        workflow
-      </h2>
-      然后进入到actions,点击<strong>New workflow</strong>
-      <img src={NEW_WORKFLOW} />
-      <br />
-      <br />
-      有很多模板可供选择，这里我们选择自定义，点击<strong>set up a work yourself</strong>
-      <br />
-      <br />
-      <img src={SETUP_YOURSELF} />
-      <br />
-      <br />
-      文件名按个人喜好来，示例代码在下节，创建完成后，每次对应分支有变动就会触发workflow，完成自动拉取代码打包发布
-      <br />
-      <br />
-      <img src={COMMIT_WORKFLOW} />
-      <h2 id="code" className={classMap.articleTitle}>
-        代码
-      </h2>
-      {myWorkflow}
-      <h2 id="result" className={classMap.articleTitle}>
-        Jobs
-      </h2>
-      点击工作流可以查看jobs执行情况，到此就大功告成了，从此无需再手动打包复制文件。
-      <br />
-      <br />
-      <img src={WORKFLOW} />
+      <main className={classMap.content}>
+        <h2 id="diff" className={classMap.articleTitle}>
+          不会还有人在手动发版吧？不会吧？手把手带你使用Github Actions完成CI/CD自动化部署
+        </h2>
+        <div className={classMap.assist}>以该repo为例子，部署在腾讯云</div>
+        <h2 id="ssh" className={classMap.articleTitle}>
+          SSH密钥
+        </h2>
+        首先需要在云服务器创建密钥，用于后续SSH远程登录
+        <img src={CREATE_SSH} />
+        <br />
+        然后进入github，路径：github/settings/Secrets，已存在的密钥会在这里展示，点击
+        <strong>new repository secret</strong>新增，也可以创建环境变量区分不同环境。
+        <br />
+        <br />
+        <img src={SETTINGS} />
+        <br />
+        <br />
+        输入名称和上一步新增的密钥，新增成功
+        <br />
+        <br />
+        <img src={NEW_SECRET} />
+        <h2 id="workflow" className={classMap.articleTitle}>
+          workflow
+        </h2>
+        然后进入到actions,点击<strong>New workflow</strong>
+        <img src={NEW_WORKFLOW} />
+        <br />
+        <br />
+        有很多模板可供选择，这里我们选择自定义，点击<strong>set up a work yourself</strong>
+        <br />
+        <br />
+        <img src={SETUP_YOURSELF} />
+        <br />
+        <br />
+        文件名按个人喜好来，示例代码在下节，创建完成后，每次对应分支有变动就会触发workflow，完成自动拉取代码打包发布
+        <br />
+        <br />
+        <img src={COMMIT_WORKFLOW} />
+        <h2 id="code" className={classMap.articleTitle}>
+          代码
+        </h2>
+        {myWorkflow}
+        <h2 id="result" className={classMap.articleTitle}>
+          Jobs
+        </h2>
+        点击工作流可以查看jobs执行情况，到此就大功告成了，从此无需再手动打包复制文件。
+        <br />
+        <br />
+        <img src={WORKFLOW} />
+      </main>
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
         <Link href="#ssh" title="SSH"></Link>
         <Link href="#workflow" title="workflow"></Link>

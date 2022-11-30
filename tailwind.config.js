@@ -43,7 +43,8 @@ module.exports = {
       full: '100%'
     },
     maxWidth: {
-      sider: '16.67%'
+      sider: '16.67%',
+      content: '80%'
     },
     height: {
       content: 'calc(100vh - 64px - 69px - 40px)',

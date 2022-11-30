@@ -6,6 +6,7 @@ export const classMap = {
   article: 'article',
   articleTitle: 'article-title',
   articleSubTitle: 'article-sub-title',
+  content: 'max-w-content',
   href: 'href',
   ul: 'ul',
   assist: 'assist',

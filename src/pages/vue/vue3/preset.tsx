@@ -12,8 +12,8 @@ export default function Preset() {
 
   return (
     <article id="root" className={classMap.article}>
-      <h1 className={classMap.pageTitle}>Vue3前置知识</h1>
-      <div className="flex-between relative">
+      <main className={classMap.content}>
+        <h1 className={classMap.pageTitle}>Vue3前置知识</h1>
         <div>
           <h2 id="proxy" className={classMap.articleTitle}>
             Vue3为什么使用proxy
@@ -101,20 +101,20 @@ export default function Preset() {
           </h3>
           跟<code>WeakSet</code>一样，没有遍历方法
         </div>
-        <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
-          <Link href="#proxy" title="Vue3为什么改用proxy">
-            <Link href="#defineProperty" title="Object.defineProperty" />
-            <Link href="#definePropertyProblem" title="Object.defineProperty存在的问题" />
-            <Link href="#proxySummary" title="使用proxy的原因总结" />
-          </Link>
-          <Link href="#collection" title="Set、Map、WeakSet、WeakMap">
-            <Link href="#set" title="Set"></Link>
-            <Link href="#weakSet" title="WeakSet"></Link>
-            <Link href="#map" title="Map"></Link>
-            <Link href="#weakMap" title="WeakMap"></Link>
-          </Link>
-        </Anchor>
-      </div>
+      </main>
+      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
+        <Link href="#proxy" title="Vue3为什么改用proxy">
+          <Link href="#defineProperty" title="Object.defineProperty" />
+          <Link href="#definePropertyProblem" title="Object.defineProperty存在的问题" />
+          <Link href="#proxySummary" title="使用proxy的原因总结" />
+        </Link>
+        <Link href="#collection" title="Set、Map、WeakSet、WeakMap">
+          <Link href="#set" title="Set"></Link>
+          <Link href="#weakSet" title="WeakSet"></Link>
+          <Link href="#map" title="Map"></Link>
+          <Link href="#weakMap" title="WeakMap"></Link>
+        </Link>
+      </Anchor>
     </article>
   );
 }

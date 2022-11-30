@@ -15,8 +15,8 @@ const { Link } = Anchor;
 export default function Index() {
   return (
     <article id="root" className={classMap.article}>
-      <h1 className={classMap.pageTitle}>http=&gt;https=&gt;http2</h1>
-      <div className="flex-between relative">
+      <main className={classMap.content}>
+        <h1 className={classMap.pageTitle}>http=&gt;https=&gt;http2</h1>
         <div>
           <h2 id="httpDisAdv" className={classMap.articleTitle}>
             http的不足
@@ -113,24 +113,24 @@ export default function Index() {
           模块，否则需要重新安装更高版本的nginx
           <UseMarkDown markdown={NGINX}></UseMarkDown>
         </div>
+      </main>
 
-        <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
-          <Link href="#httpDisAdv" title="http不足" />
-          <Link href="#https" title="https">
-            <Link href="#listen" title="被窃听" />
-            <Link href="#change" title="被篡改" />
-            <Link href="#fish" title="冒充" />
-            <Link href="#legal" title="验证证书合法性" />
-            <Link href="#disAdv" title="缺点" />
-          </Link>
-          <Link href="#http2" title="http2">
-            <Link href="#frame" title="帧结构" />
-            <Link href="#stream" title="并发传输" />
-            <Link href="#other" title="其他优点" />
-          </Link>
-          <Link href="#nginx" title="nginx配置"></Link>
-        </Anchor>
-      </div>
+      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
+        <Link href="#httpDisAdv" title="http不足" />
+        <Link href="#https" title="https">
+          <Link href="#listen" title="被窃听" />
+          <Link href="#change" title="被篡改" />
+          <Link href="#fish" title="冒充" />
+          <Link href="#legal" title="验证证书合法性" />
+          <Link href="#disAdv" title="缺点" />
+        </Link>
+        <Link href="#http2" title="http2">
+          <Link href="#frame" title="帧结构" />
+          <Link href="#stream" title="并发传输" />
+          <Link href="#other" title="其他优点" />
+        </Link>
+        <Link href="#nginx" title="nginx配置"></Link>
+      </Anchor>
     </article>
   );
 }

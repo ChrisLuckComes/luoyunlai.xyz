@@ -55,5 +55,9 @@
   "svg": {
     "prefix": "svg",
     "body": "<embed src=\"\" type=\"image/svg+xml\" />"
+  },
+  "main": {
+    "prefix": "main",
+    "body": "<main className={classMap.content}>\n\n</main>"
   }
 }

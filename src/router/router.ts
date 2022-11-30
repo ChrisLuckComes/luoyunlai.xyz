@@ -86,6 +86,11 @@ const routers = [
         path: 'hook',
         name: 'Hook',
         element: lazy(() => import('@/pages/react/hook'))
+      },
+      {
+        key: 'state',
+        path: 'state',
+        name: '还在用Redux吗？你已经out了'
       }
     ]
   },
@@ -138,6 +143,12 @@ const routers = [
         path: 'nodeJs',
         name: 'Node.js',
         element: lazy(() => import('@/pages/node/node'))
+      },
+      {
+        key: 'middleware',
+        path: 'middleware',
+        name: 'express和koa的中间件模型',
+        element: lazy(() => import('@/pages/node/middleware'))
       }
     ]
   },

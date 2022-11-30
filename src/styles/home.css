@@ -35,6 +35,7 @@ ul {
   @apply h-full overflow-y-auto;
 }
 
+
 .article-title {
   @apply font-semibold text-h2 mt-6 mb-2;
 }
