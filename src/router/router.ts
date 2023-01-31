@@ -90,7 +90,8 @@ const routers = [
       {
         key: 'state',
         path: 'state',
-        name: '还在用Redux吗？你已经out了'
+        name: '还在用Redux吗？你已经out了',
+        element: lazy(() => import('@/pages/react/store'))
       }
     ]
   },

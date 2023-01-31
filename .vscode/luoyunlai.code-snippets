@@ -17,7 +17,7 @@
   // }
   "react": {
     "prefix": "react",
-    "body": "import { classMap } from '@/constants/constant';\nimport { Anchor } from 'antd';\nimport { UseMarkDown } from '@/hooks/useMarkdown';\nconst { Link } = Anchor;\n\nexport default function Index() {\n\treturn <article id=\"root\" className={classMap.article}></article>;\n}"
+    "body": "import { classMap } from '@/constants/constant';\nimport { Anchor } from 'antd';\nimport { UseMarkDown } from '@/hooks/useMarkdown';\nconst { Link } = Anchor;\n\nexport default function Index() {\n\treturn <article id=\"root\" className={classMap.article}>\n<main className={classMap.content}>\n</main>\n</article>;\n}"
   },
   "h2": {
     "prefix": "h2",
