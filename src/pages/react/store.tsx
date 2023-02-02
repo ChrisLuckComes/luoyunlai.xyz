@@ -5,10 +5,12 @@ import {
   ADD_TO_STORE,
   CONFIGURE_STORE,
   CREATE_STORE,
+  DISPATCH,
   PROVIDER,
   REDUX_APP,
   REDUX_STORE,
   STORE_SLICE,
+  SUBSCRIBE,
   USE_REDUX_STATE
 } from './_store';
 const { Link } = Anchor;
@@ -21,7 +23,9 @@ export default function Index() {
     useReduxState = <UseMarkDown markdown={USE_REDUX_STATE} />,
     createStore = <UseMarkDown markdown={CREATE_STORE} />,
     configureStore = <UseMarkDown markdown={CONFIGURE_STORE}></UseMarkDown>,
-    provider = <UseMarkDown markdown={PROVIDER}></UseMarkDown>;
+    provider = <UseMarkDown markdown={PROVIDER}></UseMarkDown>,
+    subscribe = <UseMarkDown markdown={SUBSCRIBE}></UseMarkDown>,
+    dispatch = <UseMarkDown markdown={DISPATCH}></UseMarkDown>;
 
   return (
     <article id="root" className={classMap.article}>
@@ -88,8 +92,22 @@ export default function Index() {
       {createStore}
       <p>
         函数接收reducer、preloadedState、enhancer参数创建一个包括<code>dispatch</code>,<code>subscribe</code>
-        等属性的store对象，其中dispatch用来修改state,subscribe订阅listener的变化
+        等属性的store对象。
       </p>
+      <br />
+      <br />
+      Redux采用了发布订阅模式，工作流程:
+      <br />
+      <ul className={classMap.ul}>
+        <li id="subscribe">
+          1. <code>subscribe</code>接收参数listener，将其添加到nextListener数组中
+          {subscribe}
+        </li>
+        <li id="dispatch">
+          2. <code>dispatch</code>调用执行完reducer修改state，最后遍历执行nextListener
+          {dispatch}
+        </li>
+      </ul>
       <h2 id="diff" className={classMap.articleTitle}>
         在react中的实现
       </h2>
@@ -97,7 +115,8 @@ export default function Index() {
         Provider
       </h3>
       react-redux这个repo中的<code>Provider</code>
-      组件是实现state变化刷新页面的核心，它帮我们做了订阅，并且使用<code>Context</code>将state传递给了子组件，所以state有变化时能刷新页面。
+      组件是实现state变化刷新页面的核心，它帮我们做了订阅，并且使用<code>Context</code>
+      将state传递给了子组件，所以state有变化时能刷新页面。
       <div className={classMap.assist}>src\components\Provider.tsx</div>
       {provider}
       <h2 id="#reduxInReact" className={classMap.articleTitle}>
@@ -109,7 +128,10 @@ export default function Index() {
         <Link title="源码解析" href="#source">
           <Link title="初始化" href="#init">
             <Link title="configureStore" href="#configureStore"></Link>
-            <Link title="createStore" href="#createStore"></Link>
+            <Link title="createStore" href="#createStore">
+              <Link title="subscribe" href="#subscribe"></Link>
+              <Link title="dispatch" href="#dispatch"></Link>
+            </Link>
           </Link>
           <Link title="在react中的实现" href="#reduxInReact">
             <Link title="Provider" href="#provider"></Link>

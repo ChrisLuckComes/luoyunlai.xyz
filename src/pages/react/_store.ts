@@ -203,6 +203,49 @@ export function configureStore<
 }
 \`\`\``;
 
+export const SUBSCRIBE = `\`\`\`js
+function subscribe(listener: () => void) {
+
+  let isSubscribed = true
+
+  ensureCanMutateNextListeners()
+  // 将listener添加到nextListeners
+  nextListeners.push(listener)
+
+  return function unsubscribe() {
+    if (!isSubscribed) {
+      return
+    }
+
+    isSubscribed = false
+
+    ensureCanMutateNextListeners()
+    const index = nextListeners.indexOf(listener)
+    nextListeners.splice(index, 1)
+    currentListeners = null
+  }
+}
+\`\`\``
+
+export const DISPATCH = `\`\`\`js
+function dispatch(action: A) {
+  try {
+    isDispatching = true
+    currentState = currentReducer(currentState, action)
+  } finally {
+    isDispatching = false
+  }
+
+  const listeners = (currentListeners = nextListeners)
+  for (let i = 0; i < listeners.length; i++) {
+    const listener = listeners[i]
+    listener()
+  }
+
+  return action
+}
+\`\`\``
+
 export const PROVIDER = `\`\`\`jsx
 function Provider<A extends Action = AnyAction, S = unknown>({
   store,
@@ -242,3 +285,4 @@ function Provider<A extends Action = AnyAction, S = unknown>({
   return <Context.Provider value={contextValue}>{children}</Context.Provider>
 }
 \`\`\``
+

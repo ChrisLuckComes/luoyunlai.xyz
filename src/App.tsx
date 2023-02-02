@@ -38,7 +38,7 @@ export default function App() {
           <div className="flex-shrink-0">
             <img className="h-36 mr-8" src={CAIGOU} alt="caigou" width={36} />
           </div>
-          <span>Luoyunlai.xyz</span>
+          <span>Luoyunlai.top</span>
         </div>
         <Menu className="min-w-header-menu" selectedKeys={selectedKeys} onClick={e => clickMenu(e)} mode="horizontal">
           {routers.map(router => (
