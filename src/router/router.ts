@@ -172,6 +172,20 @@ const routers = [
         element: lazy(() => import('@/pages/experiences/cloud'))
       }
     ]
+  },
+  {
+    key: 'knowledge',
+    path: '/knowledge',
+    name: '知识',
+    element: lazy(() => import('@/pages/index')),
+    children: [
+      {
+        key: 'browser',
+        path: 'browser',
+        name: '浏览器如何工作',
+        element: lazy(() => import('@/pages/knowledge/browser'))
+      }
+    ]
   }
 ];
 

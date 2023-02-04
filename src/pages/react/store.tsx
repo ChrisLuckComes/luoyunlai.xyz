@@ -69,60 +69,61 @@ export default function Index() {
           height={500}
           src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-counter-example/tree/master/?fontsize=14&hidenavigation=1&theme=dark"
         />
+        <h2 id="source" className={classMap.articleTitle}>
+          源码解析
+        </h2>
+        <h2 id="#init" className={classMap.articleTitle}>
+          初始化
+        </h2>
+        <h3 id="configureStore" className={classMap.articleSubTitle}>
+          配置store
+        </h3>
+        按照使用步骤，第一步就是配置store
+        <br />
+        <strong>repo: redux-toolkit</strong>
+        <div className={classMap.assist}>packages\toolkit\src\configureStore.ts</div>
+        {configureStore}
+        <p>对options中的参数进行处理，最后调用标准Redux createStore()函数</p>
+        <h3 id="createStore" className={classMap.articleSubTitle}>
+          createStore
+        </h3>
+        <div className={classMap.assist}>src\createStore.ts</div>
+        {createStore}
+        <p>
+          函数接收reducer、preloadedState、enhancer参数创建一个包括<code>dispatch</code>,<code>subscribe</code>
+          等属性的store对象。
+        </p>
+        <br />
+        <br />
+        Redux采用了发布订阅模式，工作流程:
+        <br />
+        <ul className={classMap.ul}>
+          <li id="subscribe">
+            1. <code>subscribe</code>接收参数listener，将其添加到nextListener数组中
+            {subscribe}
+          </li>
+          <li id="dispatch">
+            2. <code>dispatch</code>调用执行完reducer修改state，最后遍历执行nextListener
+            {dispatch}
+          </li>
+        </ul>
+        <h2 id="diff" className={classMap.articleTitle}>
+          在react中的实现
+        </h2>
+        <h3 id="provider" className={classMap.articleSubTitle}>
+          Provider
+        </h3>
+        react-redux这个repo中的<code>Provider</code>
+        组件是实现state变化刷新页面的核心，它帮我们做了订阅，并且使用<code>Context</code>
+        将state传递给了子组件，所以state有变化时能刷新页面。
+        <div className={classMap.assist}>src\components\Provider.tsx</div>
+        {provider}
+        <h2 id="#reduxInReact" className={classMap.articleTitle}>
+          当前主流方案
+        </h2>
+        按现在的眼光来看Redux，确实略微繁琐了。使用<code>useContext</code>就能实现类似的功能，还不需要额外引入库。
       </main>
-      <h2 id="source" className={classMap.articleTitle}>
-        源码解析
-      </h2>
-      <h2 id="#init" className={classMap.articleTitle}>
-        初始化
-      </h2>
-      <h3 id="configureStore" className={classMap.articleSubTitle}>
-        配置store
-      </h3>
-      按照使用步骤，第一步就是配置store
-      <br />
-      <strong>repo: redux-toolkit</strong>
-      <div className={classMap.assist}>packages\toolkit\src\configureStore.ts</div>
-      {configureStore}
-      <p>对options中的参数进行处理，最后调用标准Redux createStore()函数</p>
-      <h3 id="createStore" className={classMap.articleSubTitle}>
-        createStore
-      </h3>
-      <div className={classMap.assist}>src\createStore.ts</div>
-      {createStore}
-      <p>
-        函数接收reducer、preloadedState、enhancer参数创建一个包括<code>dispatch</code>,<code>subscribe</code>
-        等属性的store对象。
-      </p>
-      <br />
-      <br />
-      Redux采用了发布订阅模式，工作流程:
-      <br />
-      <ul className={classMap.ul}>
-        <li id="subscribe">
-          1. <code>subscribe</code>接收参数listener，将其添加到nextListener数组中
-          {subscribe}
-        </li>
-        <li id="dispatch">
-          2. <code>dispatch</code>调用执行完reducer修改state，最后遍历执行nextListener
-          {dispatch}
-        </li>
-      </ul>
-      <h2 id="diff" className={classMap.articleTitle}>
-        在react中的实现
-      </h2>
-      <h3 id="provider" className={classMap.articleSubTitle}>
-        Provider
-      </h3>
-      react-redux这个repo中的<code>Provider</code>
-      组件是实现state变化刷新页面的核心，它帮我们做了订阅，并且使用<code>Context</code>
-      将state传递给了子组件，所以state有变化时能刷新页面。
-      <div className={classMap.assist}>src\components\Provider.tsx</div>
-      {provider}
-      <h2 id="#reduxInReact" className={classMap.articleTitle}>
-        当前主流方案
-      </h2>
-      按现在的眼光来看Redux，确实略微繁琐了。使用<code>useContext</code>就能实现类似的功能，还不需要额外引入库。
+
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
         <Link title="Redux" href="#redux" />
         <Link title="源码解析" href="#source">

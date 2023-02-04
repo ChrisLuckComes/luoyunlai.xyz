@@ -39,6 +39,10 @@
     "prefix": "anchor",
     "body": "<Anchor className=\"anchor\" getContainer={() => document.getElementById('content') as HTMLElement}></Anchor>"
   },
+  "anchorLink":{
+    "prefix": "link",
+    "body": "<Link href=\"#\" title=\"\"></Link>"
+  },
   "link": {
     "prefix": "a",
     "body": "<a className={classMap.href} target=\"_blank\" rel=\"noreferrer\" href=\"\"></a>",
