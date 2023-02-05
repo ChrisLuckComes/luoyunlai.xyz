@@ -1,11 +1,13 @@
 import { classMap } from '@/constants/constant';
-import { Anchor } from 'antd';
+import { Alert, Anchor } from 'antd';
 import { UseMarkDown } from '@/hooks/useMarkdown';
 
 import SHARE from '@/images/knowledge/share.png';
 import STRUCTURE from '@/images/knowledge/structure.webp';
 import BASIC_FLOW from '@/images/knowledge/basicFlow.webp';
 import MAIN_FLOW from '@/images/knowledge/mainflow.webp';
+import MATH_EXPRESSION from '@/images/knowledge/mathExpression.webp';
+import PARSE_TREE from '@/images/knowledge/parseTree.webp';
 
 const { Link } = Anchor;
 
@@ -108,21 +110,53 @@ export default function Index() {
         <img src={MAIN_FLOW} />
         <br />
         <br />
+        
         <h3 id="parse" className={classMap.articleSubTitle}>
-          解释
+          解析
         </h3>
-        <h3 id="grammar" className={classMap.articleSubTitle}>
-          语法
+        解析就是把文档转换成代码可以使用的结构，转换的结果通常是节点树，代表了文档的结构，也被称为语法树。如下图：
+        <br /><br />
+        <img src={MATH_EXPRESSION} />
+          <br /><br />
+        <h3 id="parser" className={classMap.articleSubTitle}>
+          词法分析和语法分析
         </h3>
-        <h3 id="translation" className={classMap.articleSubTitle}>
-          翻译
-        </h3>
+        解析分为两个子进程，词法分析(lexer)和语法分析(parser)。
+        <br /><br />
+        词法分析就是把输入分割为单词的过程，它们都是来自语法词汇表中，就像人类语言都是由词典中的单词组成一样。它会移除不相关的内容例如空格和换行。
+        <br /><br />
+        语法分析就是语法规则的应用。它根据语法规则分析文档结构创建语法树。
+        <br /><br />
+        <img src={PARSE_TREE} />
+        <br />
+        分析是循环的过程。语法分析器向词法分析器请求单词并和语法规则匹配，如果匹配成功就在语法树上新增一个节点，然后再请求下一个单词。
+        <br />
+        如果匹配失败，语法分析器先保存单词，继续请求单词直到内部保存的单词被匹配上为止。如果没有找到规则语法分析器会抛出异常，说明文档无效，包含语法错误。
         <h3 id="parsingExample" className={classMap.articleSubTitle}>
           解释案例
         </h3>
+        我们来定义一个模型来模拟分析过程，语法如下：
+        <ul>
+          <li>1. 语法块可以是单词，表达式和运算</li>
+          <li>2. 语言可以包含任意数字</li>
+          <li>3. 一个表达式后跟随运算再跟随另一个表达式</li>
+          <li>4. 运算是加法符号和减法符号</li>
+          <li>5. 表达式是数字或单词</li>
+        </ul>
+        举个栗子,分析一下<code>2 + 3 - 1</code>：<br /><br />
+        首个命中规则的字串是<code>2</code>，第5条。第二个命中的是<code>2 + 3</code>，第3条。最后<code>2 + 3 - 1</code>再次命中第3条，因为<code>2 + 3</code>是一个表达式
         <h3 id="formal" className={classMap.articleSubTitle}>
-          词法和语法的正式定义
+          词汇表和语法的正式定义
         </h3>
+          还是上面的模型，词汇表定义如下:
+          <br /><br />
+          <Alert type='info' message={<div>
+            <div>INTEGER: 0|[1-9][0-9]*</div>
+            <div>PLUS: +</div>
+            <div>MINUS: -</div></div>}>
+          </Alert>
+          <br />
+        语法通常被定义为巴科斯范式(Backus–Naur form)，
         <h3 id="parseType" className={classMap.articleSubTitle}>
           解释器的类型
         </h3>
@@ -137,9 +171,8 @@ export default function Index() {
         <Link href="#structure" title="浏览器的架构"></Link>
         <Link href="#mainFlow" title="主要流程">
           <Link href="#examples" title="主要流程案例"></Link>
-          <Link href="#parse" title="解释"></Link>
-          <Link href="#grammar" title="语法"></Link>
-          <Link href="#translation" title="翻译"></Link>
+          <Link href="#parse" title="解析"></Link>
+          <Link href="#parser" title="词法分析和语法分析"></Link>
           <Link href="#parsingExample" title="解析案例"></Link>
           <Link href="#formal" title="词法和语法的正式定义"></Link>
           <Link href="#parseType" title="解释器的类型"></Link>
