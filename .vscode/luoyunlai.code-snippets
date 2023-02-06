@@ -43,8 +43,8 @@
     "prefix": "link",
     "body": "<Link href=\"#\" title=\"\"></Link>"
   },
-  "link": {
-    "prefix": "a",
+  "href": {
+    "prefix": "href",
     "body": "<a className={classMap.href} target=\"_blank\" rel=\"noreferrer\" href=\"\"></a>",
     "description": "新窗口超链接"
   },
