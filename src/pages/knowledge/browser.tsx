@@ -12,7 +12,9 @@ import DOM_TREE from '@/images/knowledge/domTree.webp';
 import HTML_PARSING_FLOW from '@/images/knowledge/htmlParseingFlow.webp';
 import TOKENIZE from '@/images/knowledge/tokenize.webp';
 import TREE_CONSTRUCTION from '@/images/knowledge/treeConstruction.webp';
-import { CSS_EXAMPLE, CSS_RULES, CSS_WORD_RULES, RULE_SET } from '.';
+import CSS_PARSING from '@/images/knowledge/parseCss.webp';
+
+import { CSS_EXAMPLE, CSS_RULES, CSS_WORD_RULES, RULE_SET, RENDER_OBJECT, DISPLAY } from '.';
 
 const { Link } = Anchor;
 
@@ -20,7 +22,10 @@ export default function Index() {
   const cssRules = <UseMarkDown markdown={CSS_RULES}></UseMarkDown>,
     cssWordRules = <UseMarkDown markdown={CSS_WORD_RULES}></UseMarkDown>,
     cssExample = <UseMarkDown markdown={CSS_EXAMPLE}></UseMarkDown>,
-    ruleSet = <UseMarkDown markdown={RULE_SET}></UseMarkDown>;
+    ruleSet = <UseMarkDown markdown={RULE_SET}></UseMarkDown>,
+    renderObject = <UseMarkDown markdown={RENDER_OBJECT}></UseMarkDown>,
+    display = <UseMarkDown markdown={DISPLAY}></UseMarkDown>;
+
   return (
     <article id="root" className={classMap.article}>
       <main className={classMap.content}>
@@ -343,6 +348,56 @@ export default function Index() {
         <code>div.error</code>和<code>a.error</code>
         是选择器，大括号内部包含了应用到该选择器的规则，这个结构命中了如下规则定义
         {ruleSet}
+        <br />
+        规则描述：一个或多个选择器，可以用空格(S*表示逗号)和逗号分割。规则集由大括号和内部的一个或多个用分号隔开的描述组成。
+        <br />
+        <br />
+        <img src={CSS_PARSING} />
+        <h2 id="order" className={classMap.articleTitle}>
+          加载script和css的顺序
+        </h2>
+        <h3 id="scripts" className={classMap.articleSubTitle}>
+          Scripts
+        </h3>
+        web的模型是同步的，作者希望解释器遇到<code>script</code>
+        标签时立即解析和执行scripts，此时文档的解析会暂停直到script执行完成。
+        如果这个script是外部的，资源首先要通过网络请求回来，这也是同步的，解析会暂停直到资源取回完成再开始。开发者可以在script上加上
+        <strong>defer</strong>属性，它就不会暂停文档解析，会在文档解析完后再执行。HTML5新增了<strong>async</strong>
+        异步属性，它会在另一个线程解析和执行。
+        <h3 id="speculative" className={classMap.articleSubTitle}>
+          预测解析
+        </h3>
+        WebKit和Firefox都做了这项优化。当执行script时，另一个线程解析剩下的文档并找出其他需要被加载的网络资源并加载它们。这样资源可以并行的连接上加载，总体速度提升。
+        <br />
+        值得一提的是，这个预测只解析外部引用资源例如外部script，样式表和图片，它不修改DOM Tree。
+        <h3 id="styleSheet" className={classMap.articleSubTitle}>
+          样式表
+        </h3>
+        样式表有另一个模型。概念上样式表不改变DOM
+        tree，没理由去等它们，但是样式没有加载和解析的话，会引起很多问题。所以Firefox引擎的优化方式是，在样式表加载和解析的时候，停止scripts。而WebKit只允许scipts访问会影响没有加载的样式表的属性
+        <h2 id="renderTree" className={classMap.articleTitle}>
+          Render Tree的构建
+        </h2>
+        当DOM tree创建完成时，浏览器创建另一颗树，render tree，它由要展示的元素按顺序组成，目的是为了按顺序渲染内容。
+        <br />
+        Firefox称render tree中这些元素为<strong>frame</strong>，WebKit则称为renderer或render object
+        <br />
+        renderer知道怎么去布局和渲染它自己和它的children，如下是WebKit的RenderObject类定义，它是renderer的父类
+        {renderObject}
+        每个renderer代表一个矩形区域，对应css的盒子。它包括了几何图形的信息例如宽度，高度和位置。
+        <br />
+        盒子类型被<strong>display</strong>
+        样式属性值影响。以下是WebKit中判断display属性值来决定创建DOM节点的renderer类型的代码
+        {display}
+        元素类型也是考虑在内的，form和table有特殊处理。在WebKit如果元素想新增特殊renderer，会重写
+        <code>createRenderer</code>方法。
+        <h3 id="renderTreeRelate" className={classMap.articleSubTitle}>
+          Render tree和DOM tree的关系
+        </h3>
+        虽然renderers和DOM元素一致,但是不是一对一的关系。不可见的DOM元素不会被插入render tree，例如head。
+        display值为<strong>none</strong>也不会出现在树中(然而visibility:hidden会)。
+        <br />
+        有的DOM元素跟多个object关联，因为它们的结构复杂，单个矩形描述不了
       </main>
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
         <Link href="#preface" title="前言"></Link>
@@ -367,6 +422,16 @@ export default function Index() {
           <Link href="#parseFinished" title="解析完成后的操作"></Link>
         </Link>
         <Link href="#cssParser" title="CSS解析"></Link>
+        <Link href="#order" title="加载scripts和样式表的顺序">
+          <Link href="#scripts" title="Scripts"></Link>
+          <Link href="#speculative" title="预测解析"></Link>
+          <Link href="#styleSheet" title="样式表"></Link>
+        </Link>
+        <Link href="#renderTree" title="Render Tree的构建">
+          <Link href="#renderTreeRelate" title="Render tree和DOM tree的关系"></Link>
+          <Link href="#speculative" title="预测解析"></Link>
+          <Link href="#styleSheet" title="样式表"></Link>
+        </Link>
       </Anchor>
     </article>
   );
