@@ -13,8 +13,23 @@ import HTML_PARSING_FLOW from '@/images/knowledge/htmlParseingFlow.webp';
 import TOKENIZE from '@/images/knowledge/tokenize.webp';
 import TREE_CONSTRUCTION from '@/images/knowledge/treeConstruction.webp';
 import CSS_PARSING from '@/images/knowledge/parseCss.webp';
+import RELATION from '@/images/knowledge/relation.webp';
+import RULE_TREE from '@/images/knowledge/ruleTree.webp';
+import CONTEXT_TREE from '@/images/knowledge/contextTree.webp';
 
-import { CSS_EXAMPLE, CSS_RULES, CSS_WORD_RULES, RULE_SET, RENDER_OBJECT, DISPLAY } from '.';
+import {
+  CSS_EXAMPLE,
+  CSS_RULES,
+  CSS_WORD_RULES,
+  RULE_SET,
+  RENDER_OBJECT,
+  DISPLAY,
+  COMPOUND,
+  COMPUTED_HTML,
+  COMPUTED_CSS,
+  HASH_MAP_RULES,
+  HTML_FOR_HASH
+} from '.';
 
 const { Link } = Anchor;
 
@@ -24,7 +39,12 @@ export default function Index() {
     cssExample = <UseMarkDown markdown={CSS_EXAMPLE}></UseMarkDown>,
     ruleSet = <UseMarkDown markdown={RULE_SET}></UseMarkDown>,
     renderObject = <UseMarkDown markdown={RENDER_OBJECT}></UseMarkDown>,
-    display = <UseMarkDown markdown={DISPLAY}></UseMarkDown>;
+    display = <UseMarkDown markdown={DISPLAY}></UseMarkDown>,
+    compound = <UseMarkDown markdown={COMPOUND}></UseMarkDown>,
+    computeHtml = <UseMarkDown markdown={COMPUTED_HTML}></UseMarkDown>,
+    computeCss = <UseMarkDown markdown={COMPUTED_CSS}></UseMarkDown>,
+    hashMapRules = <UseMarkDown markdown={HASH_MAP_RULES}></UseMarkDown>,
+    htmlForHash = <UseMarkDown markdown={HTML_FOR_HASH}></UseMarkDown>;
 
   return (
     <article id="root" className={classMap.article}>
@@ -394,10 +414,108 @@ export default function Index() {
         <h3 id="renderTreeRelate" className={classMap.articleSubTitle}>
           Render tree和DOM tree的关系
         </h3>
-        虽然renderers和DOM元素一致,但是不是一对一的关系。不可见的DOM元素不会被插入render tree，例如head。
-        display值为<strong>none</strong>也不会出现在树中(然而visibility:hidden会)。
+        虽然renderers和DOM元素一致,但是不是一对一的关系。不可见的DOM元素不会被插入render tree，例如head。 display值为
+        <strong>none</strong>也不会出现在树中(然而visibility:hidden会)。
         <br />
-        有的DOM元素跟多个object关联，因为它们的结构复杂，单个矩形描述不了
+        有的DOM元素跟多个object关联，因为它们的结构复杂，单个矩形描述不了。例如<code>select</code>
+        元素有三个renderer，一个用于展示区域，一个用于下拉列表盒子，一个用于按钮。
+        文本宽度一行不足被强制换行的时候，新行也会新增额外的renderer。
+        <br />
+        有些render
+        objects跟DOM节点对应的位置不一样。Floats和绝对定位元素是脱离文档流的，放置在树的不同位置，定位在实际占位的地方。
+        <br />
+        <img src={RELATION} />
+        <br />
+        <br />
+        在WebKit解决样式，创建renderer的进程名为<code>attachment</code>，每个DOM节点都有<code>attach</code>
+        方法。Attachment是同步的，节点插入DOM tree时会调用新节点的attach方法。
+        <br />
+        根节点对应CSS标准的containing
+        block，最顶部的块包括所有其他块。它的尺寸就是视口，也就是浏览器窗口展示区域尺寸，WebKit称为
+        <code>RenderView</code>。 这就是document指向的render object，树中剩余节点都会当作DOM节点创建并插入。
+        <h3 id="styleComputation" className={classMap.articleSubTitle}>
+          样式计算
+        </h3>
+        构建render tree需要计算每个render object的可视属性，这需要计算每个元素的样式属性。
+        <br />
+        样式包括不同来源的样式表，行内样式和HTML的可视属性(例如<code>bgcolor</code>
+        属性)，后面会被转换称对应的CSS样式属性。
+        <br />
+        样式表的来源有浏览器默认样式表，开发者提供的样式表，还有用户样式表。
+        <br />
+        样式计算有如下难题：
+        <ul>
+          <li>1. 样式数据结构很庞大，保持这么庞杂的样式属性，会造成内存问题</li>
+          <li>
+            2.
+            如果没有优化的话，给每一个元素寻找对应的规则会造成性能问题。对每个元素遍历整个规则列表去匹配是一个很重的任务。结构复杂的选择器会造成多次匹配
+            <br />
+            就像如下的复合规则:
+            <br />
+            {compound}
+            <br />
+            这个规则表示div是3个div的子节点。设想一下，如果要检查这个规则是否符合给定的div元素，从头开始遍历节点树，只有1到2个div的不符合规则，又需要重新开始找。
+          </li>
+          <li>定义规则层次时包括很复杂规则，例如级联。下面看下浏览器怎么面对这些问题。</li>
+        </ul>
+        <h3 id="share" className={classMap.articleSubTitle}>
+          共享样式数据
+        </h3>
+        WebKit节点引用style
+        objects(RenderStyle)，这些对象可以在某些情况下在节点间共享，这些节点是兄弟姐妹节点且满足如下条件：
+        <ul className={classMap.ul}>
+          <li>元素必须都在同一个鼠标状态下</li>
+          <li>元素都不应该有id</li>
+          <li>标签名应该匹配</li>
+          <li>class属性值应该匹配</li>
+          <li>样式属性必须完全一样</li>
+          <li>链接状态必须匹配</li>
+          <li>focus状态必须匹配</li>
+          <li>元素都不能被属性选择器影响</li>
+          <li>不能有行内样式</li>
+          <li>不能有兄弟选择器，包括+选择器，:first-child，last-child这种</li>
+        </ul>
+        <h3 id="division" className={classMap.articleSubTitle}>
+          分割为结构体
+        </h3>
+        样式上下文被分割为多个结构体。这些结构体包含某个具体的样式类型信息，例如border和color。所有结构体中的属性要么是继承的要么不是，继承的属性除非是自己定义的不然就是继承自父级，非继承的属性(reset)如果没有定义则使用默认值。
+        <h3 id="manipulate" className={classMap.articleSubTitle}>
+          简单匹配的操作
+        </h3>
+        有如下来源的样式：
+        <br />
+        <ul className={classMap.ul}>
+          <li>
+            CSS规则，在style元素中或在外部样式表中：
+            {`p {color:blue}`}
+          </li>
+          <li>
+            行内样式
+            {`<p style="color:blue"></p>`}
+          </li>
+          <li>
+            HTML可视属性
+            {`<p bgcolor="blue"></p>`}
+          </li>
+        </ul>
+        后面两个很容易匹配到元素，因为它有样式属性和HTML属性可以用作key。
+        <br />
+        在解析完样式表后，规则通过选择器加入一些hash
+        map中。有以id,classname,tagname作key的map，也有通用的map。比如，如果选择器是id，或者class，那么这些样式会被加入到对应的map，以此类推。
+        <br />
+        这个操作让匹配元素变得更简单，不需要再去找每一个声明，将相关的规则提取。
+        <br />
+        举个栗子：
+        {hashMapRules}
+        第一个规则会插入class map，第二个插入id map,第三个插入tag map。 对于下面的文档碎片：
+        {htmlForHash}
+        <br />
+        <br />
+        首先看p元素，它有class属性且值为error，所以在class
+        map中p.error规则匹配上了。再看div，因为它有id，同理也是匹配上了id map。
+        所以工作变得很简单，只需要在元素匹配的map中去匹配。
+        <br />
+        WebKit和Firefox都做了这个操作。
       </main>
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
         <Link href="#preface" title="前言"></Link>
@@ -429,8 +547,10 @@ export default function Index() {
         </Link>
         <Link href="#renderTree" title="Render Tree的构建">
           <Link href="#renderTreeRelate" title="Render tree和DOM tree的关系"></Link>
-          <Link href="#speculative" title="预测解析"></Link>
-          <Link href="#styleSheet" title="样式表"></Link>
+          <Link href="#styleComputation" title="样式计算"></Link>
+          <Link href="#share" title="共享样式数据"></Link>
+          <Link href="#division" title="分割为结构体"></Link>
+          <Link href="#manipulate" title="简单匹配的操作"></Link>
         </Link>
       </Anchor>
     </article>

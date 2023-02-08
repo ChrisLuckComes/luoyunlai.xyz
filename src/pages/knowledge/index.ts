@@ -89,3 +89,44 @@ RenderObject* RenderObject::createObject(Node* node, RenderStyle* style)
     return o;
 }
 \`\`\``;
+
+export const COMPOUND = `\`\`\`css
+div div div div{
+  ...
+  }
+\`\`\``;
+
+export const COMPUTED_HTML = `\`\`\`html
+<html>
+  <body>
+    <div class="err" id="div1">
+      <p>
+        this is a <span class="big"> big error </span>
+        this is also a
+        <span class="big"> very  big  error</span> error
+      </p>
+    </div>
+    <div class="err" id="div2">another error</div>
+  </body>
+</html>
+\`\`\``;
+
+export const COMPUTED_CSS = `\`\`\`css
+div {margin: 5px; color:black}
+.err {color:red}
+.big {margin-top:3px}
+div span {margin-bottom:4px}
+#div1 {color:blue}
+#div2 {color:green}
+\`\`\``;
+
+export const HASH_MAP_RULES = `\`\`\`css
+p.error {color: red}
+#messageDiv {height: 50px}
+div {margin: 5px}
+\`\`\``;
+
+export const HTML_FOR_HASH = `\`\`\`html
+<p class="error">an error occurred</p>
+<div id="messageDiv">this is a message</div>
+\`\`\``;
