@@ -15,3 +15,6 @@ declare module '*.jpg';
 declare module '*.jpeg';
 declare module '*.svg';
 declare module '*.mdx';
+
+
+declare module 'vite-plugin-basic-ssl';

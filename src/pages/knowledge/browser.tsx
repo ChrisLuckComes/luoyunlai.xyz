@@ -516,6 +516,81 @@ export default function Index() {
         所以工作变得很简单，只需要在元素匹配的map中去匹配。
         <br />
         WebKit和Firefox都做了这个操作。
+        <h3 id="cascade" className={classMap.articleSubTitle}>
+          样式表的顺序
+        </h3>
+        如果属性没有被任何规则定义，那么就会继承一些父级元素的样式，有些属性有默认值。那么问题来了，如果有不止一个定义怎么办呢？
+        <br />
+        样式表的顺序如下(从低到高)：
+        <ul>
+          <li>1. 浏览器声明</li>
+          <li>2. 用户通常声明</li>
+          <li>3. 作者通常声明</li>
+          <li>4. 作者important声明</li>
+          <li>5. 用户important声明</li>
+        </ul>
+        <br />
+        <br />
+        如果声明在同一级别，那么就会按定义的顺序来，详见下文{' '}
+        <a className={classMap.href} target="_self" rel="noreferrer" href="#specificity">
+          明确定义
+        </a>
+        。
+        <h3 id="specificity" className={classMap.articleSubTitle}>
+          明确定义
+        </h3>
+        <ul>
+          <li>
+            1. 如果声明来自<code>style</code>属性而不是选择器，+1，否则+0 (=a)
+          </li>
+          <li>2. id选择器+1 (=b)</li>
+          <li>3. 其他选择器和伪类+1 (=c)</li>
+          <li>4. 标签名选择器和伪元素+1 (=d)</li>
+        </ul>
+        将a-b-c-d四个数值连在一起，然后排序。
+        <br />
+        <br />
+        <h2 id="layout" className={classMap.articleTitle}>
+          布局
+        </h2>
+        当renderer创建完成后，它并没有位置和大小，计算它们的过程称为布局或者回流(reflow)。
+        <br />
+        HTML在layout
+        model的基础上使用flow，代表大多数时间都可能在单次计算出几何属性。当前flow元素通常不会影响之前flow中的元素的几何属性，所以文档布局可以从左到右，从上到下执行。例外情况：例如HTML
+        <code>table</code>元素可能不止一次计算。
+        <br />
+        坐标系统和根部框架相关，使用top和left坐标轴。
+        <br />
+        布局是一个递归的过程。它从根节点开始，对应的就是HTML文档的<code>html</code>
+        元素，然后层级递归地给每一个renderer计算几何属性。
+        <br />
+        根节点的renderer位置是0,0，它的尺寸就是视口viewport，也就是浏览器窗口的可视部分
+        <br />
+        所有的renderer都有<code>layout</code>，<code>reflow</code>方法，每个renderer给它需要layout的子节点唤起
+        <code>layout</code>方法。
+        <h3 id="dirtyBit" className={classMap.articleSubTitle}>
+          标志位系统
+        </h3>
+        为了避免一个小小的改变就完整layout，浏览器使用了标志位系统<code>dirty bit system</code>
+        。有变化的或者新增的renderer，将它自己和子节点标记为<code>dirty</code>: 需要layout。
+        <br />
+        有两个flag,<code>dirty</code>和<code>children are dirty</code>表示至少有一个子节点需要layout。
+        <h3 id="global" className={classMap.articleSubTitle}>
+          全局和增量的布局
+        </h3>
+        Layout可以发生在整个render树上，这是全局layout。它的发生可能有如下原因：
+        <ul>
+          <li>
+            1. 全局样式改变影响到了所有的renderer，例如<code>fontSize</code>变化
+          </li>
+          <li>2. 作为屏幕改变了大小的结果</li>
+        </ul>
+        <br />
+        layout可以是增量的，仅当标记为<strong>dirty</strong>的renderer要被展示的时候。例如从网络来的新的内容被添加到DOM
+        Tree后，新的renderer追加到render tree中，就会异步触发增量layout。
+        <h3 id="async" className={classMap.articleSubTitle}>
+          异步和同步layout
+        </h3>
       </main>
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
         <Link href="#preface" title="前言"></Link>
@@ -551,6 +626,12 @@ export default function Index() {
           <Link href="#share" title="共享样式数据"></Link>
           <Link href="#division" title="分割为结构体"></Link>
           <Link href="#manipulate" title="简单匹配的操作"></Link>
+          <Link href="#cascade" title="样式表的顺序"></Link>
+          <Link href="#specificity" title="明确定义"></Link>
+        </Link>
+        <Link href="#layout" title="布局">
+          <Link href="#dirtyBit" title="标志位系统"></Link>
+          <Link href="#global" title="全局和增量的布局"></Link>
         </Link>
       </Anchor>
     </article>

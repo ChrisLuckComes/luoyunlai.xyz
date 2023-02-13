@@ -3,6 +3,7 @@ import tsConfigPaths from 'vite-tsconfig-paths';
 import eslint from 'vite-plugin-eslint';
 import react from '@vitejs/plugin-react';
 import vitePluginImp from 'vite-plugin-imp';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 
 export default defineConfig(async () => {
   return {
@@ -23,7 +24,8 @@ export default defineConfig(async () => {
           }
         ]
       }),
-      eslint()
+      eslint(),
+      basicSsl()
     ],
     css: {
       preprocessorOptions: {
@@ -31,6 +33,10 @@ export default defineConfig(async () => {
           javascriptEnabled: true
         }
       }
+    },
+    server: {
+      https: true,
+      http2: true
     }
   };
 });
