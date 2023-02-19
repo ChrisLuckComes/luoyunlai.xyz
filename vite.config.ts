@@ -16,14 +16,14 @@ export default defineConfig(async () => {
     plugins: [
       react(),
       tsConfigPaths(),
-      vitePluginImp({
-        libList: [
-          {
-            libName: 'antd',
-            style: name => `antd/es/${name}/style`
-          }
-        ]
-      }),
+      // vitePluginImp({
+      //   libList: [
+      //     {
+      //       libName: 'antd',
+      //       style: name => `antd/es/${name}/style`
+      //     }
+      //   ]
+      // }),
       eslint(),
       basicSsl()
     ],

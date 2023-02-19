@@ -139,3 +139,10 @@ export const EVENT_LOOP = `\`\`\`C++
 while (!mExiting)
     NS_ProcessNextEvent(thread);
 \`\`\``;
+
+export const FLOAT = `\`\`\`html
+<p>
+  <img style="float: right" src="images/image.gif" width="100" height="100">
+  Lorem ipsum dolor sit amet, consectetuer...
+</p>
+ \`\`\``;

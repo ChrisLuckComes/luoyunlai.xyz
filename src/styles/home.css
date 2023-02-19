@@ -1,11 +1,15 @@
 @import url('./flex.css');
 
 .ant-layout-header {
-  @apply bg-white;
+  @apply bg-white !important;
 }
 
 .ant-layout-sider {
-  @apply min-w-sider w-sider max-w-sider !important;
+  @apply bg-white min-w-sider w-sider max-w-sider !important;
+}
+
+.ant-layout-footer {
+  @apply bg-white !important;
 }
 
 code {
@@ -34,7 +38,6 @@ ul {
 .article {
   @apply h-full overflow-y-auto;
 }
-
 
 .article-title {
   @apply font-semibold text-h2 mt-6 mb-2;
@@ -100,6 +103,8 @@ ul {
 
 .anchor {
   @apply fixed top-150 right-100;
+  max-height: 80vh !important;
+  overflow-y: auto;
 }
 
 .min-w-header-menu {

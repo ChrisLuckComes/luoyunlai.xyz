@@ -19,6 +19,10 @@ import BOX from '@/images/knowledge/box.webp';
 import BLOCK from '@/images/knowledge/blockBox.webp';
 import INLINE from '@/images/knowledge/inlineBox.webp';
 import BLOCK_INLINE from '@/images/knowledge/blockAndInline.webp';
+import LINES from '@/images/knowledge/lines.webp';
+import RELATIVE from '@/images/knowledge/relative.webp';
+import FLOAT_IMG from '@/images/knowledge/float.webp';
+import FIXED from '@/images/knowledge/fixed.webp';
 
 import {
   CSS_EXAMPLE,
@@ -33,7 +37,8 @@ import {
   HASH_MAP_RULES,
   HTML_FOR_HASH,
   WIDTH_CAL_EXAMPLES,
-  EVENT_LOOP
+  EVENT_LOOP,
+  FLOAT
 } from '.';
 
 const { Link } = Anchor;
@@ -51,7 +56,8 @@ export default function Index() {
     hashMapRules = <UseMarkDown markdown={HASH_MAP_RULES}></UseMarkDown>,
     htmlForHash = <UseMarkDown markdown={HTML_FOR_HASH}></UseMarkDown>,
     widthCalExample = <UseMarkDown markdown={WIDTH_CAL_EXAMPLES}></UseMarkDown>,
-    eventLoop = <UseMarkDown markdown={EVENT_LOOP}></UseMarkDown>;
+    eventLoop = <UseMarkDown markdown={EVENT_LOOP}></UseMarkDown>,
+    float = <UseMarkDown markdown={FLOAT}></UseMarkDown>;
 
   return (
     <article id="root" className={classMap.article}>
@@ -756,14 +762,59 @@ export default function Index() {
         <img src={BLOCK} />
         <br />
         <strong>inline</strong>: 没有自己的block，被block包含
+        <img src={INLINE} />
         <br />
         block盒子在垂直方向排列，inline的盒子则是水平排列。
-        <img src={INLINE} />
+        <img src={BLOCK_INLINE} />
         <br />
         inline盒子放在<strong>line boxes</strong>行盒子内。行盒子至少和最高的盒子一样高，也可以更高。当盒子按
         <strong>baseline</strong>方式对齐，代表元素底部对齐其他盒子的底部。
         <br />
-        <img src={BLOCK_INLINE} />
+        <img src={LINES} />
+        <h3 id="positioning" className={classMap.articleSubTitle}>
+          定位
+        </h3>
+        <strong>relative</strong>
+        <br />
+        相对定位：定位和平常一样，然后按规定数值移动
+        <img src={RELATIVE} />
+        <br />
+        <br />
+        <strong>float</strong>
+        <br />
+        float盒子会漂移到行的左边或者右边，有趣的是其他的盒子围在它的周围。
+        {float}
+        显示如下：
+        <img src={FLOAT_IMG} />
+        <br />
+        <strong>absolute和fixed</strong>
+        <br />
+        元素不参与正常文档流，它们相对父容器来定位。fixed的父容器是viewport。
+        <img src={FIXED} />
+        <Alert type="info" message="fixed元素不会随着文档滚动而移动。"></Alert>
+        <h3 id="layer" className={classMap.articleSubTitle}>
+          层级展示
+        </h3>
+        层级由<code>z-index</code>属性定义，它代表盒子的三维，也就是z轴的位置。
+        <br />
+        盒子被分成层级上下文。每层后面的元素会先渲染然后前面的元素在顶部，更靠近用户。在重叠的情况下，最前面的元素会遮住后面的元素。
+        <br />
+        层级通过<code>z-index</code>属性来排序。当元素没有包含z-index时，排序规则如下（由底到顶）：
+        <ul>
+          <li>1. 根元素的背景和边界</li>
+          <li>2. 普通流的块元素，按HTML中的出现顺序堆叠</li>
+          <li>3. 定位元素按HTML中出现的顺序堆叠</li>
+        </ul>
+        <Alert type='info' message={
+          <ul className={classMap.ul}>
+            <li>
+              在一组不含有z-index的同类元素，这些元素按HTML出现的顺序堆叠，不管定位属性如何
+            </li>
+            <li>
+              普通流中不含定位属性的块元素始终先于定位元素渲染并出现在定位元素的下层，即使出现顺序晚于定位元素。
+            </li>
+          </ul>
+        }></Alert>
       </main>
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
         <Link href="#preface" title="前言"></Link>
@@ -822,6 +873,8 @@ export default function Index() {
           <Link href="#box" title="CSS盒模型"></Link>
           <Link href="#position" title="位置方案"></Link>
           <Link href="#boxType" title="盒子类型"></Link>
+          <Link href="#positioning" title="定位"></Link>
+          <Link href="#layer" title="层级展示"></Link>
         </Link>
       </Anchor>
     </article>
