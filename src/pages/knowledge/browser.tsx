@@ -2,27 +2,26 @@ import { classMap } from '@/constants/constant';
 import { Alert, Anchor } from 'antd';
 import { UseMarkDown } from '@/hooks/useMarkdown';
 
-import SHARE from '@/images/knowledge/share.png';
-import STRUCTURE from '@/images/knowledge/structure.webp';
-import BASIC_FLOW from '@/images/knowledge/basicFlow.webp';
-import MAIN_FLOW from '@/images/knowledge/mainflow.webp';
-import MATH_EXPRESSION from '@/images/knowledge/mathExpression.webp';
-import PARSE_TREE from '@/images/knowledge/parseTree.webp';
-import DOM_TREE from '@/images/knowledge/domTree.webp';
-import HTML_PARSING_FLOW from '@/images/knowledge/htmlParseingFlow.webp';
-import TOKENIZE from '@/images/knowledge/tokenize.webp';
-import TREE_CONSTRUCTION from '@/images/knowledge/treeConstruction.webp';
-import CSS_PARSING from '@/images/knowledge/parseCss.webp';
-import RELATION from '@/images/knowledge/relation.webp';
-import RULE_TREE from '@/images/knowledge/ruleTree.webp';
-import BOX from '@/images/knowledge/box.webp';
-import BLOCK from '@/images/knowledge/blockBox.webp';
-import INLINE from '@/images/knowledge/inlineBox.webp';
-import BLOCK_INLINE from '@/images/knowledge/blockAndInline.webp';
-import LINES from '@/images/knowledge/lines.webp';
-import RELATIVE from '@/images/knowledge/relative.webp';
-import FLOAT_IMG from '@/images/knowledge/float.webp';
-import FIXED from '@/images/knowledge/fixed.webp';
+import SHARE from '@images/knowledge/share.png';
+import STRUCTURE from '@images/knowledge/structure.webp';
+import BASIC_FLOW from '@images/knowledge/basicFlow.webp';
+import MAIN_FLOW from '@images/knowledge/mainflow.webp';
+import MATH_EXPRESSION from '@images/knowledge/mathExpression.webp';
+import PARSE_TREE from '@images/knowledge/parseTree.webp';
+import DOM_TREE from '@images/knowledge/domTree.webp';
+import HTML_PARSING_FLOW from '@images/knowledge/htmlParseingFlow.webp';
+import TOKENIZE from '@images/knowledge/tokenize.webp';
+import TREE_CONSTRUCTION from '@images/knowledge/treeConstruction.webp';
+import CSS_PARSING from '@images/knowledge/parseCss.webp';
+import RELATION from '@images/knowledge/relation.webp';
+import BOX from '@images/knowledge/box.webp';
+import BLOCK from '@images/knowledge/blockBox.webp';
+import INLINE from '@images/knowledge/inlineBox.webp';
+import BLOCK_INLINE from '@images/knowledge/blockAndInline.webp';
+import LINES from '@images/knowledge/lines.webp';
+import RELATIVE from '@images/knowledge/relative.webp';
+import FLOAT_IMG from '@images/knowledge/float.webp';
+import FIXED from '@images/knowledge/fixed.webp';
 
 import {
   CSS_EXAMPLE,
