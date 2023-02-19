@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import tsConfigPaths from 'vite-tsconfig-paths';
 import eslint from 'vite-plugin-eslint';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 import vitePluginImp from 'vite-plugin-imp';
 import basicSsl from '@vitejs/plugin-basic-ssl';
 

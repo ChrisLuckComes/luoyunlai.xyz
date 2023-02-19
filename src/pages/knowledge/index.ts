@@ -130,3 +130,12 @@ export const HTML_FOR_HASH = `\`\`\`html
 <p class="error">an error occurred</p>
 <div id="messageDiv">this is a message</div>
 \`\`\``;
+
+export const WIDTH_CAL_EXAMPLES = `\`\`\`html
+<div style="width: 30%"/>
+\`\`\``;
+
+export const EVENT_LOOP = `\`\`\`C++
+while (!mExiting)
+    NS_ProcessNextEvent(thread);
+\`\`\``;

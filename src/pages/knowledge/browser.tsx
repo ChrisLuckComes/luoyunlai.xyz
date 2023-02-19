@@ -15,7 +15,10 @@ import TREE_CONSTRUCTION from '@/images/knowledge/treeConstruction.webp';
 import CSS_PARSING from '@/images/knowledge/parseCss.webp';
 import RELATION from '@/images/knowledge/relation.webp';
 import RULE_TREE from '@/images/knowledge/ruleTree.webp';
-import CONTEXT_TREE from '@/images/knowledge/contextTree.webp';
+import BOX from '@/images/knowledge/box.webp';
+import BLOCK from '@/images/knowledge/blockBox.webp';
+import INLINE from '@/images/knowledge/inlineBox.webp';
+import BLOCK_INLINE from '@/images/knowledge/blockAndInline.webp';
 
 import {
   CSS_EXAMPLE,
@@ -28,7 +31,9 @@ import {
   COMPUTED_HTML,
   COMPUTED_CSS,
   HASH_MAP_RULES,
-  HTML_FOR_HASH
+  HTML_FOR_HASH,
+  WIDTH_CAL_EXAMPLES,
+  EVENT_LOOP
 } from '.';
 
 const { Link } = Anchor;
@@ -44,7 +49,9 @@ export default function Index() {
     computeHtml = <UseMarkDown markdown={COMPUTED_HTML}></UseMarkDown>,
     computeCss = <UseMarkDown markdown={COMPUTED_CSS}></UseMarkDown>,
     hashMapRules = <UseMarkDown markdown={HASH_MAP_RULES}></UseMarkDown>,
-    htmlForHash = <UseMarkDown markdown={HTML_FOR_HASH}></UseMarkDown>;
+    htmlForHash = <UseMarkDown markdown={HTML_FOR_HASH}></UseMarkDown>,
+    widthCalExample = <UseMarkDown markdown={WIDTH_CAL_EXAMPLES}></UseMarkDown>,
+    eventLoop = <UseMarkDown markdown={EVENT_LOOP}></UseMarkDown>;
 
   return (
     <article id="root" className={classMap.article}>
@@ -591,6 +598,172 @@ export default function Index() {
         <h3 id="async" className={classMap.articleSubTitle}>
           异步和同步layout
         </h3>
+        增量layout是异步完成的。WebKit有定时器来执行增量layout。
+        <br />
+        脚本请求例如<code>offsetHeight</code>这种样式属性可以触发异步的增量layout。
+        <br />
+        全局layout通常都会异步触发。
+        <br />
+        有时候因为某些属性，在初始layout之后，layout作为回调函数触发，例如滚动位置的变化。
+        <h3 id="optimization" className={classMap.articleSubTitle}>
+          优化
+        </h3>
+        当layout在渲染位置的时候，被<code>resize</code>等事件触发，这些renders的大小会从缓存中获取，不会重新计算。
+        <br />
+        有些情况子树被修改了，layout也不会从root开始。例如文字被插入文字区域这种，修改只在它自身，不会影响周围。
+        <h3 id="layoutProcess" className={classMap.articleSubTitle}>
+          布局过程
+        </h3>
+        layout通常有以下几种模式：
+        <ul>
+          <li>1. 父级renderer决定它的宽度</li>
+          <li>
+            2. 父级检查子级
+            <ul className={classMap.ul}>
+              <li>替换子renderer(重新设置x和y)</li>
+              <li>如果有必要，会调用子级的layout - 在被标记为dirty或者在全局layout，或者需要计算子级的高度的情况下</li>
+            </ul>
+          </li>
+          <li>父级用子级累加高度，还有margin和padding来设置自己高度的情况下，layout会被父级使用。</li>
+          <li>设置自身的dirty为false时</li>
+        </ul>
+        <h3 id="widthCalculation" className={classMap.articleSubTitle}>
+          宽度计算
+        </h3>
+        renderer的宽度使用容器的宽度计算，包括<strong>width,margin,border</strong>等属性。
+        <br />
+        例如以下的div
+        {widthCalExample}
+        WebKit按如下规则计算：
+        <ul className={classMap.ul}>
+          <li>
+            容器宽度是所有容器的<code>availableWidth</code>和0之中的最大值。这个栗子中<code>availableWidth</code>就是
+            <code>contentWidth</code>计算方式如下
+            <div className="markdown-container">clientWidth() - paddingLeft() - paddingRight()</div>
+          </li>
+        </ul>
+        <code>clientWidth</code>和<code>clientHeight</code>代表对象内部的宽高，也就是说不包括<code>border</code>和
+        <code>scrollbar</code>
+        <ul className={classMap.ul}>
+          <li>
+            元素宽度是<code>width</code>属性时，它会被当作绝对值来计算容器宽度的百分比
+          </li>
+          <li>
+            水平的<code>border</code>和<code>padding</code>被添加了
+          </li>
+        </ul>
+        到目前为止是优先宽度的计算，下面介绍最小和最大的宽度计算。
+        <br />
+        如果优先宽度大于最大宽度，那么使用最大宽度。如果比最小宽度还小，那就使用最小宽度。
+        <h3 id="line" className={classMap.articleSubTitle}>
+          换行
+        </h3>
+        当renderer在布局中途决定需要换行，renderer就会停止并通知父级当前renderer需要被破坏，然后父级就会创建额外的renderer并调用layout。
+        <h2 id="painting" className={classMap.articleTitle}>
+          渲染
+        </h2>
+        在渲染阶段，遍历render tree调用每个renderer的<code>paint</code>方法来把内容展示到屏幕上。渲染使用UI基础组件。
+        <h3 id="globalAndIncremental" className={classMap.articleSubTitle}>
+          全局和增量
+        </h3>
+        和layout一样，渲染也可以是全局和增量的。增量渲染时，有些renderer的改变不影响整个tree。修改后的renderer使矩形失效了，它会让操作系统识别到它是一个
+        <strong>dirty</strong>区域然后生成<code>paint</code>
+        事件。操作系统会将多个区域合并为一个。在Chrome中，它的操作更为复杂，展示过程中监听这些事件并且委托消息给根节点，遍历树直到找到相关的renderer，它会重新渲染自身。
+        <h3 id="paintingOrder" className={classMap.articleSubTitle}>
+          渲染顺序
+        </h3>
+        CSS标准定义了渲染顺序，它实际上是元素在堆叠上下文中的顺序。堆叠上下文从后往前渲染，它的顺序如下：
+        <ul>
+          <li>1. background color</li>
+          <li>2. background image</li>
+          <li>3. border</li>
+          <li>4. children</li>
+          <li>5. outline</li>
+        </ul>
+        <h3 id="dynamicChanges" className={classMap.articleSubTitle}>
+          动态修改
+        </h3>
+        浏览器会尽量做最小的动作来响应修改，所以对于元素颜色的修改只会重新绘制它本身，但是对于位置的修改会触发layout，它自身，它的子集，可能还有兄弟节点都会重绘。
+        <br />
+        新增DOM节点也跟上面一样。
+        <br />
+        像修改<code>html</code>元素的<code>fontSize</code>这种大的操作，会引起缓存失效，重新布局和绘制整个树。
+        <h3 id="thread" className={classMap.articleSubTitle}>
+          渲染引擎线程
+        </h3>
+        除了网络操作，基本上都是单线程的，包括渲染引擎。在Firefox和Safari中，渲染引擎是主线程，在Chrome中是当前tab进程的主线程。
+        <br />
+        网络操作可以多线程并行执行，并行连接的数量浏览器做了限制，一般是2-6，Chrome就是6。
+        <h3 id="eventLoop" className={classMap.articleSubTitle}>
+          事件循环
+        </h3>
+        浏览器主线程是事件循环。它是一个保持进程活跃的无限循环，它等待事件并执行它们，代码如下：
+        {eventLoop}
+        <h2 id="cssVisualModel" className={classMap.articleTitle}>
+          CSS视觉模型
+        </h2>
+        <h3 id="canvas" className={classMap.articleSubTitle}>
+          Canvas
+        </h3>
+        canvas是一个空间，浏览器将内容绘制到这个空间，生成格式化的结构。
+        <h3 id="box" className={classMap.articleSubTitle}>
+          CSS盒模型
+        </h3>
+        <a className={classMap.href} target="_blank" rel="noreferrer" href="http://www.w3.org/TR/CSS2/box.html">
+          CSS盒模型
+        </a>
+        ：视觉格式化模型，它用于在文档树中生成并展示元素。
+        <br />
+        每个盒子都有内容区域(文字，图片等)和周围的padding,border,margin区域。
+        <img src={BOX} />
+        <br />
+        <br />
+        所有的元素都有<code>display</code>属性，它决定生成什么类型的盒子。
+        <ul className={classMap.ul}>
+          <li>block: 生成block box</li>
+          <li>inline: 生成一个或多个inline boxes</li>
+          <li>none: 不会生成</li>
+        </ul>
+        <br />
+        默认类型是inline，但是浏览器的样式表会设置其他默认值,例如<code>div</code>元素的默认值是block。
+        <h3 id="position" className={classMap.articleSubTitle}>
+          位置方案
+        </h3>
+        有三种方案：
+        <ul className={classMap.ul}>
+          <li>Normal: 对象通过它在文档中的位置来定位，它会通过box类型和尺寸来显示。</li>
+          <li>Float: 首先会像正常流一样显示，然后会尽量向左或向右移动。</li>
+          <li>Absolute: 对象在渲染树的位置和在DOM树的位置不同。</li>
+        </ul>
+        这些方案都使用<code>position</code>和<code>float</code>属性来设置。
+        <ul className={classMap.ul}>
+          <li>static和relative是正常文档流</li>
+          <li>absolute和fixed是绝对定位</li>
+        </ul>
+        static表示使用默认position，其他的方案使用top,bottom,left,right来定位。
+        <br />
+        box展示方式由如下内容决定：
+        <ul className={classMap.ul}>
+          <li>盒子类型</li>
+          <li>盒子位置</li>
+          <li>定位方案</li>
+          <li>像图片大小和屏幕大小这种外部信息</li>
+        </ul>
+        <h3 id="boxType" className={classMap.articleSubTitle}>
+          盒子类型
+        </h3>
+        <strong>block</strong>: 由一个block形成，在浏览器窗体内有自己的矩形
+        <img src={BLOCK} />
+        <br />
+        <strong>inline</strong>: 没有自己的block，被block包含
+        <br />
+        block盒子在垂直方向排列，inline的盒子则是水平排列。
+        <img src={INLINE} />
+        <br />
+        inline盒子放在<strong>line boxes</strong>行盒子内。行盒子至少和最高的盒子一样高，也可以更高。当盒子按
+        <strong>baseline</strong>方式对齐，代表元素底部对齐其他盒子的底部。
+        <br />
+        <img src={BLOCK_INLINE} />
       </main>
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
         <Link href="#preface" title="前言"></Link>
@@ -632,6 +805,23 @@ export default function Index() {
         <Link href="#layout" title="布局">
           <Link href="#dirtyBit" title="标志位系统"></Link>
           <Link href="#global" title="全局和增量的布局"></Link>
+          <Link href="#optimization" title="优化"></Link>
+          <Link href="#layoutProcess" title="布局过程"></Link>
+          <Link href="#widthCalculation" title="宽度计算"></Link>
+          <Link href="#line" title="换行"></Link>
+        </Link>
+        <Link href="#painting" title="渲染">
+          <Link href="#globalAndIncremental" title="全局和增量"></Link>
+          <Link href="#paintingOrder" title="渲染顺序"></Link>
+          <Link href="#dynamicChanges" title="动态修改"></Link>
+          <Link href="#thread" title="渲染引擎线程"></Link>
+          <Link href="#eventLoop" title="事件循环"></Link>
+        </Link>
+        <Link href="#cssVisualModel" title="CSS视觉模型">
+          <Link href="#canvas" title="Canvas"></Link>
+          <Link href="#box" title="CSS盒模型"></Link>
+          <Link href="#position" title="位置方案"></Link>
+          <Link href="#boxType" title="盒子类型"></Link>
         </Link>
       </Anchor>
     </article>
