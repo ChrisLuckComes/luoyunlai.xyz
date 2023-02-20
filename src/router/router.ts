@@ -124,6 +124,12 @@ const routers = [
         path: 'vue3/diff',
         name: 'Vue3 - Diff',
         element: lazy(() => import('@/pages/vue/vue3/diff'))
+      },
+      {
+        key: 'vueRouter',
+        path: 'vue2/router',
+        name: 'Vue-Router',
+        element: lazy(() => import('@/pages/vue/vue2/vueRouter'))
       }
     ]
   },
