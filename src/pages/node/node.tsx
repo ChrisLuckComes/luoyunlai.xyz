@@ -8,6 +8,7 @@ import BRAINLESS from '@/images/brainless.webp';
 import FLOW from '@/images/node/flow.png';
 
 import { EVENT_LOOP, TIMER } from './_node';
+import { LazyImage } from '@/component/image';
 
 const { Link } = Anchor;
 
@@ -139,7 +140,7 @@ export default function Index() {
         </ul>
         <br />
         那么这些技术是如何组合的呢？如下是node.js的架构图
-        <img src={NODE_MODEL} />
+        <LazyImage src={NODE_MODEL} />
         <ul className={classMap.ul}>
           <li>最上层是Node API，可以直接js调用</li>
           <li>
@@ -173,7 +174,7 @@ export default function Index() {
         ，拉到本地从hello world开始看
         <br />
         <br />
-        <img src={BRAINLESS} />
+        <LazyImage src={BRAINLESS} />
         <h2 id="v8" className={classMap.articleTitle}>
           V8
         </h2>
@@ -194,11 +195,11 @@ export default function Index() {
           <li>线程池</li>
           <li>...更多，如下图</li>
         </ul>
-        <img src={LIBUV} />
+        <LazyImage src={LIBUV} />
         <h2 id="workflow" className={classMap.articleTitle}>
           工作流程
         </h2>
-        <img src={FLOW} />
+        <LazyImage src={FLOW} />
         <br />
         以读取文件为例：
         <ul className={classMap.ul}>

@@ -10,6 +10,7 @@ import HTTP2_FRAME from '@/images/http2-frame.png';
 import HTTP2_STREAM from '@/images/http2-stream.jpg';
 import { NGINX } from '.';
 import { UseMarkDown } from '@/hooks/useMarkdown';
+import { LazyImage } from '@/component/image';
 const { Link } = Anchor;
 
 export default function Index() {
@@ -39,26 +40,26 @@ export default function Index() {
             <li id="listen">
               被<strong>窃听</strong>
               <br />
-              <img src={HTTP_LISTEN} alt="listen" />
+              <LazyImage src={HTTP_LISTEN} alt="listen" />
             </li>
             <li id="change">
               被<strong>篡改</strong>
               <br />
-              <img src={HTTP_CHANGE} alt="change" />
+              <LazyImage src={HTTP_CHANGE} alt="change" />
             </li>
             <li id="fish">
               <strong>冒充</strong>
               <br />
-              <img src={HTTP_FISH} alt="fish" />
+              <LazyImage src={HTTP_FISH} alt="fish" />
             </li>
           </ul>
           https就是为了解决这些安全风险而在的。HTTPS = HTTP + SSL/TLS，通过
           SSL证书来验证服务器的身份，并为浏览器和服务器之间的通信进行加密
           <br />
           <br />
-          <img src={HTTPS} alt="https" />
+          <LazyImage src={HTTPS} alt="https" />
           <br />
-          <img src={HTTPS_INSTRUCTION} alt="https_instruction" />
+          <LazyImage src={HTTPS_INSTRUCTION} alt="https_instruction" />
           <strong id="legal" className="text-16">
             怎么验证证书合法性？
           </strong>
@@ -89,7 +90,7 @@ export default function Index() {
             HTTP2相比于HTTP1.1（文本）使用了二进制进行数据传输，提高了HTTP的传输效率，同时也方便了使用位运算对HTTP数据进行解析。
           </p>
           <br />
-          <img src={HTTP2_FRAME} alt="frame" />
+          <LazyImage src={HTTP2_FRAME} alt="frame" />
           <br />
           <strong id="stream" className="text-16">
             并发传输
@@ -99,7 +100,7 @@ export default function Index() {
             并发传输解决了应用层队头阻塞的问题，通过多个Stream（由帧组成）复用一条TCP连接来实现，每个Stream都有ID，也避免了握手建立连接、冷启动的耗时
           </p>
           <br />
-          <img src={HTTP2_STREAM} alt="stream" />
+          <LazyImage src={HTTP2_STREAM} alt="stream" />
           <br />
           <br />
           <strong id="other" className="text-16">

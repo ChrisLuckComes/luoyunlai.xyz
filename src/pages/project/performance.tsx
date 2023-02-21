@@ -9,6 +9,7 @@ import FID_SVG from '@/images/project/fid.svg';
 import CLS_SVG from '@/images/project/cls.svg';
 import { CLS_CODE, FID, FP_FCP, LCP, LONG_TASK, TIMING, SENTRY_INIT } from './_performance';
 import { useEffect, useState } from 'react';
+import { LazyImage } from '@/component/image';
 
 const { Link } = Anchor;
 
@@ -84,7 +85,7 @@ export default function Index() {
           常见的性能优化指标及获取方式
         </h2>
         页面加载过程模型图如下：
-        <img src={IMAGE_MAP} />
+        <LazyImage src={IMAGE_MAP} />
         <br />
         这个模型是
         <a className={classMap.href} target="_blank" rel="noreferrer" href="https://www.w3.org/webperf/">
@@ -235,7 +236,7 @@ export default function Index() {
           性能分析关键指标
         </h3>
         如果使用<code>lighthouse</code>进行分析，会使用6个指标。以下是我的网站分数
-        <img src={LIGHTHOUSE} />
+        <LazyImage src={LIGHTHOUSE} />
         <br />
         如果用
         <code>
@@ -244,7 +245,7 @@ export default function Index() {
           </a>
         </code>
         等工具进行分析，会使用4个指标
-        <img src={SENTRY} />
+        <LazyImage src={SENTRY} />
         <h2 id="sentry" className={classMap.articleTitle}>
           使用Sentry做性能监控
         </h2>

@@ -3,6 +3,7 @@ import { Anchor } from 'antd';
 import { UseMarkDown } from '@/hooks/useMarkdown';
 import { MAP_REMAINING_CHILDREN, PLACE_CHILD, RECONCILE_CHILD_FIBERS, RECONCILE_SINGLE_ELEMENT, UPDATE_SLOT } from '.';
 import DIFF_SINGLE from '@/images/reconcileSingleElement.png';
+import { LazyImage } from '@/component/image';
 const { Link } = Anchor;
 
 export default function Index() {
@@ -42,7 +43,7 @@ export default function Index() {
           单节点diff
         </h2>
         以<code>object</code>类型为例，进入<code>reconcileSingleElement</code>
-        <img src={DIFF_SINGLE} />
+        <LazyImage src={DIFF_SINGLE} />
         {reconcileSingleElement}
         有个细节需要关注：
         <ul className={classMap.ul}>

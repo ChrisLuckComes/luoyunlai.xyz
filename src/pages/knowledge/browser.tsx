@@ -39,6 +39,7 @@ import {
   EVENT_LOOP,
   FLOAT
 } from '.';
+import { LazyImage } from '@/component/image';
 
 const { Link } = Anchor;
 
@@ -76,7 +77,7 @@ export default function Index() {
         </a>
         <br />
         <br />
-        <img src={SHARE} />
+        <LazyImage src={SHARE} />
         <br />
         Chrome可谓是一家独大
         <h2 id="functionality" className={classMap.articleTitle}>
@@ -95,7 +96,7 @@ export default function Index() {
           浏览器的架构
         </h2>
         <br />
-        <img src={STRUCTURE} />
+        <LazyImage src={STRUCTURE} />
         <br />
         浏览器的架构如下：
         <ul>
@@ -134,7 +135,7 @@ export default function Index() {
         渲染引擎从网络层获取请求到的文档，之后，开始如下的渲染流程。
         <br />
         <br />
-        <img src={BASIC_FLOW} />
+        <LazyImage src={BASIC_FLOW} />
         <br />
         渲染引擎开始解析HTML文档，把元素转换为DOM树(content
         tree)。引擎还会解析样式数据，包括外部CSS文件和style元素。样式信息和HTML中的视觉描述一起创建渲染树(render tree)
@@ -153,7 +154,7 @@ export default function Index() {
         </h3>
         <br />
         <br />
-        <img src={MAIN_FLOW} />
+        <LazyImage src={MAIN_FLOW} />
         <br />
         <br />
         <h3 id="parse" className={classMap.articleSubTitle}>
@@ -162,7 +163,7 @@ export default function Index() {
         解析就是把文档转换成代码可以使用的结构，转换的结果通常是节点树，代表了文档的结构，也被称为语法树。如下图：
         <br />
         <br />
-        <img src={MATH_EXPRESSION} />
+        <LazyImage src={MATH_EXPRESSION} />
         <br />
         <br />
         <h3 id="parser" className={classMap.articleSubTitle}>
@@ -177,7 +178,7 @@ export default function Index() {
         语法分析就是语法规则的应用。它根据语法规则分析文档结构创建语法树。
         <br />
         <br />
-        <img src={PARSE_TREE} />
+        <LazyImage src={PARSE_TREE} />
         <br />
         分析是循环的过程。语法分析器向词法分析器请求单词并和语法规则匹配，如果匹配成功就在语法树上新增一个节点，然后再请求下一个单词。
         <br />
@@ -274,7 +275,7 @@ export default function Index() {
         语法树由DOM(Document Object Modal)元素和属性节点组成，DOM大多数是一对一的标记。
         <br />
         <br />
-        <img src={DOM_TREE} />
+        <LazyImage src={DOM_TREE} />
         <br />
         <br />
         跟HTML类似，DOM也是W3C组织定义的，地址如下：
@@ -287,7 +288,7 @@ export default function Index() {
         HTML因为种种原因不能用规范的解析技术，浏览器自定义了解释器来解析HTML。算法主要包括两个阶段：词语切分和树的构建。
         <br />
         词语切分就是词法分析，将输入解析为标记，标记的范围是开始tag,结束tag，属性名和属性值。切分器识别到了标记，把它给到树的构造器，然后使用下一个字母来识别下一个标记，直到结束。
-        <img src={HTML_PARSING_FLOW} />
+        <LazyImage src={HTML_PARSING_FLOW} />
         <h3 id="tokenizationAlgo" className={classMap.articleSubTitle}>
           切分算法
         </h3>
@@ -321,7 +322,7 @@ export default function Index() {
         token，状态变为&quot;Data state&quot;，<div className="code">{`</html>`}</div>的处理也跟之前一样。
         <br />
         <br />
-        <img src={TOKENIZE} />
+        <LazyImage src={TOKENIZE} />
         <br />
         <br />
         <h3 id="treeAlgo" className={classMap.articleSubTitle}>
@@ -345,7 +346,7 @@ export default function Index() {
         接收到文件结尾就停止解析。
         <br />
         <br />
-        <img src={TREE_CONSTRUCTION} />
+        <LazyImage src={TREE_CONSTRUCTION} />
         <h3 id="parseFinished" className={classMap.articleSubTitle}>
           解析完成后的操作
         </h3>
@@ -384,7 +385,7 @@ export default function Index() {
         规则描述：一个或多个选择器，可以用空格(S*表示逗号)和逗号分割。规则集由大括号和内部的一个或多个用分号隔开的描述组成。
         <br />
         <br />
-        <img src={CSS_PARSING} />
+        <LazyImage src={CSS_PARSING} />
         <h2 id="order" className={classMap.articleTitle}>
           加载script和css的顺序
         </h2>
@@ -436,7 +437,7 @@ export default function Index() {
         有些render
         objects跟DOM节点对应的位置不一样。Floats和绝对定位元素是脱离文档流的，放置在树的不同位置，定位在实际占位的地方。
         <br />
-        <img src={RELATION} />
+        <LazyImage src={RELATION} />
         <br />
         <br />
         在WebKit解决样式，创建renderer的进程名为<code>attachment</code>，每个DOM节点都有<code>attach</code>
@@ -720,7 +721,7 @@ export default function Index() {
         ：视觉格式化模型，它用于在文档树中生成并展示元素。
         <br />
         每个盒子都有内容区域(文字，图片等)和周围的padding,border,margin区域。
-        <img src={BOX} />
+        <LazyImage src={BOX} />
         <br />
         <br />
         所有的元素都有<code>display</code>属性，它决定生成什么类型的盒子。
@@ -758,25 +759,25 @@ export default function Index() {
           盒子类型
         </h3>
         <strong>block</strong>: 由一个block形成，在浏览器窗体内有自己的矩形
-        <img src={BLOCK} />
+        <LazyImage src={BLOCK} />
         <br />
         <strong>inline</strong>: 没有自己的block，被block包含
-        <img src={INLINE} />
+        <LazyImage src={INLINE} />
         <br />
         block盒子在垂直方向排列，inline的盒子则是水平排列。
-        <img src={BLOCK_INLINE} />
+        <LazyImage src={BLOCK_INLINE} />
         <br />
         inline盒子放在<strong>line boxes</strong>行盒子内。行盒子至少和最高的盒子一样高，也可以更高。当盒子按
         <strong>baseline</strong>方式对齐，代表元素底部对齐其他盒子的底部。
         <br />
-        <img src={LINES} />
+        <LazyImage src={LINES} />
         <h3 id="positioning" className={classMap.articleSubTitle}>
           定位
         </h3>
         <strong>relative</strong>
         <br />
         相对定位：定位和平常一样，然后按规定数值移动
-        <img src={RELATIVE} />
+        <LazyImage src={RELATIVE} />
         <br />
         <br />
         <strong>float</strong>
@@ -784,12 +785,12 @@ export default function Index() {
         float盒子会漂移到行的左边或者右边，有趣的是其他的盒子围在它的周围。
         {float}
         显示如下：
-        <img src={FLOAT_IMG} />
+        <LazyImage src={FLOAT_IMG} />
         <br />
         <strong>absolute和fixed</strong>
         <br />
         元素不参与正常文档流，它们相对父容器来定位。fixed的父容器是viewport。
-        <img src={FIXED} />
+        <LazyImage src={FIXED} />
         <Alert type="info" message="fixed元素不会随着文档滚动而移动。"></Alert>
         <h3 id="layer" className={classMap.articleSubTitle}>
           层级展示
@@ -804,16 +805,17 @@ export default function Index() {
           <li>2. 普通流的块元素，按HTML中的出现顺序堆叠</li>
           <li>3. 定位元素按HTML中出现的顺序堆叠</li>
         </ul>
-        <Alert type='info' message={
-          <ul className={classMap.ul}>
-            <li>
-              在一组不含有z-index的同类元素，这些元素按HTML出现的顺序堆叠，不管定位属性如何
-            </li>
-            <li>
-              普通流中不含定位属性的块元素始终先于定位元素渲染并出现在定位元素的下层，即使出现顺序晚于定位元素。
-            </li>
-          </ul>
-        }></Alert>
+        <Alert
+          type="info"
+          message={
+            <ul className={classMap.ul}>
+              <li>在一组不含有z-index的同类元素，这些元素按HTML出现的顺序堆叠，不管定位属性如何</li>
+              <li>
+                普通流中不含定位属性的块元素始终先于定位元素渲染并出现在定位元素的下层，即使出现顺序晚于定位元素。
+              </li>
+            </ul>
+          }
+        ></Alert>
       </main>
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
         <Link href="#preface" title="前言"></Link>

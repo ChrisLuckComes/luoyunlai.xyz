@@ -10,6 +10,7 @@ import NEW_WORKFLOW from '@/images/newWorkflow.png';
 import SETUP_YOURSELF from '@/images/setUpYourself.png';
 import COMMIT_WORKFLOW from '@/images/commitWorkflow.png';
 import WORKFLOW from '@/images/workflow.png';
+import { LazyImage } from '@/component/image';
 
 const MY_WORKFLOW = `\`\`\`xml
 # 一个workflow，名为deploy to tengxunyun
@@ -73,36 +74,36 @@ export default function Index() {
           SSH密钥
         </h2>
         首先需要在云服务器创建密钥，用于后续SSH远程登录
-        <img src={CREATE_SSH} />
+        <LazyImage src={CREATE_SSH} />
         <br />
         然后进入github，路径：github/settings/Secrets，已存在的密钥会在这里展示，点击
         <strong>new repository secret</strong>新增，也可以创建环境变量区分不同环境。
         <br />
         <br />
-        <img src={SETTINGS} />
+        <LazyImage src={SETTINGS} />
         <br />
         <br />
         输入名称和上一步新增的密钥，新增成功
         <br />
         <br />
-        <img src={NEW_SECRET} />
+        <LazyImage src={NEW_SECRET} />
         <h2 id="workflow" className={classMap.articleTitle}>
           workflow
         </h2>
         然后进入到actions,点击<strong>New workflow</strong>
-        <img src={NEW_WORKFLOW} />
+        <LazyImage src={NEW_WORKFLOW} />
         <br />
         <br />
         有很多模板可供选择，这里我们选择自定义，点击<strong>set up a work yourself</strong>
         <br />
         <br />
-        <img src={SETUP_YOURSELF} />
+        <LazyImage src={SETUP_YOURSELF} />
         <br />
         <br />
         文件名按个人喜好来，示例代码在下节，创建完成后，每次对应分支有变动就会触发workflow，完成自动拉取代码打包发布
         <br />
         <br />
-        <img src={COMMIT_WORKFLOW} />
+        <LazyImage src={COMMIT_WORKFLOW} />
         <h2 id="code" className={classMap.articleTitle}>
           代码
         </h2>
@@ -113,7 +114,7 @@ export default function Index() {
         点击工作流可以查看jobs执行情况，到此就大功告成了，从此无需再手动打包复制文件。
         <br />
         <br />
-        <img src={WORKFLOW} />
+        <LazyImage src={WORKFLOW} />
       </main>
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
         <Link href="#ssh" title="SSH"></Link>

@@ -6,6 +6,7 @@ const { Link } = Anchor;
 import NVM from '@/images/node/nvm.png';
 import NVM_LIST from '@/images/node/nvm-list.png';
 import N from '@/images/node/n.png';
+import { LazyImage } from '@/component/image';
 
 const PATH = `\`\`\`shell 
 export N_PREFIX=/usr/local
@@ -38,7 +39,7 @@ export default function Index() {
         以管理员身份运行cmd，执行<code>nvm</code>，出现命令列表说明安装成功。
         <br />
         <br />
-        <img src={NVM} alt="" />
+        <LazyImage src={NVM} />
         <br />
         <br />
         <h3 id="nvmList" className={classMap.articleSubTitle}>
@@ -59,7 +60,7 @@ export default function Index() {
             4. 需要切换版本，执行<code>nvm use 18.12.1</code>
           </li>
         </ul>
-        <img src={NVM_LIST} />
+        <LazyImage src={NVM_LIST} />
         <h2 id="linux" className={classMap.articleTitle}>
           Linux/MacOS
         </h2>
@@ -72,7 +73,7 @@ export default function Index() {
         安装完成后执行n，如下图，说明安装成功
         <br />
         <br />
-        <img src={N} />
+        <LazyImage src={N} />
         <h3 id="path" className={classMap.articleSubTitle}>
           环境变量
         </h3>

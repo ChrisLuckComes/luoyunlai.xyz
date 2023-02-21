@@ -9,6 +9,7 @@ import VITE_RESOURCE from '@/images/vite-resource.png';
 import { VITE_CONFIG } from '.';
 import { Anchor } from 'antd';
 import { UseMarkDown } from '@/hooks/useMarkdown';
+import { LazyImage } from '@/component/image';
 const { Link } = Anchor;
 export default function Vite() {
   return (
@@ -21,7 +22,7 @@ export default function Vite() {
           </a>
         </h1>
         <br />
-        <img src={VITE} alt="VITE" width={320} height={320} />
+        <LazyImage src={VITE} alt="VITE" width={320} height={320} />
         <h2 id="front" className={classMap.articleTitle}>
           前言
         </h2>
@@ -41,19 +42,19 @@ export default function Vite() {
         </p>
         <ul className={`${classMap.ul} list-none`}>
           <li>
-            <img src={VITE_ADV_1} alt="adv1" />
+            <LazyImage src={VITE_ADV_1} alt="adv1" />
             <div className="pl-10">
               <br />
               <strong id="no-build">无需打包</strong>：准确的说是不用js写的打包器全量打包🤪 <br />
               <br />
               1. vite会直接启动服务，并且进行预构建依赖。具体表现为对代码进行导入分析，使用<strong>esbuild</strong>
               将CJS或UMD依赖全部转换为ESM缓存到node_modules/.vite/deps目录下，后续直接从缓存获取。
-              <img src={VITE_DEPS} alt="deps" />
+              <LazyImage src={VITE_DEPS} alt="deps" />
               <br />
               esbuild是用go编写的，速度比js快10-100倍，因为go对多线程的支持比js好，支持共享内存（尽量复用AST），而且esbuild所有代码都是自行编写。js设计存在多线程/编译方面的缺陷。
               <br />
               vite提供的是ESM的源码，利用了浏览器对ESM的支持，将部分打包程序的工作交给了浏览器，对于ESM不需要类似于webpack的胶水代码。并且vite给不常变化的依赖请求加上了长期强缓存。
-              <img src={MAX_AGE} alt="max-age" />
+              <LazyImage src={MAX_AGE} alt="max-age" />
               <br />
               <br />
               而webpack需要全量打包，并且在构建依赖时需要经过多个loader进行字符串的处理，尤其是babel-loader涉及到多次字符串AST互转的操作。Webpack
@@ -62,13 +63,13 @@ export default function Vite() {
               启动服务后，根据路由，通过http请求来获取文件和加载所需模块。（如果模块过多会受浏览器http最大并行数限制,vite首次启动慢其中之一是这个原因）下图是本路由的资源列表
               <br />
               可以看出vite对于资源处理的大体逻辑， index.html =&gt; 入口ESM index.tsx =&gt; index.tsx中导入的其他模块
-              <img src={VITE_RESOURCE} alt="resource" />
+              <LazyImage src={VITE_RESOURCE} alt="resource" />
             </div>
           </li>
           <li>
             <br />
             <br />
-            <img src={VITE_ADV_2} alt="adv2" />
+            <LazyImage src={VITE_ADV_2} alt="adv2" />
             <br />
             <strong id="hmr">热重载(HMR)</strong>
             &nbsp; vite明显快于webpack，这个跟它们各自的实现方式有关。
@@ -79,7 +80,7 @@ export default function Vite() {
           <li>
             <br />
             <br />
-            <img src={VITE_ADV_3} alt="adv3" />
+            <LazyImage src={VITE_ADV_3} alt="adv3" />
             <br />
             vite build使用<strong>rollup</strong>
             ,rollup产出的包体积天然比webpack的要小，原生支持ESM非常适合组件库的开发，而webpack需要注入额外胶水代码，天然有体积上的劣势。

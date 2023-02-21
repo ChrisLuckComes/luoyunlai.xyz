@@ -8,6 +8,7 @@ import CURRENT from '@/images/current.png';
 import UPDATE_IMG from '@/images/update.png';
 import CURRENT_UPDATE from '@/images/currentUpdate.png';
 import { UseMarkDown } from '@/hooks/useMarkdown';
+import { LazyImage } from '@/component/image';
 const { Link } = Anchor;
 
 export default function Fiber() {
@@ -50,7 +51,7 @@ export default function Fiber() {
         {fiberNode}
         举个栗子，如下组件
         {fiberExample}
-        <img src={FIBER_1} />
+        <LazyImage src={FIBER_1} />
         <div className={classMap.assist}>
           那么为什么父级指针叫return不叫parent呢？<code>return</code>指的是执行完<code>completeWork</code>
           后返回的下一个节点。虽然返回的确是父级，但是<code>return</code>更准确一点
@@ -95,7 +96,7 @@ export default function Fiber() {
             <br />
             <code>fiberRootNode</code>的<code>current</code>会指向当前页面上已渲染内容对应的<code>Fiber树</code>,即
             <code>current Fiber树</code>
-            <img src={FIBER_2} />
+            <LazyImage src={FIBER_2} />
             {rootNode}
             由于是首屏渲染，页面中还没有挂载任何DOM,所以fiberRootNode.current指向的rootFiber没有子fiber节点
           </li>
@@ -108,7 +109,7 @@ export default function Fiber() {
             已有的fiber节点内的属性，在首屏渲染时只有
             <code>rootFiber</code>存在对应的<code>current fiber</code>(rootFiber.alternate)
             <div className={classMap.assist}>下图右边为内存中构建的树，左侧为页面显示的树</div>
-            <img src={ALTERNATE_IMG} />
+            <LazyImage src={ALTERNATE_IMG} />
           </li>
           <li>
             3.图中右侧已构建完的<code>workInProgress树</code>在<code>commit阶段</code>渲染到页面
@@ -116,7 +117,7 @@ export default function Fiber() {
             <br />
             此时DOM更新为右侧树对应的样子。<code>fiberRootNode</code>的<code>current</code>指针指向
             <code>workInProgress树</code>，使其变为<code>current树</code>
-            <img src={CURRENT} />
+            <LazyImage src={CURRENT} />
           </li>
         </ul>
         <h3 id="update" className={classMap.articleSubTitle}>
@@ -125,14 +126,14 @@ export default function Fiber() {
         <ul>
           <li>
             1. 点击p节点触发更新，开启新的render阶段并构建新的<code>workInProgress树</code>
-            <img src={UPDATE_IMG} />和<code>mount</code>一样，<code>workInProgress树</code>可以复用
+            <LazyImage src={UPDATE_IMG} />和<code>mount</code>一样，<code>workInProgress树</code>可以复用
             <code>current树</code>
             对应的节点数据，决定是否复用的过程就是<strong>diff算法</strong>
           </li>
           <li>
             2. <code>workInProgress树</code>在<code>render阶段</code>完成构建后进入<code>commit阶段</code>
             渲染到页面上。渲染完成后，<code>workInProgress树</code>变为<code>current树</code>
-            <img src={CURRENT_UPDATE} />
+            <LazyImage src={CURRENT_UPDATE} />
           </li>
         </ul>
       </main>

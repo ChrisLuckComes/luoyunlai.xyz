@@ -14,6 +14,7 @@ import {
 } from './_middleware';
 
 import ONION from '@/images/node/koa.png';
+import { LazyImage } from '@/component/image';
 
 const { Link } = Anchor;
 
@@ -96,7 +97,7 @@ export default function Index() {
         <h3 id="onion" className={classMap.articleSubTitle}>
           洋葱模型
         </h3>
-        <img src={ONION} />
+        <LazyImage src={ONION} />
         一句话概括就是按中间件的顺序添加中间件形成嵌套的Promise,next函数就是下一个中间件，await需要等待内部promise执行，执行结果会呈现一个类似剥洋葱的模型。
         <br />
         <h3 id="koaSource" className={classMap.articleSubTitle}>

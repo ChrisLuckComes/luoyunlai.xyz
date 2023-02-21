@@ -8,6 +8,7 @@ import { useImmer } from 'use-immer';
 
 import policeIcon from '@/images/policeIcon.png';
 import CAIGOU from '@/images/caigou.gif';
+import { LazyImage } from './component/image';
 
 const { Header, Content, Footer } = Layout;
 
@@ -36,7 +37,7 @@ export default function App() {
       <Header className={classMap.menu}>
         <div onClick={() => clickMenu({ key: '/' })} className={classMap.logo}>
           <div className="flex-shrink-0">
-            <img className="h-36 mr-8" src={CAIGOU} alt="caigou" width={36} />
+            <LazyImage className="h-36 mr-8" src={CAIGOU} width={36} />
           </div>
           <span>Luoyunlai.top</span>
         </div>

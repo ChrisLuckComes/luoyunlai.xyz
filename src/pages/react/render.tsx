@@ -22,6 +22,7 @@ import BEGINWORK from '@/images/beginWork.png';
 import SUBTREE_FLAGS from '@/images/subTreeFlags.png';
 import EFFECT_LIST_PNG from '@/images/effectList.png';
 import { UseMarkDown } from '@/hooks/useMarkdown';
+import { LazyImage } from '@/component/image';
 
 const { Link } = Anchor;
 
@@ -87,7 +88,7 @@ export default function Render() {
         <br />
         还是之前的栗子
         {fiberExample}
-        <img src={FIBER_1} />
+        <LazyImage src={FIBER_1} />
         <code>render阶段</code>会依次执行
         <div className={classMap.markdown}>
           <ul>
@@ -207,7 +208,7 @@ export default function Render() {
         </div>
         <br />
         <strong>beginWork流程图</strong>
-        <img src={BEGINWORK} />
+        <LazyImage src={BEGINWORK} />
         <h2 id="completeWork" className={classMap.articleTitle}>
           completeWork
         </h2>
@@ -286,13 +287,13 @@ export default function Render() {
         的节点都会被追加在effectList中，最终形成一条以<code>rootFiber.firstEffect</code>为起点的单向链表。
         {effectList}在<code>commit阶段</code>只需要遍历<code>effectList</code>
         就能执行所有<code>effect</code>了
-        <img src={EFFECT_LIST_PNG} />
+        <LazyImage src={EFFECT_LIST_PNG} />
         但是从react16.14开始，effectList被重构了，改用<strong>SubtreeFlags</strong>
         <h3 id="SubtreeFlags" className={classMap.articleSubTitle}>
           SubtreeFlags
         </h3>
         重构之后，会将子节点的副作用冒泡到父节点的<code>SubTreeFlags</code>属性
-        <img src={SUBTREE_FLAGS} />
+        <LazyImage src={SUBTREE_FLAGS} />
         <ul>
           <li>1.B的副作用是Passive，冒泡到A，A.SubtreeFlags包含Passive</li>
           <li>2.E的副作用是Placement，冒泡到D，D.SubtreeFlags包含Placement</li>
