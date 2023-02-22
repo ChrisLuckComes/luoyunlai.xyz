@@ -1,12 +1,25 @@
 import { classMap } from '@/constants/constant';
 import { Anchor } from 'antd';
 import { UseMarkDown } from '@/hooks/useMarkdown';
-import { VUE, VUE_INIT } from './_lifeCycle';
+import {
+  MOUNT_COMPONENT,
+  VUE,
+  VUE_INIT,
+  VUE_MOUNT,
+  FLUSH_SCHEDULER_QUEUE,
+  CALL_UPDATED_HOOK,
+  DESTROY
+} from './_lifeCycle';
 const { Link } = Anchor;
 
 export default function Index() {
   const vue = <UseMarkDown markdown={VUE}></UseMarkDown>,
-    init = <UseMarkDown markdown={VUE_INIT}></UseMarkDown>;
+    init = <UseMarkDown markdown={VUE_INIT}></UseMarkDown>,
+    mount = <UseMarkDown markdown={VUE_MOUNT}></UseMarkDown>,
+    mountComponent = <UseMarkDown markdown={MOUNT_COMPONENT}></UseMarkDown>,
+    flush = <UseMarkDown markdown={FLUSH_SCHEDULER_QUEUE}></UseMarkDown>,
+    updatedHook = <UseMarkDown markdown={CALL_UPDATED_HOOK}></UseMarkDown>,
+    destroy = <UseMarkDown markdown={DESTROY}></UseMarkDown>;
 
   return (
     <article id="root" className={classMap.article}>
@@ -67,11 +80,75 @@ export default function Index() {
         </ul>
         <br />
         <code>created</code>执行完后，开始调用<code>$mount</code>安装组件。
+        <div className={classMap.assist}>src\core\instance\init.js</div>
         {init}
         <h2 id="lifecycleMixin" className={classMap.articleTitle}>
           lifecycleMixin
         </h2>
-        接下来看一下其他生命周期的细节
+        接下来看一下其他生命周期的细节。
+        <h3 id="mountComponent" className={classMap.articleSubTitle}>
+          mountComponent
+        </h3>
+        调用<code>$mount</code>开始挂载组件
+        {mount}
+        <code>$mount</code>调用了
+        <code>mountComponent</code>
+        <h3 id="beforeMount" className={classMap.articleSubTitle}>
+          beforeMount
+        </h3>
+        <code>beforeMount</code>就是字面意思，在开始mount的准备工作前执行
+        <br />
+        <h3 id="beforeUpdate" className={classMap.articleSubTitle}>
+          beforeUpdate
+        </h3>
+        <code>callHook(vm, &quot;beforeMount&quot;)</code>之后开始创建Watcher，传入更新函数等参数， 注意
+        <code>new Watcher(vm, updateComponent,...)</code>
+        传入第四个参数的before属性，Watcher的构造函数会保存它。更新阶段遍历执行watcher队列的回调函数之前，如果before存在会执行before
+        <div className={classMap.assist}>src\core\observer\scheduler.js</div>
+        {flush}
+        <br />
+        这里before函数除首次mount以外每次更新前都调用<code>callHook(vm, &quot;beforeUpdate&quot;)</code>
+        <h3 id="diff" className={classMap.articleSubTitle}>
+          updated
+        </h3>
+        在watcher遍历执行回调完成后，更新完成，调用组件更新和激活的hooks，执行<code>callUpdatedHooks</code>调用了
+        <code>updated</code>hook
+        {updatedHook}
+        <br />
+        <h3 id="mounted" className={classMap.articleSubTitle}>
+          mounted
+        </h3>
+        判断<code>$vnode</code>是否为空，为空才是首次mount，首次mount才会调用<code>mounted</code>hook
+        {mountComponent}
+        <h3 id="destroy" className={classMap.articleTitle}>
+          destroy
+        </h3>
+        <code>beforeDestroy</code>和<code>destroyed</code>hook都在<code>destroy</code>方法中被调用。
+        <h3 id="beforeDestroy" className={classMap.articleSubTitle}>
+          beforeDestroy
+        </h3>
+        和另外两个beforeXXX生命周期一样，在正式开始执行销毁之前会执行<code>beforeDestroy</code>
+        ，此时还能获取到各种数据。
+        <h3 id="destroyed" className={classMap.articleSubTitle}>
+          destroyed
+        </h3>
+        <code>destroyed</code>hook之前会进行如下操作：
+        <ul>
+          <li>
+            1. 移除该节点: <code>remove(parent.$children, vm)</code>
+          </li>
+          <li>
+            2. 调用<code>teardown()</code>卸载Watcher
+          </li>
+          <li>
+            3. 解除<code>data</code>的引用
+          </li>
+          <li>
+            4. 设置<code>_isDestroyed</code>为true，调用<code>vm.__patch__(vm._vnode, null)</code>，将该节点更新为null
+          </li>
+        </ul>
+        <code>destroyed</code>hook之后，还需要进行一些销毁操作，关闭所有监听器，销毁自身引用，和父级解绑。
+        {destroy}
       </main>
       <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
         <Link href="#pre" title="前言"></Link>
@@ -80,11 +157,16 @@ export default function Index() {
           <Link href="#created" title="created"></Link>
         </Link>
         <Link href="#lifecycleMixin" title="lifecycleMixin">
-          <Link href="#beforeMount" title="beforeMount"></Link>
-          <Link href="#mounted" title="mounted"></Link>
-          <Link href="#beforeUpdate" title="beforeUpdate"></Link>
-          <Link href="#beforeDestroy" title="beforeDestroy"></Link>
-          <Link href="#destroyed" title="destroyed"></Link>
+          <Link href="#mountComponent" title="mountComponent">
+            <Link href="#beforeMount" title="beforeMount"></Link>
+            <Link href="#beforeUpdate" title="beforeUpdate"></Link>
+            <Link href="#updated" title="updated"></Link>
+            <Link href="#mounted" title="mounted"></Link>
+          </Link>
+          <Link href="#destroy" title="destroy">
+            <Link href="#beforeDestroy" title="beforeDestroy"></Link>
+            <Link href="#destroyed" title="destroyed"></Link>
+          </Link>
         </Link>
       </Anchor>
     </article>
