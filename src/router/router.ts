@@ -136,6 +136,12 @@ const routers = [
         path: 'vue2/vForWithIf',
         name: 'Vue2 - v-for和v-if混用',
         element: lazy(() => import('@/pages/vue/vue2/vForWithIf'))
+      },
+      {
+        key: 'lifeCycle',
+        path: 'vue2/lifeCycle',
+        name: '生命周期',
+        element: lazy(() => import('@/pages/vue/vue2/lifeCycle'))
       }
     ]
   },
