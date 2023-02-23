@@ -36,24 +36,28 @@ export default function App() {
     navigate(e.key + location.search);
   };
 
-  const items: MenuProps['items'] = routers.map(router => {
-    let children: MenuItem[] = [];
-    if (router.groups) {
-      children = router.groups.map(group =>
-        getItem(
-          group,
-          group,
-          router.children.filter(c => c.group === group).map(r => getItem(r.name, r.key)),
-          'group'
-        )
-      );
-    } else {
-      if (router?.children) {
-        children = router?.children.map(r => getItem(r.name, r.key));
+  const items: MenuProps['items'] = routers
+    .filter(router => router.key !== '/')
+    .map(router => {
+      let children: MenuItem[] = [];
+      if (router.groups) {
+        children = router.groups.map(group =>
+          getItem(
+            group,
+            group,
+            router.children.filter(c => c.group === group).map(r => getItem(r.name, r.key)),
+            'group'
+          )
+        );
+      } else {
+        if (router?.children) {
+          children = router?.children.map(r => getItem(r.name, r.key));
+        } else {
+          children = [getItem(router.name, router.key)];
+        }
       }
-    }
-    return getItem(router.name, router.key, children);
-  });
+      return getItem(router.name, router.key, children);
+    });
 
   return (
     <Layout className={classMap.layout}>

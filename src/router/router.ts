@@ -180,19 +180,19 @@ const routers = [
     ]
   },
   {
-    key: 'experience',
+    key: '/experience',
     path: '/experience',
     name: '经验',
     element: lazy(() => import('@/pages/index')),
     children: [
       {
-        key: 'npm',
+        key: '/experience/npm',
         path: 'npm',
         name: '第一个npm包',
         element: lazy(() => import('@/pages/experiences/npm'))
       },
       {
-        key: 'cloud',
+        key: '/experience/cloud',
         path: 'cloud',
         name: '作为一个前端好意思说没有个人网站？',
         element: lazy(() => import('@/pages/experiences/cloud'))
@@ -206,7 +206,7 @@ const routers = [
     element: lazy(() => import('@/pages/index')),
     children: [
       {
-        key: 'browser',
+        key: '/knowledge/browser',
         path: 'browser',
         name: '浏览器如何工作',
         element: lazy(() => import('@/pages/knowledge/browser'))

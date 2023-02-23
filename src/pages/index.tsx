@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { useImmer } from 'use-immer';
 
 import { Layout, Menu, Spin } from 'antd';
@@ -29,13 +29,17 @@ interface PageContentProps {
 export default function PageContent({ menus, groups }: PageContentProps) {
   const navigate = useNavigate(),
     location = useLocation();
-    
+
   const [selectedKeys, setSelectedKeys] = useImmer<string[]>([location.pathname]);
 
   const clickMenu = (e: { key: string }) => {
     setSelectedKeys(draft => (draft = [e.key]));
     navigate(e.key);
   };
+
+  useEffect(() => {
+    setSelectedKeys([location.pathname]);
+  }, [location]);
 
   let items: MenuItem[] = [];
 
