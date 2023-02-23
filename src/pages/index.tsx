@@ -2,14 +2,12 @@ import React, { Suspense } from 'react';
 import { useImmer } from 'use-immer';
 
 import { Layout, Menu, Spin } from 'antd';
-import * as Sentry from '@sentry/react';
 import { LoadingOutlined } from '@ant-design/icons';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { MenuItem, getItem } from '@/App';
 
 const { Sider, Content } = Layout;
 const { Item } = Menu;
-
-const SentryRoutes = Sentry.withSentryReactRouterV6Routing(Routes);
 
 const classMap = {
   layout: 'h-content',
@@ -22,28 +20,42 @@ interface PageContentProps {
     key: string;
     path: string;
     name: string;
+    group?: string;
     element: React.LazyExoticComponent<() => JSX.Element>;
   }[];
+  groups?: string[];
 }
 
-export default function PageContent({ menus }: PageContentProps) {
-  const navigate = useNavigate();
-  const [selectedKeys, setSelectedKeys] = useImmer<string[]>([]);
+export default function PageContent({ menus, groups }: PageContentProps) {
+  const navigate = useNavigate(),
+    location = useLocation();
+    
+  const [selectedKeys, setSelectedKeys] = useImmer<string[]>([location.pathname]);
 
   const clickMenu = (e: { key: string }) => {
-    let path = menus.find(x => x.key === e.key)?.path!;
     setSelectedKeys(draft => (draft = [e.key]));
-    navigate(path);
+    navigate(e.key);
   };
+
+  let items: MenuItem[] = [];
+
+  if (groups) {
+    items = groups.map(group =>
+      getItem(
+        group,
+        group,
+        menus.filter(menu => menu.group === group).map(r => getItem(r.name, r.key)),
+        'group'
+      )
+    );
+  } else {
+    items = menus.map(r => getItem(r.name, r.key));
+  }
 
   return (
     <Layout className={classMap.layout}>
       <Sider className={classMap.sider}>
-        <Menu selectedKeys={selectedKeys} onClick={e => clickMenu(e)} mode="inline">
-          {menus.map(menu => (
-            <Item key={menu.key}>{menu.name}</Item>
-          ))}
-        </Menu>
+        <Menu selectedKeys={selectedKeys} onClick={e => clickMenu(e)} mode="inline" items={items}></Menu>
       </Sider>
       <Content id="content" className={classMap.content}>
         <Routes>

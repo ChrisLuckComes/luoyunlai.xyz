@@ -12,7 +12,7 @@ export default function Index() {
   return (
     <article id="root" className={classMap.article}>
       <main className={classMap.content}>
-        <h1 className={classMap.pageTitle}>Vue3 - diff</h1>
+        <h1 className={classMap.pageTitle}>Diff</h1>
         在更新时，出于性能考虑，需要最大程度的利用已存在的节点。
         <br />
         所以需要递归比较同层级的新旧节点，这个比较函数就是

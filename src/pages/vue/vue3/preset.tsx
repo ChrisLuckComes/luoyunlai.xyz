@@ -13,7 +13,7 @@ export default function Preset() {
   return (
     <article id="root" className={classMap.article}>
       <main className={classMap.content}>
-        <h1 className={classMap.pageTitle}>Vue3前置知识</h1>
+        <h1 className={classMap.pageTitle}>前置知识</h1>
         <div>
           <h2 id="proxy" className={classMap.articleTitle}>
             Vue3为什么使用proxy

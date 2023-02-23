@@ -14,31 +14,31 @@ const routers = [
     element: lazy(() => import('@/pages/index')),
     children: [
       {
-        key: 'tailwindcss',
+        key: '/project/tailwindcss',
         path: 'tailwindcss',
         name: '来不及了，快上车tailwindcss🚘',
         element: lazy(() => import('@/pages/project/tailwindcss'))
       },
       {
-        key: 'http2',
+        key: '/project/http2',
         path: 'http2',
         name: 'http=>https=>http2',
         element: lazy(() => import('@/pages/project/http2'))
       },
       {
-        key: 'vite',
+        key: '/project/vite',
         path: 'vite',
         name: '2022年还在用webpack?快上Vite！',
         element: lazy(() => import('@/pages/project/vite'))
       },
       {
-        key: 'workflow',
+        key: '/project/workflow',
         path: 'workflow',
         name: '不会还有人在手动发版吧？',
         element: lazy(() => import('@/pages/project/workflow'))
       },
       {
-        key: 'performance',
+        key: '/project/performance',
         path: 'performance',
         name: '连指标都不知道还敢说懂性能优化？',
         element: lazy(() => import('@/pages/project/performance'))
@@ -52,43 +52,43 @@ const routers = [
     element: lazy(() => import('@/pages/index')),
     children: [
       {
-        key: 'thinking',
+        key: '/react/thinking',
         path: 'thinking',
         name: '理念',
         element: lazy(() => import('@/pages/react/thinking'))
       },
       {
-        key: 'fiber',
+        key: '/react/fiber',
         path: 'fiber',
         name: 'Fiber',
         element: lazy(() => import('@/pages/react/fiber'))
       },
       {
-        key: 'render',
+        key: '/react/render',
         path: 'render',
         name: 'Render',
         element: lazy(() => import('@/pages/react/render'))
       },
       {
-        key: 'commit',
+        key: '/react/commit',
         path: 'commit',
         name: 'Commit',
         element: lazy(() => import('@/pages/react/commit'))
       },
       {
-        key: 'diff',
+        key: '/react/diff',
         path: 'diff',
         name: 'Diff',
         element: lazy(() => import('@/pages/react/diff'))
       },
       {
-        key: 'hook',
+        key: '/react/hook',
         path: 'hook',
         name: 'Hook',
         element: lazy(() => import('@/pages/react/hook'))
       },
       {
-        key: 'state',
+        key: '/react/state',
         path: 'state',
         name: '还在用Redux吗？你已经out了',
         element: lazy(() => import('@/pages/react/store'))
@@ -97,74 +97,82 @@ const routers = [
   },
   {
     key: 'vue',
-    path: 'vue',
+    path: '/vue',
     name: 'Vue',
+    groups: ['vue2', 'vue3'],
     element: lazy(() => import('@/pages/index')),
     children: [
       {
-        key: 'vue3Preset',
+        key: '/vue/vue3/preset',
         path: 'vue3/preset',
-        name: 'Vue3 - 前置知识',
+        name: '前置知识',
+        group: 'vue3',
         element: lazy(() => import('@/pages/vue/vue3/preset'))
       },
       {
-        key: 'vue3Global',
+        key: '/vue/vue3/global',
         path: 'vue3/global',
-        name: 'Vue3 - 全局概览',
+        name: '全局概览',
+        group: 'vue3',
         element: lazy(() => import('@/pages/vue/vue3/global'))
       },
       {
-        key: 'vue3Reactive',
+        key: '/vue/vue3/reactive',
         path: 'vue3/reactive',
-        name: 'Vue3 - 响应式系统',
+        name: '响应式系统',
+        group: 'vue3',
         element: lazy(() => import('@/pages/vue/vue3/reactive'))
       },
       {
-        key: 'vue3Diff',
+        key: '/vue/vue3/diff',
         path: 'vue3/diff',
-        name: 'Vue3 - Diff',
+        name: 'Diff',
+        group: 'vue3',
         element: lazy(() => import('@/pages/vue/vue3/diff'))
       },
       {
-        key: 'vueRouter',
-        path: 'vue2/router',
-        name: 'Vue2 Vue-Router',
+        key: '/vue/vue2/router',
+        path: '/vue2/router',
+        name: 'Vue-Router',
+        group: 'vue2',
         element: lazy(() => import('@/pages/vue/vue2/vueRouter'))
       },
       {
-        key: 'vForWithIf',
+        key: '/vue/vue2/vForWithIf',
         path: 'vue2/vForWithIf',
-        name: 'Vue2 - v-for和v-if混用',
+        name: 'v-for和v-if混用',
+        group: 'vue2',
         element: lazy(() => import('@/pages/vue/vue2/vForWithIf'))
       },
       {
-        key: 'lifeCycle',
+        key: '/vue/vue2/lifeCycle',
         path: 'vue2/lifeCycle',
         name: '生命周期',
+        group: 'vue2',
         element: lazy(() => import('@/pages/vue/vue2/lifeCycle'))
       }
     ]
   },
   {
-    key: 'node',
+    key: '/node',
     path: 'node',
     name: 'Node',
     element: lazy(() => import('@/pages/index')),
     children: [
       {
-        key: 'changeVersion',
+        key: '/node/changeVersion',
         path: 'changeVersion',
         name: '光速切换node版本',
         element: lazy(() => import('@/pages/node/changeVersion'))
       },
       {
-        key: 'nodeJs',
+        key: '/node/nodeJs',
         path: 'nodeJs',
         name: 'Node.js',
         element: lazy(() => import('@/pages/node/node'))
       },
       {
-        key: 'middleware',
+        key: '/node/middleware',
         path: 'middleware',
         name: 'express和koa的中间件模型',
         element: lazy(() => import('@/pages/node/middleware'))

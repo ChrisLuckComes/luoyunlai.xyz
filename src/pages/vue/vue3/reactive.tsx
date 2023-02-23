@@ -42,7 +42,7 @@ export default function Index() {
   return (
     <article id="root" className={classMap.article}>
       <main className={classMap.content}>
-        <h1 className={classMap.pageTitle}>Vue3响应式系统</h1>
+        <h1 className={classMap.pageTitle}>响应式系统</h1>
         <h2 id="reactive" className={classMap.articleTitle}>
           reactive
         </h2>

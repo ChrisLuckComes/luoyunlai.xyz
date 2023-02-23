@@ -1,14 +1,15 @@
-import { Suspense } from 'react';
-import { Layout, Menu, Spin } from 'antd';
+import { Key, ReactNode, Suspense } from 'react';
+import { Layout, Menu, MenuProps, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import routers from '@/router/router';
 import './styles/home.css';
 import { useImmer } from 'use-immer';
 
-import policeIcon from '@/images/policeIcon.png';
 import CAIGOU from '@/images/caigou.gif';
 import { LazyImage } from './component/image';
+
+export type MenuItem = Required<MenuProps>['items'][number];
 
 const { Header, Content, Footer } = Layout;
 
@@ -20,6 +21,10 @@ const classMap = {
   content: 'pt-content overflow-y-auto'
 };
 
+export const getItem = (label: ReactNode, key: Key, children?: MenuItem[], type?: 'group') => {
+  return { key, children, label, type } as MenuItem;
+};
+
 export default function App() {
   let navigate = useNavigate();
   let location = useLocation();
@@ -28,9 +33,27 @@ export default function App() {
 
   const clickMenu = (e: { key: string }) => {
     setSelectedkeys(draft => (draft = [e.key]));
-    const path = e.key === '/' ? '/' : `/${e.key}`;
-    navigate(path + location.search);
+    navigate(e.key + location.search);
   };
+
+  const items: MenuProps['items'] = routers.map(router => {
+    let children: MenuItem[] = [];
+    if (router.groups) {
+      children = router.groups.map(group =>
+        getItem(
+          group,
+          group,
+          router.children.filter(c => c.group === group).map(r => getItem(r.name, r.key)),
+          'group'
+        )
+      );
+    } else {
+      if (router?.children) {
+        children = router?.children.map(r => getItem(r.name, r.key));
+      }
+    }
+    return getItem(router.name, router.key, children);
+  });
 
   return (
     <Layout className={classMap.layout}>
@@ -41,11 +64,13 @@ export default function App() {
           </div>
           <span>Luoyunlai.top</span>
         </div>
-        <Menu className="min-w-header-menu" selectedKeys={selectedKeys} onClick={e => clickMenu(e)} mode="horizontal">
-          {routers.map(router => (
-            <Menu.Item key={router.key}>{router.name}</Menu.Item>
-          ))}
-        </Menu>
+        <Menu
+          className="min-w-header-menu"
+          selectedKeys={selectedKeys}
+          onClick={e => clickMenu(e)}
+          mode="horizontal"
+          items={items}
+        ></Menu>
       </Header>
       <Content className={classMap.content}>
         <Routes>
@@ -55,7 +80,7 @@ export default function App() {
               path={router.path + '/*'}
               element={
                 <Suspense fallback={<Spin indicator={<LoadingOutlined className="text-icon" spin />}></Spin>}>
-                  <router.element menus={router.children as []} />
+                  <router.element menus={router.children as []} groups={router.groups} />
                 </Suspense>
               }
             ></Route>

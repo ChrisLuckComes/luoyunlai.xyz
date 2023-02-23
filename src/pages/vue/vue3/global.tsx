@@ -44,7 +44,7 @@ export default function Global() {
   return (
     <article id="root" className={classMap.article}>
       <main className={classMap.content}>
-        <h1 className={classMap.pageTitle}>Vue3全局概览</h1>
+        <h1 className={classMap.pageTitle}>全局概览</h1>
         <div>
           <h2 id="createApp" className={classMap.articleTitle}>
             createApp
