@@ -109,4 +109,122 @@ export function proxy (target: Object, sourceKey: string, key: string) {
   }
   Object.defineProperty(target, key, sharedPropertyDefinition)
 }
-\`\`\``
+\`\`\``;
+
+export const INIT_WATCH = `\`\`\`js
+function initWatch (vm: Component, watch: Object) {
+  for (const key in watch) {
+    const handler = watch[key]
+    if (Array.isArray(handler)) {
+      for (let i = 0; i < handler.length; i++) {
+        createWatcher(vm, key, handler[i])
+      }
+    } else {
+      createWatcher(vm, key, handler)
+    }
+  }
+}
+\`\`\``;
+
+export const CREATE_WATCHER = `\`\`\`js
+function createWatcher (
+  vm: Component,
+  expOrFn: string | Function,
+  handler: any,
+  options?: Object
+) {
+  if (isPlainObject(handler)) {
+    options = handler
+    handler = handler.handler
+  }
+  if (typeof handler === 'string') {
+    handler = vm[handler]
+  }
+  return vm.$watch(expOrFn, handler, options)
+}
+\`\`\``;
+
+export const VUE_WATCH = `\`\`\`js
+Vue.prototype.$watch = function (
+  expOrFn: string | Function,
+  cb: any,
+  options?: Object
+): Function {
+  const vm: Component = this
+  if (isPlainObject(cb)) {
+    return createWatcher(vm, expOrFn, cb, options)
+  }
+  options = options || {}
+  options.user = true
+  const watcher = new Watcher(vm, expOrFn, cb, options)
+  if (options.immediate) {
+    try {
+      cb.call(vm, watcher.value)
+    } catch (error) {
+      handleError(error, vm, 'callback for immediate watcher ' + watcher.expression)
+    }
+  }
+  return function unwatchFn () {
+    watcher.teardown()
+  }
+}
+\`\`\``;
+
+export const GET = `\`\`\`js
+/**
+ * Evaluate the getter, and re-collect dependencies.
+ */
+get () {
+  pushTarget(this)
+  let value
+  const vm = this.vm
+  try {
+    value = this.getter.call(vm, vm)
+  } catch (e) {
+    if (this.user) {
+      handleError(e, vm, 'getter for watcher ' + this.expression)
+    } else {
+      throw e
+    }
+  } finally {
+    // 如果deep为true，遍历对象，将每一个属性都添加监听
+    if (this.deep) {
+      traverse(value)
+    }
+    popTarget()
+    this.cleanupDeps()
+  }
+  return value
+}
+\`\`\``;
+
+export const RUN = `\`\`\`js
+/**
+ * Scheduler job interface.
+ * Will be called by the scheduler.
+ */
+run () {
+  if (this.active) {
+    const value = this.get()
+    if (
+      value !== this.value ||
+      // 当watch的目标是对象或数组时或者deep为true时，即使触发get获取到的值和this.value一样也会执行回调函数
+      isObject(value) ||
+      this.deep
+    ) {
+      // set new value
+      const oldValue = this.value
+      this.value = value
+      if (this.user) {
+        try {
+          this.cb.call(this.vm, value, oldValue)
+        } catch (e) {
+          handleError(e, this.vm, 'callback for watcher ' + this.expression)
+        }
+      } else {
+        this.cb.call(this.vm, value, oldValue)
+      }
+    }
+  }
+}
+\`\`\``;

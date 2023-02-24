@@ -1,14 +1,29 @@
 import { classMap } from '@/constants/constant';
 import { Anchor } from 'antd';
 import { UseMarkDown } from '@/hooks/useMarkdown';
-import { INIT_STATE, INIT_COMPUTED, DEFINE_COMPUTED, SHARED_PROPERTY_DEFENITION } from './_watchComputed';
+import {
+  INIT_STATE,
+  INIT_COMPUTED,
+  DEFINE_COMPUTED,
+  SHARED_PROPERTY_DEFENITION,
+  INIT_WATCH,
+  VUE_WATCH,
+  CREATE_WATCHER,
+  RUN,
+  GET
+} from './_watchComputed';
 const { Link } = Anchor;
 
 export default function Index() {
   const initState = <UseMarkDown markdown={INIT_STATE}></UseMarkDown>,
     initComputed = <UseMarkDown markdown={INIT_COMPUTED}></UseMarkDown>,
     defineComputed = <UseMarkDown markdown={DEFINE_COMPUTED}></UseMarkDown>,
-    sharedPropertyDefinition = <UseMarkDown markdown={SHARED_PROPERTY_DEFENITION}></UseMarkDown>;
+    sharedPropertyDefinition = <UseMarkDown markdown={SHARED_PROPERTY_DEFENITION}></UseMarkDown>,
+    initWatch = <UseMarkDown markdown={INIT_WATCH}></UseMarkDown>,
+    watch = <UseMarkDown markdown={VUE_WATCH}></UseMarkDown>,
+    createWatcher = <UseMarkDown markdown={CREATE_WATCHER}></UseMarkDown>,
+    run = <UseMarkDown markdown={RUN}></UseMarkDown>,
+    get = <UseMarkDown markdown={GET}></UseMarkDown>;
 
   return (
     <article id="root" className={classMap.article}>
@@ -41,6 +56,36 @@ export default function Index() {
         <h2 id="watch" className={classMap.articleTitle}>
           watch
         </h2>
+        遍历watch属性，调用<code>createWatcher</code>
+        {initWatch}
+        调用<code>$watch</code>创建Watcher，<code>$watch</code>在<code>stateMixin</code>中被添加到Vue原型上。
+        <br />
+        {createWatcher}
+        <code>$watch</code>会设置<code>options.user = true</code>，以表示当前watcher是watch类型。可以看到watch基本上跟
+        <code>computed</code>
+        类似，只是细节上的区别。
+        {watch}
+        <h2 id="summary" className={classMap.articleTitle}>
+          总结
+        </h2>
+        <ul className={classMap.ul}>
+          <li>最显著的区别：computed保存了计算结果，可以直接使用。而watch只是将旧值和新值传入并执行回调函数</li>
+          <li>
+            computed可以定义<code>get,set</code>属性，watch不支持。
+          </li>
+          <li>
+            watch支持<code>immediate</code>，可以传入当前值watcher.value立即执行一次回调函数。
+          </li>
+          <li>computed支持缓存，在依赖没有变化的时候无需重新执行。watch不支持缓存，每次更新都会执行回调函数</li>
+          <li>
+            watch支持<code>deep</code>属性 ，触发get时会遍历对象，将每一个属性都添加监听。
+            {get}
+          </li>
+          <li>
+            当watch的目标是对象或数组时或者deep为true时，即使触发get获取到的值和this.value一样也会执行回调函数，而computed不会。
+            {run}
+          </li>
+        </ul>
         <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
           <Link href="#pre" title="前言"></Link>
           <Link href="#computed" title="computed"></Link>
