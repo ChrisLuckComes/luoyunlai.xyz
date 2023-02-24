@@ -10,7 +10,7 @@ function initData (vm: Component) {
 
 export function getData (data: Function, vm: Component): any {
     try {
-        //使用闭包，在data函数中返回数据，这样每个组件data就是独一份
+        //使用call传入vm，这样对于每个vm都创建了一份数据
         return data.call(vm, vm)
     } catch (e) {
         handleError(e, vm, data())
