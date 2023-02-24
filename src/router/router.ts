@@ -157,7 +157,14 @@ const routers = [
         name: 'computed和watch',
         group: 'vue2',
         element: lazy(() => import('@/pages/vue/vue2/watchComputed'))
-      }
+      },
+      {
+        key: '/vue/vue2/data',
+        path: 'vue2/data',
+        name: '为什么data必须是函数',
+        group: 'vue2',
+        element: lazy(() => import('@/pages/vue/vue2/data'))
+      },
     ]
   },
   {
