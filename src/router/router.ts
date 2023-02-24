@@ -150,6 +150,13 @@ const routers = [
         name: '生命周期',
         group: 'vue2',
         element: lazy(() => import('@/pages/vue/vue2/lifeCycle'))
+      },
+      {
+        key: '/vue/vue2/watchComputed',
+        path: 'vue2/watchComputed',
+        name: 'computed和watch',
+        group: 'vue2',
+        element: lazy(() => import('@/pages/vue/vue2/watchComputed'))
       }
     ]
   },
