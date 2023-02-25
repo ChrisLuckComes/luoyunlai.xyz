@@ -22,44 +22,6 @@ const routers = [
     ]
   },
   {
-    key: 'project',
-    path: '/project',
-    name: '工程化',
-    element: lazy(() => import('@/pages/index')),
-    children: [
-      {
-        key: '/project/tailwindcss',
-        path: 'tailwindcss',
-        name: '来不及了，快上车tailwindcss🚘',
-        element: lazy(() => import('@/pages/project/tailwindcss'))
-      },
-      {
-        key: '/project/http2',
-        path: 'http2',
-        name: 'http=>https=>http2',
-        element: lazy(() => import('@/pages/project/http2'))
-      },
-      {
-        key: '/project/vite',
-        path: 'vite',
-        name: '2022年还在用webpack?快上Vite！',
-        element: lazy(() => import('@/pages/project/vite'))
-      },
-      {
-        key: '/project/workflow',
-        path: 'workflow',
-        name: '不会还有人在手动发版吧？',
-        element: lazy(() => import('@/pages/project/workflow'))
-      },
-      {
-        key: '/project/performance',
-        path: 'performance',
-        name: '连指标都不知道还敢说懂性能优化？',
-        element: lazy(() => import('@/pages/project/performance'))
-      }
-    ]
-  },
-  {
     key: 'react',
     path: '/react',
     name: 'React',
@@ -204,6 +166,44 @@ const routers = [
         path: 'middleware',
         name: 'express和koa的中间件模型',
         element: lazy(() => import('@/pages/node/middleware'))
+      }
+    ]
+  },
+  {
+    key: 'project',
+    path: '/project',
+    name: '工程化',
+    element: lazy(() => import('@/pages/index')),
+    children: [
+      {
+        key: '/project/tailwindcss',
+        path: 'tailwindcss',
+        name: '来不及了，快上车tailwindcss🚘',
+        element: lazy(() => import('@/pages/project/tailwindcss'))
+      },
+      {
+        key: '/project/http2',
+        path: 'http2',
+        name: 'http=>https=>http2',
+        element: lazy(() => import('@/pages/project/http2'))
+      },
+      {
+        key: '/project/vite',
+        path: 'vite',
+        name: '2022年还在用webpack?快上Vite！',
+        element: lazy(() => import('@/pages/project/vite'))
+      },
+      {
+        key: '/project/workflow',
+        path: 'workflow',
+        name: '不会还有人在手动发版吧？',
+        element: lazy(() => import('@/pages/project/workflow'))
+      },
+      {
+        key: '/project/performance',
+        path: 'performance',
+        name: '连指标都不知道还敢说懂性能优化？',
+        element: lazy(() => import('@/pages/project/performance'))
       }
     ]
   },
