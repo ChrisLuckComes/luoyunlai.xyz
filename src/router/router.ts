@@ -8,6 +8,20 @@ const routers = [
     element: lazy(() => import('@/home'))
   },
   {
+    key: 'js',
+    path: '/js',
+    name: 'JavaScript',
+    element: lazy(() => import('@/pages/index')),
+    children: [
+      {
+        key: '/js/module',
+        path: 'module',
+        name: 'CommonJS和ES Module',
+        element: lazy(() => import('@/pages/javaScript/module'))
+      }
+    ]
+  },
+  {
     key: 'project',
     path: '/project',
     name: '工程化',
@@ -164,7 +178,7 @@ const routers = [
         name: '为什么data必须是函数',
         group: 'vue2',
         element: lazy(() => import('@/pages/vue/vue2/data'))
-      },
+      }
     ]
   },
   {
