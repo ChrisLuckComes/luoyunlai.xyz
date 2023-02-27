@@ -18,7 +18,19 @@ const routers = [
         path: 'module',
         name: 'CommonJS和ES Module',
         element: lazy(() => import('@/pages/javaScript/module'))
-      }
+      },
+      {
+        key: '/js/promise',
+        path: 'promise',
+        name: '从0到1实现promise',
+        element: lazy(() => import('@/pages/javaScript/promise'))
+      },
+      // {
+      //   key: '/js/asyncAwait',
+      //   path: 'asyncAwait',
+      //   name: 'async await',
+      //   element: lazy(() => import('@/pages/javaScript/asyncAwait'))
+      // }
     ]
   },
   {
