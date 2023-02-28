@@ -24,7 +24,7 @@ const routers = [
         path: 'promise',
         name: '从0到1实现promise',
         element: lazy(() => import('@/pages/javaScript/promise'))
-      },
+      }
       // {
       //   key: '/js/asyncAwait',
       //   path: 'asyncAwait',
@@ -250,6 +250,12 @@ const routers = [
         path: 'browser',
         name: '浏览器如何工作',
         element: lazy(() => import('@/pages/knowledge/browser'))
+      },
+      {
+        key: '/knowledge/safety',
+        path: 'safety',
+        name: '常见Web应用安全漏洞及应对手段',
+        element: lazy(() => import('@/pages/knowledge/safety'))
       }
     ]
   }

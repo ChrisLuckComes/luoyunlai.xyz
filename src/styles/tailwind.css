@@ -746,10 +746,6 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.p-60 {
-  padding: 60px;
-}
-
 .pt-content {
   padding-top: 40px;
 }
