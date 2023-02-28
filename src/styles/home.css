@@ -64,41 +64,18 @@ ul {
 }
 
 .markdown-container {
-  text-align: left;
-  white-space: pre;
-  word-spacing: normal;
-  word-break: normal;
-  overflow-wrap: normal;
-  color: rgb(238, 238, 238);
-  background: rgb(47, 47, 47);
+  background: #f2f4f5;
   font-family: 'Roboto Mono', monospace;
   font-size: 1em;
   line-height: 1.5em;
-  tab-size: 4;
   hyphens: none;
   overflow: auto;
   position: relative;
   margin: 0.5em 0px;
   padding: 1.25em 1em;
-}
-
-.language-js,
-.language-ts {
-  text-align: left;
-  white-space: pre;
-  word-spacing: normal;
-  word-break: normal;
-  overflow-wrap: normal;
-  color: rgb(238, 238, 238);
-  background: rgb(47, 47, 47);
-  font-family: 'Roboto Mono', monospace;
-  font-size: 1em;
-  line-height: 1.5em;
-  tab-size: 4;
-  hyphens: none;
-  overflow: auto;
-  position: relative;
-  margin: 0.5em 0px;
+  & code {
+    border: none;
+  }
 }
 
 .anchor {

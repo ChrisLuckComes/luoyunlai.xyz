@@ -18,20 +18,7 @@ export default defineConfig(async () => {
         '@images': path.join(__dirname, 'src/images')
       }
     },
-    plugins: [
-      react(),
-      tsConfigPaths(),
-      // vitePluginImp({
-      //   libList: [
-      //     {
-      //       libName: 'antd',
-      //       style: name => `antd/es/${name}/style`
-      //     }
-      //   ]
-      // }),
-      eslint(),
-      basicSsl()
-    ],
+    plugins: [react(), tsConfigPaths(), eslint(), basicSsl()],
     css: {
       preprocessorOptions: {
         less: {

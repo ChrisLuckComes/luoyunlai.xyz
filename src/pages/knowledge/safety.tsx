@@ -9,21 +9,9 @@ import { useEffect, useLayoutEffect, useReducer, useState } from 'react';
 const { Link } = Anchor;
 
 export default function Index() {
-  const [markdowns, setMarkdowns] = useState({
-    sql_1: <></>,
-    code_1: <></>,
-    xssHtml: <></>
-  });
-
-  useEffect(() => {
-    setMarkdowns(() => {
-      return {
-        sql_1: <UseMarkDown markdown={SQL_1}></UseMarkDown>,
-        code_1: <UseMarkDown markdown={CODE_1}></UseMarkDown>,
-        xssHtml: <UseMarkDown markdown={XSS_HTML}></UseMarkDown>
-      };
-    });
-  }, []);
+  const sql_1 = <UseMarkDown markdown={SQL_1}></UseMarkDown>,
+    code_1 = <UseMarkDown markdown={CODE_1}></UseMarkDown>,
+    xssHtml = <UseMarkDown markdown={XSS_HTML}></UseMarkDown>;
 
   return (
     <article id="root" className={classMap.article}>
@@ -59,7 +47,7 @@ export default function Index() {
         <ul className={classMap.ul}>
           <li>
             1. 如下使用未信任数据的SQL，即使使用ORM框架，也是不安全的：
-            {markdowns.code_1}
+            {sql_1}
           </li>
           <li>
             2. 结合上面的例子，攻击者将如下链接id参数值改为{`'or '1'='1`}：<br />
@@ -185,7 +173,7 @@ export default function Index() {
           <li>
             1. 有如下URL：<code>http://example.com/app/accountInfo?acct=notmyacct</code>
             发起get请求，如果服务端程序没有认证，直接使用该参数，那么攻击者只需要修改acct的值就可以获取任何人的账号信息，例如如下代码：
-            {markdowns.code_1}
+            {code_1}
           </li>
           <li>2. 简单的修改一下URL，可以跳转到与权限不符的页面。</li>
         </ul>
@@ -227,7 +215,7 @@ export default function Index() {
         <ul className={classMap.ul}>
           <li>
             在HTML片段内没有经过校验或转义使用未信任的数据：
-            {markdowns.xssHtml}
+            {xssHtml}
           </li>
         </ul>
         <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
