@@ -4,7 +4,7 @@ import { UseMarkDown } from '@/hooks/useMarkdown';
 import { LazyImage } from '@/component/image';
 import RISK from '@images/knowledge/risks.png';
 import { SQL_1, CODE_1, XSS_HTML } from './_safety';
-import { useLayoutEffect, useReducer, useState } from 'react';
+import { useEffect, useLayoutEffect, useReducer, useState } from 'react';
 
 const { Link } = Anchor;
 
@@ -15,7 +15,7 @@ export default function Index() {
     xssHtml: <></>
   });
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setMarkdowns(() => {
       return {
         sql_1: <UseMarkDown markdown={SQL_1}></UseMarkDown>,
