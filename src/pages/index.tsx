@@ -5,6 +5,7 @@ import { Layout, Menu, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { MenuItem, getItem } from '@/App';
+import BackTop from '@/component/backTop';
 
 const { Sider, Content } = Layout;
 const { Item } = Menu;
@@ -70,6 +71,7 @@ export default function PageContent({ menus, groups }: PageContentProps) {
               element={
                 <Suspense fallback={<Spin indicator={<LoadingOutlined className="text-icon" spin />}></Spin>}>
                   <child.element />
+                  <BackTop />
                 </Suspense>
               }
             ></Route>

