@@ -28,7 +28,7 @@ export default function Index() {
     dispatch = <UseMarkDown markdown={DISPATCH}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 id="info" className={classMap.articleTitle}>
           还在用Redux吗？你out了。

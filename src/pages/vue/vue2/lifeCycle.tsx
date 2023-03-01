@@ -22,7 +22,7 @@ export default function Index() {
     destroy = <UseMarkDown markdown={DESTROY}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 id="pre" className={classMap.articleTitle}>
           生命周期

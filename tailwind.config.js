@@ -17,6 +17,7 @@ module.exports = {
         10: '10px',
         50: '50px',
         60: '60px',
+        72: '72px',
         100: '100px',
         150: '150px'
       }
@@ -42,7 +43,8 @@ module.exports = {
     },
     width: {
       sider: '16.67%',
-      full: '100%'
+      full: '100%',
+      48: '48px'
     },
     maxWidth: {
       sider: '16.67%',
@@ -52,7 +54,8 @@ module.exports = {
       content: 'calc(100vh - 64px - 69px - 40px)',
       full: '100%',
       screen: '100vh',
-      36: '36px'
+      36: '36px',
+      48: '48px'
     }
   },
   plugins: []

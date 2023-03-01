@@ -9,7 +9,7 @@ export default function Index() {
     genElement = <UseMarkDown markdown={GEN_ELEMENT}></UseMarkDown>,
     genFor = <UseMarkDown markdown={GEN_FOR}></UseMarkDown>;
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 className={classMap.articleTitle}>为什么v-for和v-if不要一起使用</h2>
         例如模板如下代码：

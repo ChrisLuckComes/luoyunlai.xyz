@@ -64,7 +64,7 @@ export default function Index() {
   const myWorkflow = <UseMarkDown markdown={MY_WORKFLOW}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 id="diff" className={classMap.articleTitle}>
           不会还有人在手动发版吧？不会吧？手把手带你使用Github Actions完成CI/CD自动化部署

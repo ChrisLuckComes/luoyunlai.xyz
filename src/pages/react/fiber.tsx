@@ -19,7 +19,7 @@ export default function Fiber() {
     rootNode = <UseMarkDown markdown={ROOT_NODE}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 id="idea" className={classMap.articleTitle}>
           概念

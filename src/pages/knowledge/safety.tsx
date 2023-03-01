@@ -4,7 +4,7 @@ import { UseMarkDown } from '@/hooks/useMarkdown';
 import { LazyImage } from '@/component/image';
 import RISK from '@images/knowledge/risks.png';
 import { SQL_1, CODE_1, XSS_HTML } from './_safety';
-import { useEffect, useLayoutEffect, useReducer, useState } from 'react';
+import BackTop from '@/component/backTop';
 
 const { Link } = Anchor;
 
@@ -14,8 +14,8 @@ export default function Index() {
     xssHtml = <UseMarkDown markdown={XSS_HTML}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
-      <main className={classMap.content}>
+    <article id="rootActicle" className={classMap.article}>
+      <main id='main' className={classMap.content}>
         <h2 id="pre" className={classMap.articleTitle}>
           常见Web应用安全漏洞及应对手段
         </h2>
@@ -218,6 +218,7 @@ export default function Index() {
             {xssHtml}
           </li>
         </ul>
+        <BackTop />
         <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
           <Link href="#injection" title="注入">
             <Link href="#weakness1" title="漏洞"></Link>

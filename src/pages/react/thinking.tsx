@@ -9,7 +9,7 @@ export default function Thinking() {
     flags = <UseMarkDown markdown={FLAGS}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 id="thinking" className={classMap.articleTitle}>
           React理念

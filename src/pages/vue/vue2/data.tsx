@@ -10,7 +10,7 @@ import { INIT_DATA } from './_data';
 export default function Index() {
   const initData = <UseMarkDown markdown={INIT_DATA}></UseMarkDown>;
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 id="title" className={classMap.articleTitle}>
           为什么data必须是函数

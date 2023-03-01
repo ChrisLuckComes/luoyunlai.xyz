@@ -40,7 +40,7 @@ export default function Index() {
     trigger = <UseMarkDown markdown={TRIGGER}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h1 className={classMap.pageTitle}>响应式系统</h1>
         <h2 id="reactive" className={classMap.articleTitle}>

@@ -34,7 +34,7 @@ export default function Index() {
     commitHookEffectListMount = <UseMarkDown markdown={COMMIT_HOOK_EFFECT_LIST_MOUNT} />;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 id="hooks" className={classMap.articleTitle}>
           Hooks

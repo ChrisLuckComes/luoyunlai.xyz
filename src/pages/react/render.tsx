@@ -44,7 +44,7 @@ export default function Render() {
     workLoopConcurrent = <UseMarkDown markdown={WORK_LOOP_CONCUNCURRENT}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 id="flow" className={classMap.articleTitle}>
           Render阶段流程

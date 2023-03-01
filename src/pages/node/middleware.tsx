@@ -28,7 +28,7 @@ export default function Index() {
     compose = <UseMarkDown markdown={COMPOSE}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 id="express" className={classMap.articleTitle}>
           express中间件

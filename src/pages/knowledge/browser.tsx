@@ -60,7 +60,7 @@ export default function Index() {
     float = <UseMarkDown markdown={FLOAT}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 id="preface" className={classMap.articleTitle}>
           前言

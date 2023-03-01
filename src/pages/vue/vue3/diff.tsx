@@ -10,7 +10,7 @@ export default function Index() {
     patchKeyedChildren = <UseMarkDown markdown={PATCH_KEYED_CHILDREN_SEQUENCE}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h1 className={classMap.pageTitle}>Diff</h1>
         在更新时，出于性能考虑，需要最大程度的利用已存在的节点。

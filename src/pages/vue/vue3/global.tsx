@@ -42,7 +42,7 @@ export default function Global() {
     triggerEffect = <UseMarkDown markdown={TRIGGER_EFFECT}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h1 className={classMap.pageTitle}>全局概览</h1>
         <div>

@@ -15,7 +15,7 @@ export PATH=$N_PREFIX/bin:$PATH
 
 export default function Index() {
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 className={classMap.articleTitle}>光速切换Node.js版本</h2>
         有时候需要Node.js升级或者降级兼容，此时就需要进行切换版本的操作。

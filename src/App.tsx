@@ -76,7 +76,7 @@ export default function App() {
           items={items}
         ></Menu>
       </Header>
-      <Content className={classMap.content}>
+      <Content id="content" className={classMap.content}>
         <Routes>
           {routers.map(router => (
             <Route

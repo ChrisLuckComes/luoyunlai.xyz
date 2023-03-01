@@ -46,7 +46,7 @@ export default function Index() {
     changeCurrentRoot = <UseMarkDown markdown={CHANGE_CURRENT_ROOT} />;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 id="process" className={classMap.articleTitle}>
           流程概览

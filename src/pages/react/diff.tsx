@@ -14,7 +14,7 @@ export default function Index() {
     placeChild = <UseMarkDown markdown={PLACE_CHILD} />;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 id="diff" className={classMap.articleTitle}>
           Diff

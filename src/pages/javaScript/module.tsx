@@ -13,7 +13,7 @@ export default function Index() {
     esApp = <UseMarkDown markdown={ES_APP}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 className={classMap.articleTitle}>CommonJS和ES module</h2>
         <h2 id="pre" className={classMap.articleTitle}>

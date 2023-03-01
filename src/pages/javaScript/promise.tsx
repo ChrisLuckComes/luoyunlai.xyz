@@ -10,7 +10,7 @@ export default function Index() {
     promiseStruct = <UseMarkDown markdown={PROMISE_STRUCT}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootActicle" className={classMap.article}>
       <main className={classMap.content}>
         <h2 id="promise" className={classMap.articleTitle}>
           Promise
