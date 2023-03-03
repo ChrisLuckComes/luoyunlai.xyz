@@ -24,6 +24,12 @@ const routers = [
         path: 'promise',
         name: '从0到1实现promise',
         element: lazy(() => import('@/pages/javaScript/promise'))
+      },
+      {
+        key: '/js/closure',
+        path: 'closure',
+        name: '10分钟内搞懂什么是闭包',
+        element: lazy(() => import('@/pages/javaScript/closure'))
       }
       // {
       //   key: '/js/asyncAwait',

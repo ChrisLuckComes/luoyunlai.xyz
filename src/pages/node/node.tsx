@@ -286,7 +286,7 @@ export default function Index() {
             <strong>check(检查)</strong>：<code>setImmediate</code>回调函数在这里执行
             <br />
             <br />
-            此阶段允许在轮询阶段完成后立即执行回调。如果轮询阶段变为空闲装后台，并且脚本使用<code>setImmediate</code>
+            此阶段允许在轮询阶段完成后立即执行回调。如果轮询阶段变为空闲状态，并且脚本使用<code>setImmediate</code>
             后被排列在队列中，则事件循环可能到检查阶段而不是等待。
             <br />
             <code>setImmediate</code>实际上是一个在事件循环的单独阶段运行的特殊计时器，它使用一个libuv

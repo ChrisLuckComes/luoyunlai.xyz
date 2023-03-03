@@ -8,10 +8,10 @@ export default function BackTop() {
 
   const { pathname } = useLocation();
 
-  const [scrollDom, setScrollDom] = useState<HTMLDivElement>();
+  const [scrollDom, setScrollDom] = useState<HTMLElement>();
 
   const showIcon = (e: any) => {
-    let top = e?.target?.scrollTop;
+    let top = e.target.scrollTop;
     setVisible(top > 20);
   };
 
@@ -32,11 +32,9 @@ export default function BackTop() {
 
   useLayoutEffect(() => {
     setTimeout(() => {
-      let root = document.getElementById('rootActicle') as HTMLDivElement;
-      if (root) {
-        setScrollDom(root);
-        root.addEventListener('scroll', showIcon, true);
-      }
+      let root = document.getElementById('rootActicle')!;
+      setScrollDom(root);
+      root.addEventListener('scroll', showIcon, true);
     }, 1000);
 
     return () => {

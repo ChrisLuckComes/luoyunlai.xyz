@@ -45,7 +45,7 @@ export default function Index() {
         <h3 id="standard2" className={classMap.articleSubTitle}>
           规范
         </h3>
-        h3 promise必须提供<code>then</code>
+        promise必须提供<code>then</code>
         方法来访问它当前或最终的值或者失败理由，所以需要给Promise类加上value和reason属性来保存值，提供then方法来访问。
         <br />
         <code>then</code>方法接收两个参数:

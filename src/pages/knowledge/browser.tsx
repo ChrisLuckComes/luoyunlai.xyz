@@ -306,7 +306,7 @@ export default function Index() {
         ></Alert>
         <br />
         <br />
-        初始状态称为&quot;data state&quot;。当遇到<code>{`/`}</code>时，状态变为&quot;Tag open state&quot;。消费
+        初始状态称为&quot;data state&quot;。当遇到<code>{`<`}</code>时，状态变为&quot;Tag open state&quot;。消费
         <code>a-z</code>字母时创建&quot;Start tag token&quot;，状态变为&quot;Tag name state&quot;。然后保持这个state直到
         <code>{`>`}</code>被消费。每个字母会被追加到token name上。上面的栗子被创建的token就是<code>html</code> token。
         <br />
