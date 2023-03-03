@@ -39,7 +39,7 @@
     "prefix": "anchor",
     "body": "<Anchor className=\"anchor\" getContainer={() => document.getElementById('content') as HTMLElement}></Anchor>"
   },
-  "anchorLink":{
+  "anchorLink": {
     "prefix": "link",
     "body": "<Link href=\"#\" title=\"\"></Link>"
   },
@@ -63,5 +63,9 @@
   "main": {
     "prefix": "main",
     "body": "<main className={classMap.content}>\n\n</main>"
+  },
+  "image": {
+    "prefix": "image",
+    "body": "<LazyImage src={} />"
   }
 }

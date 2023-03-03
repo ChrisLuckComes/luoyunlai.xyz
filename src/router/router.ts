@@ -30,6 +30,12 @@ const routers = [
         path: 'closure',
         name: '10分钟内搞懂什么是闭包',
         element: lazy(() => import('@/pages/javaScript/closure'))
+      },
+      {
+        key: '/js/prototype',
+        path: 'prototype',
+        name: '10分钟内搞懂原型和原型链',
+        element: lazy(() => import('@/pages/javaScript/prototype'))
       }
       // {
       //   key: '/js/asyncAwait',
