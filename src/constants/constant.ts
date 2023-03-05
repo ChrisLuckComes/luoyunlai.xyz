@@ -10,6 +10,7 @@ export const classMap = {
   href: 'href',
   ul: 'ul',
   assist: 'assist',
+  assistCenter: 'assist text-center',
   markdown: 'markdown-container',
   h4: 'block text-16 my-10'
 };

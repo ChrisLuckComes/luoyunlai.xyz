@@ -21,19 +21,19 @@
   },
   "h2": {
     "prefix": "h2",
-    "body": "<h2 id=\"diff\" className={classMap.articleTitle}></h2>"
+    "body": "<h2 id=\"diff\" className={classMap.articleTitle}>$1</h2>"
   },
   "h3": {
     "prefix": "h3",
-    "body": "<h3 id=\"diff\" className={classMap.articleSubTitle}></h3>"
+    "body": "<h3 id=\"diff\" className={classMap.articleSubTitle}>$1</h3>"
   },
   "assist": {
     "prefix": "assist",
-    "body": "<div className={classMap.assist}></div>"
+    "body": "<div className={classMap.assist}>$1</div>"
   },
   "ul": {
     "prefix": "ul",
-    "body": "<ul className={classMap.ul}></ul>"
+    "body": "<ul className={classMap.ul}>\n$1\n</ul>"
   },
   "anchor": {
     "prefix": "anchor",
@@ -50,11 +50,11 @@
   },
   "useMarkdown": {
     "prefix": "markdown",
-    "body": "<UseMarkDown markdown={}></UseMarkDown>"
+    "body": "<UseMarkDown markdown={$1}></UseMarkDown>"
   },
   "lazy": {
     "prefix": "lazy",
-    "body": "lazy(()=>import(''))"
+    "body": "lazy(()=>import('$1'))"
   },
   "svg": {
     "prefix": "svg",
@@ -62,10 +62,14 @@
   },
   "main": {
     "prefix": "main",
-    "body": "<main className={classMap.content}>\n\n</main>"
+    "body": "<main className={classMap.content}>\n$1\n</main>"
   },
   "image": {
     "prefix": "image",
-    "body": "<LazyImage src={} />"
+    "body": "<LazyImage src={$1} />"
+  },
+  "jsmd": {
+    "prefix": "jsmd",
+    "body": "export const CODE = `\\`\\`\\`js\n$1\n\\`\\`\\``"
   }
 }

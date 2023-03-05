@@ -36,6 +36,12 @@ const routers = [
         path: 'prototype',
         name: '10分钟内搞懂原型和原型链',
         element: lazy(() => import('@/pages/javaScript/prototype'))
+      },
+      {
+        key: '/js/garbage',
+        path: 'garbage',
+        name: '垃圾回收',
+        element: lazy(() => import('@/pages/javaScript/garbage'))
       }
       // {
       //   key: '/js/asyncAwait',
