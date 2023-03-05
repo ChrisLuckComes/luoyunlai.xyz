@@ -4,7 +4,7 @@ import { UseMarkDown } from '@/hooks/useMarkdown';
 import { LazyImage } from '@/component/image';
 const { Link } = Anchor;
 
-import NICK_YOUNG from '@images/js/nickYoung.webp';
+import NICK_YOUNG from '@images/js/NickYoung.webp';
 import PROTO_DEBUG from '@images/js/protoDebug.png';
 import PROTO_TOP from '@images/js/protoChainTop.png';
 import PROTO_CHAIN from '@images/js/protoChain.png';
@@ -117,5 +117,4 @@ export default function Index() {
       </Anchor>
     </article>
   );
-  zz;
 }
