@@ -240,6 +240,12 @@ const routers = [
         path: "performance",
         name: "连指标都不知道还敢说懂性能优化？",
         element: lazy(() => import("@/pages/project/performance"))
+      },
+      {
+        key: "/project/webpack",
+        path: "webpack",
+        name: "Webpack",
+        element: lazy(() => import("@/pages/project/webpack"))
       }
     ]
   },
@@ -280,6 +286,12 @@ const routers = [
         path: "safety",
         name: "常见Web应用安全漏洞及应对手段",
         element: lazy(() => import("@/pages/knowledge/safety"))
+      },
+      {
+        key: "/knowledge/eventLoop",
+        path: "eventLoop",
+        name: "浏览器的事件循环机制",
+        element: lazy(() => import("@/pages/knowledge/eventLoop"))
       }
     ]
   }
