@@ -94,7 +94,7 @@ const createCompiler = rawOptions => {
 			}
 		}
 	}
-    // options和默认配置合并
+    // 应用options和默认配置合并之后的配置
 	applyWebpackOptionsDefaults(options);
     // 执行环境配置相关hook
 	compiler.hooks.environment.call();
@@ -452,38 +452,7 @@ compile(callback) {
 
         const logger = compilation.getLogger("webpack.Compiler");
 
-        logger.time("make hook");
-        this.hooks.make.callAsync(compilation, err => {
-            logger.timeEnd("make hook");
-            if (err) return callback(err);
-
-            logger.time("finish make hook");
-            this.hooks.finishMake.callAsync(compilation, err => {
-                logger.timeEnd("finish make hook");
-                if (err) return callback(err);
-
-                process.nextTick(() => {
-                    logger.time("finish compilation");
-                    compilation.finish(err => {
-                        logger.timeEnd("finish compilation");
-                        if (err) return callback(err);
-
-                        logger.time("seal compilation");
-                        compilation.seal(err => {
-                            logger.timeEnd("seal compilation");
-                            if (err) return callback(err);
-
-                            logger.time("afterCompile hook");
-                            this.hooks.afterCompile.callAsync(compilation, err => {
-                                logger.timeEnd("afterCompile hook");
-                                if (err) return callback(err);
-
-                                return callback(null, compilation);
-                            });
-                        });
-                    });
-                });
-            });
+		// ……
         });
     });
 }
@@ -504,5 +473,718 @@ newCompilation(params) {
     this.hooks.thisCompilation.call(compilation, params);
     this.hooks.compilation.call(compilation, params);
     return compilation;
+}
+\`\`\``;
+
+export const NORMAL = `\`\`\`js
+createNormalModuleFactory() {
+	this._cleanupLastNormalModuleFactory();
+	const normalModuleFactory = new NormalModuleFactory({
+		context: this.options.context,
+		fs: this.inputFileSystem,
+		resolverFactory: this.resolverFactory,
+		options: this.options.module,
+		associatedObjectForCache: this.root,
+		layers: this.options.experiments.layers
+	});
+	this._lastNormalModuleFactory = normalModuleFactory;
+	this.hooks.normalModuleFactory.call(normalModuleFactory);
+	return normalModuleFactory;
+}
+
+createContextModuleFactory() {
+	const contextModuleFactory = new ContextModuleFactory(this.resolverFactory);
+	this.hooks.contextModuleFactory.call(contextModuleFactory);
+	return contextModuleFactory;
+}
+
+newCompilationParams() {
+	const params = {
+		normalModuleFactory: this.createNormalModuleFactory(),
+		contextModuleFactory: this.createContextModuleFactory()
+	};
+	return params;
+}
+\`\`\``;
+
+export const CREATE_MODULE = `\`\`\`js
+// 新增RuleSetCompiler，解析module rule
+const ruleSetCompiler = new RuleSetCompiler([
+ ……
+]);
+
+class NormalModuleFactory extends ModuleFactory {
+	/**
+	 * @param {Object} param params
+	 * @param {string=} param.context context
+	 * @param {InputFileSystem} param.fs file system
+	 * @param {ResolverFactory} param.resolverFactory resolverFactory
+	 * @param {ModuleOptions} param.options options
+	 * @param {Object=} param.associatedObjectForCache an object to which the cache will be attached
+	 * @param {boolean=} param.layers enable layers
+	 */
+	constructor({
+		context,
+		fs,
+		resolverFactory,
+		options,
+		associatedObjectForCache,
+		layers = false
+	}) {
+		this.ruleSet = ruleSetCompiler.compile([
+			{
+				rules: options.defaultRules
+			},
+			{
+				rules: options.rules
+			}
+		]);
+
+		// …… 
+	}
+}
+\`\`\``;
+
+export const LOADER_PLUGIN = `\`\`\`js
+class LoaderPlugin {
+	/**
+	 * @param {Object} options options
+	 */
+	constructor(options = {}) {}
+
+	/**
+	 * Apply the plugin
+	 * @param {Compiler} compiler the compiler instance
+	 * @returns {void}
+	 */
+	apply(compiler) {
+		compiler.hooks.compilation.tap(
+			"LoaderPlugin",
+			(compilation, { normalModuleFactory }) => {
+				compilation.dependencyFactories.set(
+					LoaderDependency,
+					normalModuleFactory
+				);
+				compilation.dependencyFactories.set(
+					LoaderImportDependency,
+					normalModuleFactory
+				);
+			}
+		);
+
+		compiler.hooks.compilation.tap("LoaderPlugin", compilation => {
+			const moduleGraph = compilation.moduleGraph;
+			NormalModule.getCompilationHooks(compilation).loader.tap(
+				"LoaderPlugin",
+				loaderContext => {
+					/**
+					 * @param {string} request the request string to load the module from
+					 * @param {LoadModuleCallback} callback callback returning the loaded module or error
+					 * @returns {void}
+					 */
+					loaderContext.loadModule = (request, callback) => {
+						const dep = new LoaderDependency(request);
+						dep.loc = {
+							name: request
+						};
+						const factory = compilation.dependencyFactories.get(
+							/** @type {DepConstructor} */ (dep.constructor)
+						);
+						if (factory === undefined) {
+							return callback(
+								new Error(
+									\`No module factory available for dependency type: \${dep.constructor.name}\`
+								)
+							);
+						}
+						// 开始将模块添加到buildQueue队列并循环执行
+						compilation.buildQueue.increaseParallelism();
+						compilation.handleModuleCreation(
+							{
+								factory,
+								dependencies: [dep],
+								originModule: loaderContext._module,
+								context: loaderContext.context,
+								recursive: false
+							},
+							err => {
+								compilation.buildQueue.decreaseParallelism();
+								if (err) {
+									return callback(err);
+								}
+								const referencedModule = moduleGraph.getModule(dep);
+								if (!referencedModule) {
+									return callback(new Error("Cannot load the module"));
+								}
+								if (referencedModule.getNumberOfErrors() > 0) {
+									return callback(
+										new Error("The loaded module contains errors")
+									);
+								}
+								const moduleSource = referencedModule.originalSource();
+								if (!moduleSource) {
+									return callback(
+										new Error(
+											"The module created for a LoaderDependency must have an original source"
+										)
+									);
+								}
+								let source, map;
+								if (moduleSource.sourceAndMap) {
+									const sourceAndMap = moduleSource.sourceAndMap();
+									map = sourceAndMap.map;
+									source = sourceAndMap.source;
+								} else {
+									map = moduleSource.map();
+									source = moduleSource.source();
+								}
+								const fileDependencies = new LazySet();
+								const contextDependencies = new LazySet();
+								const missingDependencies = new LazySet();
+								const buildDependencies = new LazySet();
+								referencedModule.addCacheDependencies(
+									fileDependencies,
+									contextDependencies,
+									missingDependencies,
+									buildDependencies
+								);
+
+								for (const d of fileDependencies) {
+									loaderContext.addDependency(d);
+								}
+								for (const d of contextDependencies) {
+									loaderContext.addContextDependency(d);
+								}
+								for (const d of missingDependencies) {
+									loaderContext.addMissingDependency(d);
+								}
+								for (const d of buildDependencies) {
+									loaderContext.addBuildDependency(d);
+								}
+								return callback(null, source, map, referencedModule);
+							}
+						);
+					};
+
+					/**
+					 * @param {string} request the request string to load the module from
+					 * @param {ImportModuleOptions=} options options
+					 * @param {ImportModuleCallback=} callback callback returning the exports
+					 * @returns {void}
+					 */
+					const importModule = (request, options, callback) => {
+						const dep = new LoaderImportDependency(request);
+						dep.loc = {
+							name: request
+						};
+						const factory = compilation.dependencyFactories.get(
+							/** @type {DepConstructor} */ (dep.constructor)
+						);
+						if (factory === undefined) {
+							return callback(
+								new Error(
+									\`No module factory available for dependency type: \${dep.constructor.name}\`
+								)
+							);
+						}
+						compilation.buildQueue.increaseParallelism();
+						compilation.handleModuleCreation(
+							{
+								factory,
+								dependencies: [dep],
+								originModule: loaderContext._module,
+								contextInfo: {
+									issuerLayer: options.layer
+								},
+								context: loaderContext.context,
+								connectOrigin: false
+							},
+							err => {
+								compilation.buildQueue.decreaseParallelism();
+								if (err) {
+									return callback(err);
+								}
+								const referencedModule = moduleGraph.getModule(dep);
+								if (!referencedModule) {
+									return callback(new Error("Cannot load the module"));
+								}
+								compilation.executeModule(
+									referencedModule,
+									{
+										entryOptions: {
+											baseUri: options.baseUri,
+											publicPath: options.publicPath
+										}
+									},
+									(err, result) => {
+										if (err) return callback(err);
+										for (const d of result.fileDependencies) {
+											loaderContext.addDependency(d);
+										}
+										for (const d of result.contextDependencies) {
+											loaderContext.addContextDependency(d);
+										}
+										for (const d of result.missingDependencies) {
+											loaderContext.addMissingDependency(d);
+										}
+										for (const d of result.buildDependencies) {
+											loaderContext.addBuildDependency(d);
+										}
+										if (result.cacheable === false)
+											loaderContext.cacheable(false);
+										for (const [name, { source, info }] of result.assets) {
+											const { buildInfo } = loaderContext._module;
+											if (!buildInfo.assets) {
+												buildInfo.assets = Object.create(null);
+												buildInfo.assetsInfo = new Map();
+											}
+											buildInfo.assets[name] = source;
+											buildInfo.assetsInfo.set(name, info);
+										}
+										callback(null, result.exports);
+									}
+								);
+							}
+						);
+					};
+
+					/**
+					 * @param {string} request the request string to load the module from
+					 * @param {ImportModuleOptions} options options
+					 * @param {ImportModuleCallback=} callback callback returning the exports
+					 * @returns {Promise<any> | void} exports
+					 */
+					loaderContext.importModule = (request, options, callback) => {
+						if (!callback) {
+							return new Promise((resolve, reject) => {
+								importModule(request, options || {}, (err, result) => {
+									if (err) reject(err);
+									else resolve(result);
+								});
+							});
+						}
+						return importModule(request, options || {}, callback);
+					};
+				}
+			);
+		});
+	}
+}
+module.exports = LoaderPlugin;
+\`\`\``;
+
+export const HANDLE_MODULE_CREATION = `\`\`\`js
+/**
+ * @typedef {Object} HandleModuleCreationOptions
+ * @property {ModuleFactory} factory
+ * @property {Dependency[]} dependencies
+ * @property {Module | null} originModule
+ * @property {Partial<ModuleFactoryCreateDataContextInfo>=} contextInfo
+ * @property {string=} context
+ * @property {boolean=} recursive recurse into dependencies of the created module
+ * @property {boolean=} connectOrigin connect the resolved module with the origin module
+ */
+ // Workaround for typescript as it doesn't support function overloading in jsdoc within a class
+ Compilation.prototype.factorizeModule = /** @type {{
+	 (options: FactorizeModuleOptions & { factoryResult?: false }, callback: ModuleCallback): void;
+	 (options: FactorizeModuleOptions & { factoryResult: true }, callback: ModuleFactoryResultCallback): void;
+ }} */ (
+	 function (options, callback) {
+		 this.factorizeQueue.add(options, callback);
+	 }
+ );
+/**
+ * @param {HandleModuleCreationOptions} options options object
+ * @param {ModuleCallback} callback callback
+ * @returns {void}
+ */
+handleModuleCreation(
+	{
+		factory,
+		dependencies,
+		originModule,
+		contextInfo,
+		context,
+		recursive = true,
+		connectOrigin = recursive
+	},
+	callback
+) {
+	const moduleGraph = this.moduleGraph;
+
+	const currentProfile = this.profile ? new ModuleProfile() : undefined;
+
+	this.factorizeModule(
+		{
+			currentProfile,
+			factory,
+			dependencies,
+			factoryResult: true,
+			originModule,
+			contextInfo,
+			context
+		},
+		(err, factoryResult) => {
+			const newModule = factoryResult.module;
+
+			if (!newModule) {
+				applyFactoryResultDependencies();
+				return callback();
+			}
+
+			if (currentProfile !== undefined) {
+				moduleGraph.setProfile(newModule, currentProfile);
+			}
+
+			this.addModule(newModule, (err, module) => {
+				if (err) {
+					applyFactoryResultDependencies();
+					if (!err.module) {
+						err.module = module;
+					}
+					this.errors.push(err);
+
+					return callback(err);
+				}
+
+				if (
+					this._unsafeCache &&
+					factoryResult.cacheable !== false &&
+					/** @type {any} */ (module).restoreFromUnsafeCache &&
+					this._unsafeCachePredicate(module)
+				) {
+					const unsafeCacheableModule =
+						/** @type {Module & { restoreFromUnsafeCache: Function }} */ (
+							module
+						);
+					for (let i = 0; i < dependencies.length; i++) {
+						const dependency = dependencies[i];
+						moduleGraph.setResolvedModule(
+							connectOrigin ? originModule : null,
+							dependency,
+							unsafeCacheableModule
+						);
+						unsafeCacheDependencies.set(dependency, unsafeCacheableModule);
+					}
+					if (!unsafeCacheData.has(unsafeCacheableModule)) {
+						unsafeCacheData.set(
+							unsafeCacheableModule,
+							unsafeCacheableModule.getUnsafeCacheData()
+						);
+					}
+				} else {
+					applyFactoryResultDependencies();
+					for (let i = 0; i < dependencies.length; i++) {
+						const dependency = dependencies[i];
+						moduleGraph.setResolvedModule(
+							connectOrigin ? originModule : null,
+							dependency,
+							module
+						);
+					}
+				}
+
+				this._handleModuleBuildAndDependencies(
+					originModule,
+					module,
+					recursive,
+					callback
+				);
+			});
+		}
+	);
+}
+
+/**
+ * @param {FactorizeModuleOptions} options options object
+ * @param {ModuleOrFactoryResultCallback} callback callback
+ * @returns {void}
+ */
+_factorizeModule(
+	{
+		currentProfile,
+		factory,
+		dependencies,
+		originModule,
+		factoryResult,
+		contextInfo,
+		context
+	},
+	callback
+) {
+	if (currentProfile !== undefined) {
+		currentProfile.markFactoryStart();
+	}
+	factory.create(
+		{
+			contextInfo: {
+				issuer: originModule ? originModule.nameForCondition() : "",
+				issuerLayer: originModule ? originModule.layer : null,
+				compiler: this.compiler.name,
+				...contextInfo
+			},
+			resolveOptions: originModule ? originModule.resolveOptions : undefined,
+			context: context
+				? context
+				: originModule
+				? originModule.context
+				: this.compiler.context,
+			dependencies: dependencies
+		},
+		(err, result) => {
+			if (result) {
+				// TODO webpack 6: remove
+				// For backward-compat
+				if (result.module === undefined && result instanceof Module) {
+					result = {
+						module: result
+					};
+				}
+				if (!factoryResult) {
+					const {
+						fileDependencies,
+						contextDependencies,
+						missingDependencies
+					} = result;
+					if (fileDependencies) {
+						this.fileDependencies.addAll(fileDependencies);
+					}
+					if (contextDependencies) {
+						this.contextDependencies.addAll(contextDependencies);
+					}
+					if (missingDependencies) {
+						this.missingDependencies.addAll(missingDependencies);
+					}
+				}
+			}
+			if (err) {
+				const notFoundError = new ModuleNotFoundError(
+					originModule,
+					err,
+					dependencies.map(d => d.loc).filter(Boolean)[0]
+				);
+				return callback(notFoundError, factoryResult ? result : undefined);
+			}
+			if (!result) {
+				return callback();
+			}
+
+			if (currentProfile !== undefined) {
+				currentProfile.markFactoryEnd();
+			}
+
+			callback(null, factoryResult ? result : result.module);
+		}
+	);
+}
+\`\`\``;
+
+export const COMPLILATION_CLASS = `\`\`\`js
+class Compilation {
+	/**
+	 * Creates an instance of Compilation.
+	 * @param {Compiler} compiler the compiler which created the compilation
+	 * @param {CompilationParams} params the compilation parameters
+	 */
+	constructor(compiler, params) {
+		//……
+		this.hooks = Object.freeze({
+
+		})
+		//……
+		/** @type {AsyncQueue<Module, string, Module>} */
+		this.addModuleQueue = new AsyncQueue({
+			name: "addModule",
+			parent: this.processDependenciesQueue,
+			getKey: module => module.identifier(),
+			processor: this._addModule.bind(this)
+		});
+		/** @type {AsyncQueue<FactorizeModuleOptions, string, Module | ModuleFactoryResult>} */
+		this.factorizeQueue = new AsyncQueue({
+			name: "factorize",
+			parent: this.addModuleQueue,
+			processor: this._factorizeModule.bind(this)
+		});
+		/** @type {AsyncQueue<Module, Module, Module>} */
+		this.buildQueue = new AsyncQueue({
+			name: "build",
+			parent: this.factorizeQueue,
+			processor: this._buildModule.bind(this)
+		});
+	}
+}
+\`\`\``;
+
+export const NORMAL_MODULE = `\`\`\`js
+const { getContext, runLoaders } = require("loader-runner");
+
+/**
+ * @param {WebpackOptions} options webpack options
+ * @param {Compilation} compilation the compilation
+ * @param {ResolverWithOptions} resolver the resolver
+ * @param {InputFileSystem} fs the file system
+ * @param {NormalModuleCompilationHooks} hooks the hooks
+ * @param {function((WebpackError | null)=): void} callback callback function
+ * @returns {void}
+ */
+_doBuild(options, compilation, resolver, fs, hooks, callback) {
+	const loaderContext = this._createLoaderContext(
+		resolver,
+		options,
+		compilation,
+		fs,
+		hooks
+	);
+
+	const processResult = (err, result) => {
+		if (err) {
+			if (!(err instanceof Error)) {
+				err = new NonErrorEmittedError(err);
+			}
+			const currentLoader = this.getCurrentLoader(loaderContext);
+			const error = new ModuleBuildError(err, {
+				from:
+					currentLoader &&
+					compilation.runtimeTemplate.requestShortener.shorten(
+						currentLoader.loader
+					)
+			});
+			return callback(error);
+		}
+
+		const source = result[0];
+		const sourceMap = result.length >= 1 ? result[1] : null;
+		const extraInfo = result.length >= 2 ? result[2] : null;
+
+		if (!Buffer.isBuffer(source) && typeof source !== "string") {
+			const currentLoader = this.getCurrentLoader(loaderContext, 0);
+			const err = new Error(
+				\`Final loader (\${
+					currentLoader
+						? compilation.runtimeTemplate.requestShortener.shorten(
+								currentLoader.loader
+						  )
+						: "unknown"
+				}) didn't return a Buffer or String\`
+			);
+			const error = new ModuleBuildError(err);
+			return callback(error);
+		}
+
+		this._source = this.createSource(
+			options.context,
+			this.binary ? asBuffer(source) : asString(source),
+			sourceMap,
+			compilation.compiler.root
+		);
+		if (this._sourceSizes !== undefined) this._sourceSizes.clear();
+		this._ast =
+			typeof extraInfo === "object" &&
+			extraInfo !== null &&
+			extraInfo.webpackAST !== undefined
+				? extraInfo.webpackAST
+				: null;
+		return callback();
+	};
+
+	this.buildInfo.fileDependencies = new LazySet();
+	this.buildInfo.contextDependencies = new LazySet();
+	this.buildInfo.missingDependencies = new LazySet();
+	this.buildInfo.cacheable = true;
+
+	try {
+		hooks.beforeLoaders.call(this.loaders, this, loaderContext);
+	} catch (err) {
+		processResult(err);
+		return;
+	}
+
+	if (this.loaders.length > 0) {
+		this.buildInfo.buildDependencies = new LazySet();
+	}
+
+	// 执行loader
+	runLoaders(
+		{
+			resource: this.resource,
+			loaders: this.loaders,
+			context: loaderContext,
+			processResource: (loaderContext, resourcePath, callback) => {
+				const resource = loaderContext.resource;
+				const scheme = getScheme(resource);
+				hooks.readResource
+					.for(scheme)
+					.callAsync(loaderContext, (err, result) => {
+						if (err) return callback(err);
+						if (typeof result !== "string" && !result) {
+							return callback(new UnhandledSchemeError(scheme, resource));
+						}
+						return callback(null, result);
+					});
+			}
+		},
+		(err, result) => {
+			// Cleanup loaderContext to avoid leaking memory in ICs
+			loaderContext._compilation =
+				loaderContext._compiler =
+				loaderContext._module =
+				loaderContext.fs =
+					undefined;
+
+			if (!result) {
+				this.buildInfo.cacheable = false;
+				return processResult(
+					err || new Error("No result from loader-runner processing"),
+					null
+				);
+			}
+			this.buildInfo.fileDependencies.addAll(result.fileDependencies);
+			this.buildInfo.contextDependencies.addAll(result.contextDependencies);
+			this.buildInfo.missingDependencies.addAll(result.missingDependencies);
+			for (const loader of this.loaders) {
+				this.buildInfo.buildDependencies.add(loader.loader);
+			}
+			this.buildInfo.cacheable = this.buildInfo.cacheable && result.cacheable;
+			processResult(err, result.result);
+		}
+	);
+}
+\`\`\``;
+
+export const LOADER_RUNNER = `\`\`\`js
+function runSyncOrAsync(fn, context, args, callback) {
+	var isSync = true;
+	var isDone = false;
+	var isError = false; // internal error
+	var reportedError = false;
+	try {
+		// 执行loader
+		var result = (function LOADER_EXECUTION() {
+			return fn.apply(context, args);
+		}());
+		if(isSync) {
+			isDone = true;
+			if(result === undefined)
+				return callback();
+			if(result && typeof result === "object" && typeof result.then === "function") {
+				return result.then(function(r) {
+					callback(null, r);
+				}, callback);
+			}
+			return callback(null, result);
+		}
+	} catch(e) {
+		if(isError) throw e;
+		if(isDone) {
+			// loader is already "done", so we cannot use the callback function
+			// for better debugging we print the error on the console
+			if(typeof e === "object" && e.stack) console.error(e.stack);
+			else console.error(e);
+			return;
+		}
+		isDone = true;
+		reportedError = true;
+		callback(e);
+	}
 }
 \`\`\``;

@@ -292,6 +292,12 @@ const routers = [
         path: "eventLoop",
         name: "浏览器的事件循环机制",
         element: lazy(() => import("@/pages/knowledge/eventLoop"))
+      },
+      {
+        key: "/knowledge/html",
+        path: "html",
+        name: "回顾三剑客html,css,javascript",
+        element: lazy(() => import("@/pages/knowledge/html"))
       }
     ]
   }
