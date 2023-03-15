@@ -298,6 +298,18 @@ const routers = [
         path: "html",
         name: "回顾三剑客html,css,javascript",
         element: lazy(() => import("@/pages/knowledge/html"))
+      },
+      {
+        key: "/knowledge/development",
+        path: "development",
+        name: "前端技术发展和架构升级",
+        element: lazy(() => import("@/pages/knowledge/development"))
+      },
+      {
+        key: "/knowledge/treeShaking",
+        path: "treeShaking",
+        name: "Tree Shaking",
+        element: lazy(() => import("@/pages/knowledge/treeShaking"))
       }
     ]
   }
