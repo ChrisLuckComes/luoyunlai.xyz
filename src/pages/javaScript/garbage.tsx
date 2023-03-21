@@ -1,14 +1,21 @@
-import { classMap } from '@/constants/constant';
-import { Anchor } from 'antd';
-import { UseMarkDown } from '@/hooks/useMarkdown';
-import { DOM_LOOP, LOOP, HIDDEN_CLASS, NO_DEF, CLOSURE_TIMER, CLOSURE } from './_garbage';
+import { classMap } from "@/constants/constant";
+import { Anchor } from "antd";
+import { UseMarkDown } from "@/hooks/useMarkdown";
+import {
+  DOM_LOOP,
+  LOOP,
+  HIDDEN_CLASS,
+  NO_DEF,
+  CLOSURE_TIMER,
+  CLOSURE
+} from "./_garbage";
 const { Link } = Anchor;
 
-import GC from '@images/js/majorGC.svg';
-import GENERATION from '@images/js/generation.svg';
-import MINOR from '@images/js/minorGC.svg';
-import OLD from '@images/js/oldGen.svg';
-import { LazyImage } from '@/component/image';
+import GC from "@images/js/majorGC.svg";
+import GENERATION from "@images/js/generation.svg";
+import MINOR from "@images/js/minorGC.svg";
+import OLD from "@images/js/oldGen.svg";
+import { LazyImage } from "@/component/image";
 
 export default function Index() {
   const loop = <UseMarkDown markdown={LOOP}></UseMarkDown>,
@@ -37,7 +44,7 @@ export default function Index() {
         标记清除(mark-and-sweep)是JavaScript最常用的垃圾回收策略。当变量进入上下文，例如在函数内部声明一个变量时，变量会被加上存在于上下文的标记。在上下文中的变量，永远不应该释放它们的内存，因为只要上下文中的代码在运行，就有可能用到它们。当变量离开上下文时，也会被加上离开上下文的标记。
         <br />
         <br />
-        给变量加标记的方式有很多种，可以维护在上下文中和不在上下文中两个变量列表，也可以把一个列表转移到另一个列表。过程实现不中药，关键是策略。
+        给变量加标记的方式有很多种，可以维护在上下文中和不在上下文中两个变量列表，也可以把一个列表转移到另一个列表。过程实现不重要，关键是策略。
         <br />
         <br />
         垃圾回收程序运行的时候，会标记内存中存储的所有变量，然后它会将所有上下文中的变量，以及被上下文中变量引用的变量的标记去掉。在此之后，还有标记的变量就是待删除的了，原因是任何上下文的变量都访问不到它们了。随后垃圾回收程序做一次
@@ -49,7 +56,7 @@ export default function Index() {
           引用计数
         </h2>
         引用计数(reference
-        counting)是一种不常用的策略。它的思路是对每个值都记录它被引用的次数，声明变量并给它赋一个引用值时，这个值的引用树为1。如果同一个值又被赋给另一个变量，那么引用数+1.类似的，如果保存对该值引用的变量被其他值给覆盖了，那么引用数-1。当一个值的引用数为0时，说明没办法访问到这个值，可以回收它的内存了。垃圾回收程序下次运行的时候就会释放引用数为0的值的内存。
+        counting)是一种不常用的策略。它的思路是对每个值都记录它被引用的次数，声明变量并给它赋一个引用值时，这个值的引用数为1。如果同一个值又被赋给另一个变量，那么引用数+1.类似的，如果保存对该值引用的变量被其他值给覆盖了，那么引用数-1。当一个值的引用数为0时，说明没办法访问到这个值，可以回收它的内存了。垃圾回收程序下次运行的时候就会释放引用数为0的值的内存。
         <br />
         <br />
         这种策略有严重的问题，循环引用，循环引用就是两个对象互相引用，有如下代码：
@@ -69,12 +76,17 @@ export default function Index() {
         </h2>
         V8使用的垃圾回收策略是标记整理(mark-compact)
         <h3 id="major" className={classMap.articleSubTitle}>
-          主要GC <span className={classMap.assist}>Major GC(Mark-Compact 标记-整理)</span>
+          主要GC{" "}
+          <span className={classMap.assist}>
+            Major GC(Mark-Compact 标记-整理)
+          </span>
         </h3>
         主要GC回收整个堆内存的垃圾，过程如下图：
         <br />
         <embed src={GC} type="image/svg+xml" />
-        <div className={classMap.assistCenter}>主要GC过程分为三个阶段:标记、清除和整理</div>
+        <div className={classMap.assistCenter}>
+          主要GC过程分为三个阶段:标记、清除和整理
+        </div>
         <strong id="mark">标记阶段</strong>
         <br />
         搞清楚哪些对象可以被回收是垃圾回收必不可少的过程。垃圾回收器使用可达性代表存活。任意对象在运行时可以访问必须被保留，访问不到的就可能被回收。
@@ -86,8 +98,11 @@ export default function Index() {
         <br />
         <strong id="sweep">清除阶段</strong>
         <br />
-        清除阶段会将要被回收的&quot;死亡&quot;对象添加到称为<code>free-list</code>
+        <br />
+        清除阶段会将要被回收的&quot;死亡&quot;对象添加到称为
+        <code>free-list</code>
         的数据结构中，这个过程会在内存中留下空白。当标记阶段完成后，GC找到不可达对象留下的相邻的空白，并且将它们加到合适的free-list。为了快速查找，free-lists根据内存块的大小来区别。未来如果想分配内存，只需要从free-list找到合适大小的内存块。
+        <br /> <br />
         <strong id="compact">整理</strong>
         <br />
         主要GC选择性的清理/整理某些页，在碎片启发式算法基础上(fragmentation
@@ -95,13 +110,17 @@ export default function Index() {
         <h3 id="generationalLayout" className={classMap.articleSubTitle}>
           两代之间的设计
         </h3>
-        V8的堆内存分为不同的区域称为代(<strong>generation</strong>)。新生代(young generation 细分为婴儿室
-        <strong>nursery</strong>和中级的<strong>intermediate</strong>子生代)和老生代(old
+        V8的堆内存分为不同的区域称为代(<strong>generation</strong>
+        )。新生代(young generation 细分为婴儿室
+        <strong>nursery</strong>和中级的<strong>intermediate</strong>
+        子生代)和老生代(old
         generation)。对象最开始分配到婴儿室，如果在下一次GC中存活，它会保留新生代中且被认为是中级的。如果又活过了另一次GC，它们会被移动到老生代。
         <br />
         <br />
         <LazyImage src={GENERATION} />
-        <div className={classMap.assistCenter}>V8堆内存被分割成generations，在GC后存活的对象会在generation之间移动</div>
+        <div className={classMap.assistCenter}>
+          V8堆内存被分割成generations，在GC后存活的对象会在generation之间移动
+        </div>
         <br />
         垃圾回收有一个重要术语:<code>The Generational Hypothesis</code>
         代的假设，大多数对象分配之后很快就不可达了，这不仅仅是V8或者JS的表现，大多数动态语言都是这样。
@@ -109,17 +128,27 @@ export default function Index() {
         V8这种代的堆内存设计利用了对象生命周期的事实。这里GC主要是整理/移动，当对象在垃圾回收存活就复制它们。这有点反直觉，因为在GC的时候复制对象的代价很高，但是只有小部分的对象能实际存活，其他的分配变成了垃圾。
         实际上只需要和存活的对象成比例的花费，而不是所有的分配。
         <h3 id="minor" className={classMap.articleSubTitle}>
-          次要GC <span className={classMap.assist}>Minor GC(Scavenger 捡破烂的人/清道夫)</span>
+          次要GC{" "}
+          <span className={classMap.assist}>
+            Minor GC(Scavenger 捡破烂的人/清道夫)
+          </span>
         </h3>
         V8有两个垃圾回收器。
-        <a className={classMap.href} target="_self" rel="noreferrer" href="#major">
+        <a
+          className={classMap.href}
+          target="_self"
+          rel="noreferrer"
+          href="#major"
+        >
           Major GC(Mark-Compact)
         </a>
-        从整个堆内存收集垃圾。<strong>Minor GC(Scavenger)</strong>从新生代收集垃圾。
+        从整个堆内存收集垃圾。<strong>Minor GC(Scavenger)</strong>
+        从新生代收集垃圾。
         <br />
         <br />
         Scavenger中，存活的对象总是转移到另一页。V8对于新生代使用二分空间(semi-space)设计。意思就是整个空间的一半始终是空的，留给转移对象的步骤。在垃圾回收过程中，初始化为空的空间称为
-        <strong>To-Space</strong>，需要复制对象的目标区域称为<strong>From-Space</strong>。
+        <strong>To-Space</strong>，需要复制对象的目标区域称为
+        <strong>From-Space</strong>。
         最坏的情况就是，每个对象都可以在scavenge下存活，它们都需要复制。
         <br />
         <br />
@@ -130,7 +159,9 @@ export default function Index() {
         转移的步骤移动所有存活的对象到相邻的内存块(同一页内)，这样有利于移除死对象留下的碎片。然后切换两个空间，To-Space和From-Space交换。一旦GC完成，新的内存分配从From-Space开始。
         <br />
         <LazyImage src={MINOR} />
-        <div className={classMap.assistCenter}>Scavenger将存活的对象移动到新页</div>
+        <div className={classMap.assistCenter}>
+          Scavenger将存活的对象移动到新页
+        </div>
         <br />
         如果仅仅只用这种策略，很快就会内存耗尽。对象活过第二次GC就移动到老生代，而不是To-Space
         <br />
@@ -138,14 +169,17 @@ export default function Index() {
         <br />
         <br />
         <LazyImage src={OLD} />
-        <div className={classMap.assistCenter}>Scavenger将中级对象移动到老生代，婴儿室里的对象移动到新页</div>
+        <div className={classMap.assistCenter}>
+          Scavenger将中级对象移动到老生代，婴儿室里的对象移动到新页
+        </div>
         在这个过程中，实际上做了下面三步：标记，移动，指针更新，都是交叉进行，而不是确定的阶段
         <h2 id="manage" className={classMap.articleTitle}>
           内存管理
         </h2>
         虽然说大多数开发者通常无需关心内存管理，但是JavaScript运行在浏览器中，分配给浏览器的内存通常少于桌面软件，移动浏览器更少。这主要是出于安全考虑，避免网页大量运行JavaScript耗尽能存导致系统崩溃，这个内存限制影响内存分配和同一个线程中能执行的语句数量。
         <br />
-        将内存占用量保持在一个较小的值可以让页面性能更好。优化内存占用手段之一就是<strong>解除引用</strong>
+        将内存占用量保持在一个较小的值可以让页面性能更好。优化内存占用手段之一就是
+        <strong>解除引用</strong>
         ：当数据不再必要，那么把它设置为null，就可以释放引用，最适合全局变量及其属性，因为局部变量超出作用域后会自动接触引用。
         <br />
         解除引用不会自动导致内存被回收，而是保证相关的值不在上下文里，下次GC会回收。
@@ -183,7 +217,8 @@ export default function Index() {
             <br />
             意外声明全局变量是最常见也最容易修复的内存泄漏问题，如下:
             {noDef}
-            此时，解释器会把变量name当作window的属性来创建，相当于<code>window.name = &quot;lyl&quot;</code>
+            此时，解释器会把变量name当作window的属性来创建，相当于
+            <code>window.name = &quot;lyl&quot;</code>
             。在windows对象上创建的属性，只要window本身还在就不会消失。这个问题很容易解决，加上变量声明关键字即可。
             <br />
             <br />
@@ -204,7 +239,10 @@ export default function Index() {
           </li>
         </ul>
       </main>
-      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
+      <Anchor
+        className="anchor"
+        getContainer={() => document.getElementById("content") as HTMLElement}
+      >
         <Link href="#pre" title="垃圾回收"></Link>
         <Link href="#markSweep" title="标记清除"></Link>
         <Link href="#referenceCounting" title="引用计数"></Link>

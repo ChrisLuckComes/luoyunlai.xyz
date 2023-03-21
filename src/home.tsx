@@ -1,16 +1,34 @@
-import githubLogo from '@/images/githubLogo.png';
-import { LazyImage } from './component/image';
+import Typed from "typed.js";
+import { useEffect, useRef, useState } from "react";
+
+import Styles from "./home.module.css";
 
 const classMap = {
-  home: 'flex-center flex-col w-full h-full'
+  home: "flex-center flex-col w-full h-full"
 };
 
 export default function Home() {
+  const el = useRef(null);
+
+  useEffect(() => {
+    const typed = new Typed(el.current, {
+      strings: ["pnpm start\n", "console.log('分享前端方面的知识和经验')"],
+      typeSpeed: 60
+    });
+
+    return () => {
+      typed.destroy();
+    };
+  }, []);
+
   return (
     <div className={classMap.home}>
-      <LazyImage width="450" height="450" src={githubLogo} />
-      <div>Luoyunlai.top</div>
-      <div className="text-assist">分享前端方面的知识和经验</div>
+      <div className={Styles["home"]}>
+        <div className={Styles["title-bar"]}>Luoyunlai.top</div>
+        <div className={Styles["text-body"]}>
+          &nbsp;$&nbsp;<span ref={el}></span>
+        </div>
+      </div>
     </div>
   );
 }
