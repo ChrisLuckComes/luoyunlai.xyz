@@ -11,50 +11,65 @@ const routers = [
     key: "js",
     path: "/js",
     name: "JavaScript",
+    groups: ["JavaScript", "TypeScript"],
     element: lazy(() => import("@/pages/index")),
     children: [
       {
         key: "/js/module",
         path: "module",
         name: "CommonJS和ES Module",
+        group: "JavaScript",
         element: lazy(() => import("@/pages/javaScript/module"))
       },
       {
         key: "/js/promise",
         path: "promise",
         name: "从0到1实现promise",
+        group: "JavaScript",
         element: lazy(() => import("@/pages/javaScript/promise"))
       },
       {
         key: "/js/closure",
         path: "closure",
         name: "10分钟内搞懂什么是闭包",
+        group: "JavaScript",
         element: lazy(() => import("@/pages/javaScript/closure"))
       },
       {
         key: "/js/prototype",
         path: "prototype",
         name: "10分钟内搞懂原型和原型链",
+        group: "JavaScript",
         element: lazy(() => import("@/pages/javaScript/prototype"))
       },
       {
         key: "/js/garbage",
         path: "garbage",
         name: "垃圾回收",
+        group: "JavaScript",
         element: lazy(() => import("@/pages/javaScript/garbage"))
       },
       {
         key: "/js/websocket",
         path: "websocket",
         name: "WebSocket",
+        group: "JavaScript",
         element: lazy(() => import("@/pages/javaScript/websocket"))
+      },
+      {
+        key: "/js/tsExercise",
+        path: "tsExercise",
+        name: "TypeScript类型体操(一)",
+        group: "TypeScript",
+        element: lazy(() => import("@/pages/javaScript/tsExercise"))
+      },
+      {
+        key: "/js/tsExercise2",
+        path: "tsExercise2",
+        name: "TypeScript类型体操(二)",
+        group: "TypeScript",
+        element: lazy(() => import("@/pages/javaScript/tsExercise2"))
       }
-      // {
-      //   key: '/js/asyncAwait',
-      //   path: 'asyncAwait',
-      //   name: 'async await',
-      //   element: lazy(() => import('@/pages/javaScript/asyncAwait'))
-      // }
     ]
   },
   {
