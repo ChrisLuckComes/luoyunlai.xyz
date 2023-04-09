@@ -194,7 +194,7 @@ type Expected = {
 type Todo = DeepReadonly<X> // should be same as \`Expected\`
 \`\`\``;
 
-export const DeepReadonly = `\`\`\`js
+export const DEEP_READ_ONLY = `\`\`\`js
 export type DeepReadonly<T> = {
     readonly [K in keyof T]: T[K] extends Record<any, any>
       ? DeepReadonly<T[K]>
