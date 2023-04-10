@@ -1,3 +1,17 @@
+import { UseMarkDown } from "@/hooks/useMarkdown";
+
+/**
+ * 组合标题和内容
+ * @param title
+ * @param subtitle
+ */
+export function generateExercise(title: string, exercise: string) {
+  return {
+    title: UseMarkDown({ markdown: title }),
+    content: UseMarkDown({ markdown: exercise })
+  };
+}
+
 export const If = `\`\`\`ts
 export type If<C extends boolean, T, F> = C extends true ? T : F;
 \`\`\``;
@@ -112,6 +126,11 @@ export type MyReturnType<T extends (args: any) => any> = T extends (
     : any;
 \`\`\``;
 
+export const returnType = generateExercise(
+  MY_RETURN_TYPE_TITLE,
+  MY_RETURN_TYPE
+);
+
 export const OMIT_TITLE = `\`\`\`ts
 不使用 Omit 实现 TypeScript 的 Omit<T, K> 泛型。
 
@@ -138,6 +157,8 @@ export type MyOmit<T, K extends keyof T> = {
 };
 \`\`\``;
 
+export const omit = generateExercise(OMIT_TITLE, OMIT);
+
 export const READONLY_2_TITLE = `\`\`\`ts
 实现一个通用MyReadonly2<T, K>，它带有两种类型的参数T和K。
 
@@ -162,13 +183,15 @@ todo.description = "barFoo" // Error: cannot reassign a readonly property
 todo.completed = true // OK
 \`\`\``;
 
-export const READONLY_2 = `\`\`\`js
+export const READONLY_2 = `\`\`\`ts
 export type MyReadonly2<T, K extends keyof T> = {
     readonly [P in keyof T as P extends K ? P : never]: T[P];
   } & { [P in keyof T as P extends K ? never : P]: T[P] };
 \`\`\``;
 
-export const DeepReadonly_TITLE = `\`\`\`ts
+export const readonly2 = generateExercise(READONLY_2_TITLE, READONLY_2);
+
+export const DEEP_READONLY_TITLE = `\`\`\`ts
 实现一个通用的DeepReadonly<T>，它将对象的每个参数及其子对象递归地设为只读。
 
 您可以假设在此挑战中我们仅处理对象。数组，函数，类等都无需考虑。但是，您仍然可以通过覆盖尽可能多的不同案例来挑战自己。
@@ -194,10 +217,171 @@ type Expected = {
 type Todo = DeepReadonly<X> // should be same as \`Expected\`
 \`\`\``;
 
-export const DEEP_READ_ONLY = `\`\`\`js
+export const DEEP_READONLY = `\`\`\`ts
 export type DeepReadonly<T> = {
     readonly [K in keyof T]: T[K] extends Record<any, any>
       ? DeepReadonly<T[K]>
       : T[K];
   };
 \`\`\``;
+
+export const deepReadonly = generateExercise(
+  DEEP_READONLY_TITLE,
+  DEEP_READONLY
+);
+
+export const TUPLE_TO_UNION_TITLE = `\`\`\`ts
+实现泛型TupleToUnion<T>，它返回元组所有值的合集。
+
+例如
+
+type Arr = ['1', '2', '3']
+
+type Test = TupleToUnion<Arr> // expected to be '1' | '2' | '3'
+\`\`\``;
+
+export const TUPLE_TO_UNION = `\`\`\`ts
+export type TupleToUnion<T extends any[]> = T extends [infer F, ...infer L]
+  ? F | TupleToUnion<L>
+  : never;
+\`\`\``;
+
+export const tupleToUnion = generateExercise(
+  TUPLE_TO_UNION_TITLE,
+  TUPLE_TO_UNION
+);
+
+export const LAST_TITLE = `\`\`\`ts
+实现一个通用Last<T>，它接受一个数组T并返回其最后一个元素的类型。
+
+例如
+
+type arr1 = ['a', 'b', 'c']
+type arr2 = [3, 2, 1]
+
+type tail1 = Last<arr1> // expected to be 'c'
+type tail2 = Last<arr2> // expected to be 1
+
+\`\`\``;
+
+export const LAST = `\`\`\`ts
+type Last<T extends any[]> = T extends [...infer F, infer L] ? L : never;
+\`\`\``;
+
+export const last = generateExercise(LAST_TITLE, LAST);
+
+export const POP_TITLE = `\`\`\`ts
+实现一个通用Pop<T>，它接受一个数组T，并返回一个由数组T的前length-1项以相同的顺序组成的数组。
+
+例如
+
+type arr1 = ['a', 'b', 'c', 'd']
+type arr2 = [3, 2, 1]
+
+type re1 = Pop<arr1> // expected to be ['a', 'b', 'c']
+type re2 = Pop<arr2> // expected to be [3, 2]
+额外：同样，您也可以实现Shift，Push和Unshift吗？
+\`\`\``;
+
+export const POP = `\`\`\`ts
+type Pop<T extends any[]> = T extends [...infer F, infer L] ? F : T;
+\`\`\``;
+
+export const pop = generateExercise(POP_TITLE, POP);
+
+export const PUSH_TITLE = `\`\`\`ts
+type arr1 = ["a", "b", "c", "d"];
+type arr2 = [3, 2, 1];
+
+type e = "e";
+type zero = 0;
+
+type re1 = Push<arr1, e>; // expected to be ['a', 'b', 'c','d', 'e']
+type re2 = Push<arr2, zero>; // expected to be [3, 2, 1, 0]
+\`\`\``;
+
+export const PUSH = `\`\`\`ts
+type Push<T extends any[], K> = [...T, K];
+\`\`\``;
+
+export const push = generateExercise(PUSH_TITLE, PUSH);
+
+export const SHIFT_TITLE = `\`\`\`ts
+type arr1 = ["a", "b", "c", "d"];
+type arr2 = [3, 2, 1];
+
+type re1 = Shift<arr1>; // expected to be ['b', 'c', 'd']
+type re2 = Shift<arr2, zero>; // expected to be [2, 1]
+\`\`\``;
+
+export const SHIFT = `\`\`\`ts
+export type Shift<T extends any[], K = []> = T extends [infer F, ...infer R]
+  ? K extends F
+    ? never
+    : R
+  : T
+\`\`\``;
+
+export const shift = generateExercise(SHIFT_TITLE, SHIFT);
+
+export const UNSHIFT_TITLE = `\`\`\`ts
+type arr1 = ["a", "b", "c", "d"];
+type arr2 = [3, 2, 1];
+
+type e = "e";
+
+type zero = 0;
+
+type re1 = Unshift<arr1, e>; // expected to be ['e','a','b', 'c', 'd']
+type re2 = Unshift<arr2, zero>; // expected to be [0, 3, 2, 1]
+\`\`\``;
+
+export const UNSHIFT = `\`\`\`ts
+export type Unshift<T extends any[], K> = [K, ...T];
+\`\`\``;
+
+export const unshift = generateExercise(UNSHIFT_TITLE, UNSHIFT);
+
+export const CHAINABLE_OPTIONS_TITLE = `\`\`\`ts
+在 JavaScript 中我们经常会使用可串联（Chainable/Pipeline）的函数构造一个对象，但在 TypeScript 中，你能合理的给它赋上类型吗？
+
+在这个挑战中，你可以使用任意你喜欢的方式实现这个类型 - Interface, Type 或 Class 都行。你需要提供两个函数 option(key, value) 和 get()。
+在 option 中你需要使用提供的 key 和 value 扩展当前的对象类型，通过 get 获取最终结果。
+
+例如
+
+declare const config: Chainable
+
+const result = config
+  .option('foo', 123)
+  .option('name', 'type-challenges')
+  .option('bar', { value: 'Hello World' })
+  .get()
+
+// 期望 result 的类型是：
+interface Result {
+  foo: number
+  name: string
+  bar: {
+    value: string
+  }
+}
+你只需要在类型层面实现这个功能 - 不需要实现任何 TS/JS 的实际逻辑。
+
+你可以假设 key 只接受字符串而 value 接受任何类型，你只需要暴露它传递的类型而不需要进行任何处理。同样的 key 只会被使用一次。
+\`\`\``;
+
+export const CHAINABLE = `\`\`\`ts
+export type Chainable<T = {}> = {
+  option<K extends string, V extends any>(
+    key: K,
+    value: V
+  ): Chainable<Omit<T, K> & Record<K, V>>;
+  get(): T;
+};
+\`\`\``;
+
+export const chainableOptions = generateExercise(
+  CHAINABLE_OPTIONS_TITLE,
+  CHAINABLE
+);

@@ -277,6 +277,12 @@ const routers = [
         element: lazy(() => import("@/pages/experiences/npm"))
       },
       {
+        key: "/experience/vsCodeExtenion",
+        path: "vsCodeExtenion",
+        name: "第一个VSCode插件",
+        element: lazy(() => import("@/pages/experiences/vsCodeExtenion"))
+      },
+      {
         key: "/experience/cloud",
         path: "cloud",
         name: "作为一个前端好意思说没有个人网站？",

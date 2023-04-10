@@ -71,5 +71,9 @@
   "jsmd": {
     "prefix": "jsmd",
     "body": "export const CODE = `\\`\\`\\`js\n$1\n\\`\\`\\``"
+  },
+  "tsmd": {
+    "prefix": "tsmd",
+    "body": "export const CODE = `\\`\\`\\`ts\n$1\n\\`\\`\\``"
   }
 }
