@@ -84,6 +84,30 @@ export default function Index() {
         内部主要通过<code>tryCatch</code>来执行
         <code>innerFn</code>，也就是wrap包裹的函数。
         {makeInvokeMethod}
+        分析调用流程：
+        <br />
+        <ul className={classMap.ul}>
+          <li>首先函数被转换为上面的代码</li>
+          <li>
+            <ul>
+              <li>
+                1. 通过<code>await</code>分割生成器函数代码生成
+                <code>_callee$</code>函数
+              </li>
+              <li>2. context对象用于储存函数执行上下文，包括各种属性和方法</li>
+              <li>
+                3. invoke()定义next()，用于执行<code>_callee$</code>跳到下一步
+              </li>
+            </ul>
+          </li>
+          <li>
+            调用next，进入switch语句，根据context的标识执行对应的case块，return对应结果。
+          </li>
+          <li>
+            运行到结尾，switch匹配不到返回空值，next的返回值为
+            <code>{`{value:undefined,done:true}`}</code>
+          </li>
+        </ul>
         <h2 id="generator" className={classMap.articleTitle}>
           自行实现
         </h2>

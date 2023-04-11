@@ -72,6 +72,7 @@ export const ASYNC_OUTPUT = `\`\`\`js
       function a() {
         return _a.apply(this, arguments);
       }
+      // 根据await语句将代码分割为switch-case块，后续通过切换_context.prev和_context.next分别执行每个case
       function _a() {
         _a = _asyncToGenerator(
           /*#__PURE__*/ regeneratorRuntime.mark(function _callee() {
@@ -124,7 +125,7 @@ function wrap(innerFn, outerFn, self, tryLocsList) {
         ? outerFn
         : Generator;
     var generator = Object.create(protoGenerator.prototype);
-    var context = new Context(tryLocsList || []);
+    var context = new Context(tryLocsList || []); // context有prev,next.done,sent,method,arg等属性，也有stop,complete,abrupt等方法。
 
     // The ._invoke method unifies the implementations of the .next,
     // .throw, and .return methods.
