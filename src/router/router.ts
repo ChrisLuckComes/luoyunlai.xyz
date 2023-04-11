@@ -50,6 +50,13 @@ const routers = [
         element: lazy(() => import("@/pages/javaScript/garbage"))
       },
       {
+        key: "/js/asyncAwait",
+        path: "asyncAwait",
+        name: "Async Await",
+        group: "JavaScript",
+        element: lazy(() => import("@/pages/javaScript/asyncAwait"))
+      },
+      {
         key: "/js/websocket",
         path: "websocket",
         name: "WebSocket",
