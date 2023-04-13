@@ -1,15 +1,15 @@
-import { classMap } from '@/constants/constant';
-import VITE from '@/images/vite.png';
-import VITE_ADV_1 from '@/images/vite-adv-1.png';
-import VITE_ADV_2 from '@/images/vite-adv-2.png';
-import VITE_ADV_3 from '@/images/vite-adv-3.png';
-import MAX_AGE from '@/images/max-age.png';
-import VITE_DEPS from '@/images/vite-deps.png';
-import VITE_RESOURCE from '@/images/vite-resource.png';
-import { VITE_CONFIG } from '.';
-import { Anchor } from 'antd';
-import { UseMarkDown } from '@/hooks/useMarkdown';
-import { LazyImage } from '@/component/image';
+import { classMap } from "@/constants/constant";
+import VITE from "@/images/vite.png";
+import VITE_ADV_1 from "@/images/vite-adv-1.png";
+import VITE_ADV_2 from "@/images/vite-adv-2.png";
+import VITE_ADV_3 from "@/images/vite-adv-3.png";
+import MAX_AGE from "@/images/max-age.png";
+import VITE_DEPS from "@/images/vite-deps.png";
+import VITE_RESOURCE from "@/images/vite-resource.png";
+import { VITE_CONFIG } from ".";
+import { Anchor } from "antd";
+import { UseMarkDown } from "@/hooks/useMarkdown";
+import { LazyImage } from "@/component/image";
 const { Link } = Anchor;
 export default function Vite() {
   return (
@@ -17,7 +17,12 @@ export default function Vite() {
       <main className={classMap.content}>
         <h1 className={classMap.pageTitle}>
           2022年还在用webpack?快上
-          <a className="text-blue" target="_blank" rel="noreferrer" href="https://cn.vitejs.dev/">
+          <a
+            className="text-blue"
+            target="_blank"
+            rel="noreferrer"
+            href="https://cn.vitejs.dev/"
+          >
             Vite！
           </a>
         </h1>
@@ -27,12 +32,17 @@ export default function Vite() {
           前言
         </h2>
         <p>
-          本仓库最开始是由 <code>create-react-app</code> 创建，其中使用了webpack，关于webpack我有几点想吐槽
+          本仓库最开始是由 <code>create-react-app</code>{" "}
+          创建，其中使用了webpack，关于webpack我有几点想吐槽
         </p>
         <ul className={classMap.ul}>
-          <li>1.热替换速度慢，写完几行代码随手保存想看看效果，需要等个几秒才能看到。</li>
+          <li>
+            1.热替换速度慢，写完几行代码随手保存想看看效果，需要等个几秒才能看到。
+          </li>
           <li>2.工程规模变大后，启动速度显著变慢。</li>
-          <li>3.配置大而复杂，不用vue-cli/umi/creatReactApp这种集大成者高低也得来个几十行代码才能达到最佳状态</li>
+          <li>
+            3.配置大而复杂，不用vue-cli/umi/creatReactApp这种集大成者高低也得来个几十行代码才能达到最佳状态
+          </li>
         </ul>
         <h2 id="begin" className={classMap.articleTitle}>
           优点
@@ -45,9 +55,12 @@ export default function Vite() {
             <LazyImage src={VITE_ADV_1} alt="adv1" />
             <div className="pl-10">
               <br />
-              <strong id="no-build">无需打包</strong>：准确的说是不用js写的打包器全量打包🤪 <br />
+              <strong id="no-build">无需打包</strong>
+              ：准确的说是不用js写的打包器全量打包🤪 <br />
               <br />
-              1. vite会直接启动服务，并且进行预构建依赖。具体表现为对代码进行导入分析，使用<strong>esbuild</strong>
+              1.
+              vite会直接启动服务，并且进行预构建依赖。具体表现为对代码进行导入分析，使用
+              <strong>esbuild</strong>
               将CJS或UMD依赖全部转换为ESM缓存到node_modules/.vite/deps目录下，后续直接从缓存获取。
               <LazyImage src={VITE_DEPS} alt="deps" />
               <br />
@@ -58,11 +71,13 @@ export default function Vite() {
               <br />
               <br />
               而webpack需要全量打包，并且在构建依赖时需要经过多个loader进行字符串的处理，尤其是babel-loader涉及到多次字符串AST互转的操作。Webpack
-              打包时间 = parse string * n + transform * n + parse to AST + compress
+              打包时间 = parse string * n + transform * n + parse to AST +
+              compress
               <br /> <br /> 2.
               启动服务后，根据路由，通过http请求来获取文件和加载所需模块。（如果模块过多会受浏览器http最大并行数限制,vite首次启动慢其中之一是这个原因）下图是本路由的资源列表
               <br />
-              可以看出vite对于资源处理的大体逻辑， index.html =&gt; 入口ESM index.tsx =&gt; index.tsx中导入的其他模块
+              可以看出vite对于资源处理的大体逻辑， index.html =&gt; 入口ESM
+              index.tsx =&gt; index.tsx中导入的其他模块
               <LazyImage src={VITE_RESOURCE} alt="resource" />
             </div>
           </li>
@@ -115,37 +130,52 @@ export default function Vite() {
               新增&nbsp;<code>vite.config.ts</code>
               <UseMarkDown markdown={VITE_CONFIG}></UseMarkDown>
               <br />
-              大功告成，可以pnpm start启动了，最后移除react-scripts&nbsp;<code>pnpm remove react-scripts</code>
+              大功告成，可以pnpm start启动了，最后移除react-scripts&nbsp;
+              <code>pnpm remove react-scripts</code>
             </p>
           </li>
           <li>umi4天然支持</li>
         </ul>
         <h2 id="end" className={classMap.articleTitle}>
-          结语
+          技术选型
         </h2>
-        可以看出本文重复最多的单词就是ESM，vite的核心理念就在于此，充分的利用现代浏览器原生支持ESM。而现在兴起了一股用其他编译型语言来开发javascript工具的热潮，例如Rust(
-        <a className="text-blue" target="_blank" rel="noreferrer" href="https://github.com/swc-project/swc">
-          SWC
-        </a>
-        ),Go
+        可以看出本文重复最多的单词就是ESM，vite的核心理念就在于此，充分的利用现代浏览器原生支持ESM。
         <br />
-        vite虽然开发阶段用esbuild预构建依赖，但是build阶段还是用的rollup来打包，esbuild暂时不适合用于生产 &nbsp;
-        <strong>敲黑板：（不支持es5代码,代码分割能力弱，css处理能力弱，总之就是功能上的缺失）</strong>
-        <br />
-        rollup原生只支持ESM，对于cjs,umd模块需要额外引入插件来处理。 以下两种场景vite不适用：
         <ul className={classMap.ul}>
-          <li>工程需要兼容性，需要跑在不支持ESM的客户端上</li>
-          <li>类似Electron这种自带大量cjs模块的工程</li>
+          <li>
+            <strong>Rollup</strong>
+            更适合打包组件库/插件(library)。它基于ESM打包，生成的文件更小，支持tree-shaking，但是不支持代码分割。
+          </li>
+          <li>
+            <strong>Webpack</strong>
+            更适合打包项目，它支持代码分割，devServer的热更新，以及各种loader和plugin来处理各种文件。但是它的产物会注入很多胶水代码，导致体积增加。
+          </li>
+          <li>
+            <strong>Vite</strong>
+            更适合现代Web应用的开发(支持ESM)，追求开发效率和性能优化的可以选择Vite。如果项目需要一定兼容性，不太适合用于生产打包，当然也有插件支持。
+          </li>
+          <li>
+            <strong>Turbopack</strong>
+            很新，很快，使用Rust编写，但是它处于alpha阶段，未来等稳定了再考虑。
+          </li>
         </ul>
       </main>
-      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
+      <Anchor
+        className="anchor"
+        getContainer={() => document.getElementById("content") as HTMLElement}
+      >
         <Link href="#front" title="前言" />
         <Link href="#begin" title="优点">
           <Link href="#no-build" title="无需打包" />
           <Link href="#hmr" title="热重载(HMR)" />
         </Link>
         <Link href="#move" title="迁移流程"></Link>
-        <Link href="#end" title="结语"></Link>
+        <Link href="#end" title="技术选型">
+          <Link href="#rollup" title="Rollup"></Link>
+          <Link href="#webpack" title="Webpack"></Link>
+          <Link href="#vite" title="Vite"></Link>
+          <Link href="#turbopack" title="Turbopack"></Link>
+        </Link>
       </Anchor>
     </article>
   );
