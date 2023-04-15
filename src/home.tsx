@@ -1,6 +1,6 @@
 import Typed from "typed.js";
-import { useEffect, useRef, useState } from "react";
-
+import { useEffect, useRef } from "react";
+import { request, cancel } from "@/tool/request";
 import Styles from "./home.module.css";
 
 const classMap = {

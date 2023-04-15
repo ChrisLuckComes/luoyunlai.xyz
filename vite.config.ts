@@ -9,7 +9,8 @@ import viteCompression from "vite-plugin-compression";
 export default defineConfig(async () => {
   return {
     build: {
-      outDir: "build"
+      outDir: "build",
+      reportCompressedSize: false
     },
     optimizeDeps: {
       include: ["react/jsx-runtime"]
