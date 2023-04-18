@@ -1,5 +1,4 @@
 import { classMap } from "@/constants/constant";
-import { Anchor } from "antd";
 import { UseMarkDown } from "@/hooks/useMarkdown";
 import {
   ASYNC_OUTPUT,
@@ -12,7 +11,7 @@ import {
   AWRAP,
   INVOKE
 } from "./_asyncAwait";
-const { Link } = Anchor;
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Index() {
   const example = <UseMarkDown markdown={EXAMPLE}></UseMarkDown>,
@@ -28,9 +27,9 @@ export default function Index() {
     invoke = <UseMarkDown markdown={INVOKE}></UseMarkDown>;
 
   return (
-    <article id="rootActicle" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h2 id="pre" className={classMap.articleTitle}>
+        <h2 id="pre" className="font-semibold text-h2 mb-2">
           async await
         </h2>
         async函数是使用<code>async</code>关键字的函数，是
@@ -137,24 +136,64 @@ export default function Index() {
         AsyncIterator部分完整代码:
         {invoke}
       </main>
-      <Anchor
-        className="anchor"
-        getContainer={() => document.getElementById("content") as HTMLElement}
-      >
-        <Link href="#pre" title="async await"></Link>
-        <Link href="#webpack" title="打包分析">
-          <Link href="#regeneratorRuntime" title="regeneratorRuntime">
-            <Link href="#mark" title="mark"></Link>
-            <Link href="#makeInvokeMethod" title="makeInvokeMethod"></Link>
-          </Link>
-        </Link>
-        <Link href="#generator" title="自行实现"></Link>
-        <Link href="#summary" title="总结">
-          <Link href="#async" title="async"></Link>
-          <Link href="#await" title="await"></Link>
-          <Link href="#invoke" title="AsyncIterator"></Link>
-        </Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "Async await",
+            key: "1",
+            href: "#pre"
+          },
+          {
+            title: "打包分析",
+            key: "2",
+            href: "#webpack",
+            children: [
+              {
+                title: "regeneratorRuntime",
+                key: "3",
+                href: "#regeneratorRuntime"
+              },
+              {
+                title: "mark",
+                key: "4",
+                href: "#mark"
+              },
+              {
+                title: "makeInvokeMethod",
+                key: "5",
+                href: "#makeInvokeMethod"
+              }
+            ]
+          },
+          {
+            title: "generator",
+            key: "6",
+            href: "#generator"
+          },
+          {
+            title: "summary",
+            key: "7",
+            href: "#summary",
+            children: [
+              {
+                title: "async",
+                key: "8",
+                href: "#async"
+              },
+              {
+                title: "await",
+                key: "9",
+                href: "#await"
+              },
+              {
+                title: "invoke",
+                key: "10",
+                href: "#invoke"
+              }
+            ]
+          }
+        ]}
+      />
     </article>
   );
 }

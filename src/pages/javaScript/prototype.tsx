@@ -1,22 +1,21 @@
-import { classMap } from '@/constants/constant';
-import { Anchor } from 'antd';
-import { UseMarkDown } from '@/hooks/useMarkdown';
-import { LazyImage } from '@/component/image';
-const { Link } = Anchor;
+import { classMap } from "@/constants/constant";
+import { UseMarkDown } from "@/hooks/useMarkdown";
+import { LazyImage } from "@/component/image";
 
-import NICK_YOUNG from '@images/js/NickYoung.webp';
-import PROTO_DEBUG from '@images/js/protoDebug.png';
-import PROTO_TOP from '@images/js/protoChainTop.png';
-import PROTO_CHAIN from '@images/js/protoChain.png';
+import NICK_YOUNG from "@images/js/NickYoung.webp";
+import PROTO_DEBUG from "@images/js/protoDebug.png";
+import PROTO_TOP from "@images/js/protoChainTop.png";
+import PROTO_CHAIN from "@images/js/protoChain.png";
 
-import { EXAMPLE } from './_prototype';
+import { EXAMPLE } from "./_prototype";
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Index() {
   const example = <UseMarkDown markdown={EXAMPLE}></UseMarkDown>;
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h2 id="pre" className={classMap.articleTitle}>
+        <h2 id="pre" className="font-semibold text-h2 mb-2">
           10分钟内搞懂原型和原型链
         </h2>
         又是一个小伙伴们遇到会黑人问号脸的问题
@@ -35,7 +34,8 @@ export default function Index() {
         <br />
         <LazyImage src={PROTO_DEBUG}></LazyImage>
         <br />
-        如图，可以看到a有属性<code>[[Prototype]]</code>，是不是在哪见过这种中括号的属性啊？想起来了没，就是作用域链
+        如图，可以看到a有属性<code>[[Prototype]]</code>
+        ，是不是在哪见过这种中括号的属性啊？想起来了没，就是作用域链
         <code>[[Scope]]</code>
         <br />
         <br />
@@ -68,7 +68,9 @@ export default function Index() {
             3. 构造函数的<code>this</code>指向新对象
           </li>
           <li>4. 执行构造函数</li>
-          <li>5. 如果构造函数返回不为空，则返回该对象；否则返回刚创建的新对象</li>
+          <li>
+            5. 如果构造函数返回不为空，则返回该对象；否则返回刚创建的新对象
+          </li>
         </ul>
         构造函数也是函数，没有特殊语法，区别就是调用方式不同，首字母一般是大写。任何函数用new调用就是构造函数，不用就是普通函数。
         <h2 id="prototype" className={classMap.articleTitle}>
@@ -80,16 +82,20 @@ export default function Index() {
         <br />
         <br />
         每当调用构造函数创建一个新实例，实例的内部[[Prototype]]的指针就会被赋值为构造函数的原型对象。
-        虽然js不能直接访问到[[Prototype]]，但是Chrome,Safari,Firefox浏览器会在每个对象上暴露<code>__proto__</code>
-        ，通过这个属性就可以访问对象的原型，也可以使用<code>Object.getPrototypeOf(obj)</code>来获取
+        虽然js不能直接访问到[[Prototype]]，但是Chrome,Safari,Firefox浏览器会在每个对象上暴露
+        <code>__proto__</code>
+        ，通过这个属性就可以访问对象的原型，也可以使用
+        <code>Object.getPrototypeOf(obj)</code>来获取
         <br />
-        <br /> 关键记住一句话：<strong>对象跟构造函数原型有联系，跟构造函数没有</strong>。
+        <br /> 关键记住一句话：
+        <strong>对象跟构造函数原型有联系，跟构造函数没有</strong>。
         <code>console.log(obj.__proto__ === Object.prototype) // true</code>
         <h3 id="attr" className={classMap.articleSubTitle}>
           访问属性
         </h3>
         在通过对象访问属性时，会按照这个属性的名称开始找。首先是在对象本身开始，如果找到了就返回对应的值。如果没有找到，则会沿着
-        <code>[[Prototype]]</code>这个指针进入原型对象， 然后在原型对象上找到属性后再返回对应的值。
+        <code>[[Prototype]]</code>这个指针进入原型对象，
+        然后在原型对象上找到属性后再返回对应的值。
         <br />
         因此，在调用<code>a.setAge()</code>
         时，会发生两步搜索，先问a有setAge属性吗？没有。然后继续找，再问a的原型有setAge属性吗？有。于是就返回了保存在原型上的这个函数
@@ -105,16 +111,47 @@ export default function Index() {
         <LazyImage src={PROTO_TOP}></LazyImage>
         原型链扩展了上文访问属性的搜索机制，通过原型链就可以继续向上搜索原型的原型。
       </main>
-      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
-        <Link href="#pre" title="前言"></Link>
-        <Link href="#debug" title="Debug"></Link>
-        <Link href="#object" title="对象"></Link>
-        <Link href="#func" title="构造函数"></Link>
-        <Link href="#prototype" title="原型">
-          <Link href="#attr" title="访问属性"></Link>
-        </Link>
-        <Link href="#protoChain" title="原型链"></Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "前言",
+            key: "pre",
+            href: "#pre"
+          },
+          {
+            title: "Debug",
+            key: "debug",
+            href: "#debug"
+          },
+          {
+            title: "对象",
+            key: "object",
+            href: "#object"
+          },
+          {
+            title: "构造函数",
+            key: "func",
+            href: "#func"
+          },
+          {
+            title: "原型",
+            key: "prototype",
+            href: "#prototype",
+            children: [
+              {
+                title: "访问属性",
+                key: "attr",
+                href: "#attr"
+              }
+            ]
+          },
+          {
+            title: "原型链",
+            key: "protoChain",
+            href: "#protoChain"
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

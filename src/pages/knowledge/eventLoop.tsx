@@ -1,7 +1,5 @@
 import { classMap } from "@/constants/constant";
-import { Anchor } from "antd";
 import { UseMarkDown } from "@/hooks/useMarkdown";
-const { Link } = Anchor;
 
 import EVENT_LOOP from "@images/knowledge/eventloop.webp";
 import EVENT_LOOP1 from "@images/knowledge/eventloop2.webp";
@@ -9,14 +7,15 @@ import RESULT_IMG from "@images/knowledge/result.png";
 import TIMER from "@images/knowledge/timer2.png";
 import { LazyImage } from "@/component/image";
 import { RESULT } from "./_eventLoop";
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Index() {
   const result = <UseMarkDown markdown={RESULT}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h2 id="pre" className={classMap.articleTitle}>
+        <h2 id="pre" className="font-semibold text-h2 mb-2">
           事件循环(Event Loop)
         </h2>
         网上看过很多文章写事件循环、主线程、任务、微任务，还是有些疑问没有解答，总是没有搞的特别清楚，本文将这些碎片知识收集并记录下来。
@@ -67,16 +66,35 @@ export default function Index() {
         <br />
         先执行同步代码，包括新增timer,然后执行所有的微任务。只不过timer会等本次微任务执行完成后下次循环再执行，而且timer和timer之间会在不同的循环中执行。
       </main>
-      <Anchor
-        className="anchor"
-        getContainer={() => document.getElementById("content") as HTMLElement}
-      >
-        <Link href="#pre" title="事件循环(Event Loop)"></Link>
-        <Link href="#mainThread" title="主线程"></Link>
-        <Link href="#eventloop" title="Event Loop"></Link>
-        <Link href="#code" title="例子"></Link>
-        <Link href="#summary" title="总结"></Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "事件循环(Event Loop)",
+            key: "pre",
+            href: "#pre"
+          },
+          {
+            title: "主线程",
+            key: "mainThread",
+            href: "#mainThread"
+          },
+          {
+            title: "Event Loop",
+            key: "eventloop",
+            href: "#eventloop"
+          },
+          {
+            title: "例子",
+            key: "code",
+            href: "#code"
+          },
+          {
+            title: "总结",
+            key: "summary",
+            href: "#summary"
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

@@ -1,8 +1,7 @@
 import { classMap } from "@/constants/constant";
-import { Anchor } from "antd";
 import { UseMarkDown } from "@/hooks/useMarkdown";
 import { CODE, CODE_1, CODE_2, NEXTTICK, USED } from "./_treeShaking";
-const { Link } = Anchor;
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Index() {
   const code = <UseMarkDown markdown={CODE}></UseMarkDown>,
@@ -11,9 +10,9 @@ export default function Index() {
     used = <UseMarkDown markdown={USED}></UseMarkDown>,
     nextTick = <UseMarkDown markdown={NEXTTICK}></UseMarkDown>;
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h2 id="pre" className={classMap.articleTitle}>
+        <h2 id="pre" className="font-semibold text-h2 mb-2">
           Tree Shaking
         </h2>
         Tree Shaking翻译为摇树优化，它通常用于移除js上下文中未使用的代码，最先在
@@ -37,7 +36,7 @@ export default function Index() {
         <br />
         然后window.memorize调用了add函数，并触发某些副作用。那么像webpack这种工程化工具也要将add打包到最后的bundle中，即使没有其他模块依赖add函数
         {code}
-        <h3 id="diff" className={classMap.articleSubTitle}>
+        <h3 id="webpack" className={classMap.articleSubTitle}>
           webpack的处理
         </h3>
         webpack提供了副作用的配置<strong>module.rule.sideEffects</strong>
@@ -83,22 +82,47 @@ export default function Index() {
         </h2>
         普遍做法参考antd，构建出两个文件夹，并且配置package.json的main和module属性，同时支持cjs和esm模块化。
       </main>
-      <Anchor
-        className="anchor"
-        getContainer={() => document.getElementById("content") as HTMLElement}
-      >
-        <Link href="#pre" title="Tree Shaking"></Link>
-        <Link href="#esm" title="ESM规范"></Link>
-        <Link href="#effect" title="副作用">
-          <Link href="#webpack" title="webpack"></Link>
-        </Link>
-        <Link href="#good" title="友好的导出模式"></Link>
-        <Link href="#vue" title="Vue中的tree shaking"></Link>
-        <Link
-          href="#design"
-          title="设计兼顾易用性和tree shaking的公共库"
-        ></Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "Tree Shaking",
+            key: "pre",
+            href: "#pre"
+          },
+          {
+            title: "ESM规范",
+            key: "esm",
+            href: "#esm"
+          },
+          {
+            title: "副作用",
+            key: "effect",
+            href: "#effect",
+            children: [
+              {
+                title: "webpack",
+                key: "webpack",
+                href: "#webpack"
+              }
+            ]
+          },
+          {
+            title: "友好的导出模式",
+            key: "good",
+            href: "#good"
+          },
+          {
+            title: "Vue中的tree shaking",
+            key: "vue",
+            href: "#vue"
+          },
+          {
+            title: "设计兼顾易用性和tree shaking的公共库",
+            key: "design",
+            href: "#design"
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

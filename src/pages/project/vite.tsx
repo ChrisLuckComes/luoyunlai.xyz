@@ -7,15 +7,77 @@ import MAX_AGE from "@/images/max-age.png";
 import VITE_DEPS from "@/images/vite-deps.png";
 import VITE_RESOURCE from "@/images/vite-resource.png";
 import { VITE_CONFIG } from ".";
-import { Anchor } from "antd";
 import { UseMarkDown } from "@/hooks/useMarkdown";
 import { LazyImage } from "@/component/image";
-const { Link } = Anchor;
+import { ArticleAnchor } from "@/component/Anchor";
+
+const linkItems = [
+  {
+    key: "h1",
+    href: "#h1",
+    title: "Vite"
+  },
+  {
+    key: "1",
+    href: "#front",
+    title: "前言"
+  },
+  {
+    key: "2",
+    href: "#begin",
+    title: "优点",
+    children: [
+      {
+        key: "3",
+        href: "#no-build",
+        title: "无需打包"
+      },
+      {
+        key: "4",
+        href: "#hmr",
+        title: "热重载(HMR)"
+      }
+    ]
+  },
+  {
+    key: "5",
+    href: "#move",
+    title: "迁移流程"
+  },
+  {
+    key: "6",
+    href: "#end",
+    title: "技术选型",
+    children: [
+      {
+        key: "7",
+        href: "#rollup",
+        title: "Rollup"
+      },
+      {
+        key: "8",
+        href: "#webpack",
+        title: "Webpack"
+      },
+      {
+        key: "9",
+        href: "#vite",
+        title: "Vite"
+      },
+      {
+        key: "10",
+        href: "#turbopack",
+        title: "Turbopack"
+      }
+    ]
+  }
+];
+
 export default function Vite() {
   return (
-    <article className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h1 className={classMap.pageTitle}>
+        <h1 id="h1" className={classMap.pageTitle}>
           2022年还在用webpack?快上
           <a
             className="text-blue"
@@ -160,23 +222,7 @@ export default function Vite() {
           </li>
         </ul>
       </main>
-      <Anchor
-        className="anchor"
-        getContainer={() => document.getElementById("content") as HTMLElement}
-      >
-        <Link href="#front" title="前言" />
-        <Link href="#begin" title="优点">
-          <Link href="#no-build" title="无需打包" />
-          <Link href="#hmr" title="热重载(HMR)" />
-        </Link>
-        <Link href="#move" title="迁移流程"></Link>
-        <Link href="#end" title="技术选型">
-          <Link href="#rollup" title="Rollup"></Link>
-          <Link href="#webpack" title="Webpack"></Link>
-          <Link href="#vite" title="Vite"></Link>
-          <Link href="#turbopack" title="Turbopack"></Link>
-        </Link>
-      </Anchor>
+      <ArticleAnchor items={linkItems}></ArticleAnchor>
     </article>
   );
 }

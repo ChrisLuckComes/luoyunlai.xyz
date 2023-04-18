@@ -1,5 +1,4 @@
 import { classMap } from "@/constants/constant";
-import { Anchor } from "antd";
 import { UseMarkDown } from "@/hooks/useMarkdown";
 import {
   COMPILER,
@@ -15,7 +14,7 @@ import {
   ROOT,
   WEPBACK_OPTIONS_APPLY
 } from "./_webpack";
-const { Link } = Anchor;
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Index() {
   const root = <UseMarkDown markdown={ROOT}></UseMarkDown>,
@@ -36,9 +35,9 @@ export default function Index() {
     runner = <UseMarkDown markdown={LOADER_RUNNER}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h2 id="webpack" className={classMap.articleTitle}>
+        <h2 id="pre" className="font-semibold text-h2 mb-2">
           Webpack
         </h2>
         Webpack是现代JS程序的打包工具，几乎每个前端都使用/曾经用过。它从入口开始构建出一个依赖图(dependency
@@ -123,7 +122,7 @@ export default function Index() {
             {normal}
           </li>
           <li>
-            2. <strong>normalModuleFactory</strong>中， new{" "}
+            2. <strong>normalModuleFactory</strong>中， new
             <strong>RuleSetCompiler</strong> 然后执行<code>compile</code>
             方法，传入loader配置<code>options.rules</code>
             <br />
@@ -148,7 +147,7 @@ export default function Index() {
             <code>processor</code>
             {loaderPlugin}
           </li>
-          <li>
+          <li id="runLoader">
             5. <strong>handleModuleCreation</strong> 调用
             <code>factorizeModule</code>，填充<code>factorizeQueue</code>
             队列，队列的加工方法是<code>_factorizeModule</code>，调用了
@@ -196,26 +195,76 @@ export default function Index() {
         方法的类，然后调用Plugin的时候，它的apply方法的会注入compiler参数。break
         compiler信息量很大，包括各种hooks，自定义插件选择合适的hook在回调函数中完成自定义逻辑即可。
       </main>
-      <Anchor
-        className="anchor"
-        getContainer={() => document.getElementById("content") as HTMLElement}
-      >
-        <Link href="#pre" title="Webpack"></Link>
-        <Link href="#webpack" title="Webpack入口函数">
-          <Link href="#createCompiler" title="createCompiler"></Link>
-          <Link href="#compiler" title="compiler"></Link>
-          <Link href="#webpackOptionsApply" title="WebpackOptionsApply"></Link>
-          <Link href="#run" title="run"></Link>
-        </Link>
-        <Link href="#loaderAndPlugin" title="loader和plugin">
-          <Link href="#loader" title="loader">
-            <Link href="#rule" title="解析rules"></Link>
-            <Link href="#run" title="执行loader"></Link>
-            <Link href="#loaderSummary" title="总结"></Link>
-          </Link>
-          <Link href="#plugin" title="plugin"></Link>
-        </Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "Webpack",
+            key: "pre",
+            href: "#pre"
+          },
+          {
+            title: "Webpack入口函数",
+            key: "webpack",
+            href: "#webpack",
+            children: [
+              {
+                title: "createCompiler",
+                key: "createCompiler",
+                href: "#createCompiler"
+              },
+              {
+                title: "compiler",
+                key: "compiler",
+                href: "#compiler"
+              },
+              {
+                title: "WebpackOptionsApply",
+                key: "webpackOptionsApply",
+                href: "#webpackOptionsApply"
+              },
+              {
+                title: "run",
+                key: "run",
+                href: "#run"
+              }
+            ]
+          },
+          {
+            title: "loader和plugin",
+            key: "loaderAndPlugin",
+            href: "#loaderAndPlugin",
+            children: [
+              {
+                title: "loader",
+                key: "loader",
+                href: "#loader",
+                children: [
+                  {
+                    title: "解析rules",
+                    key: "rule",
+                    href: "#rule"
+                  },
+                  {
+                    title: "执行loader",
+                    key: "runLoader",
+                    href: "#runLoader"
+                  },
+                  {
+                    title: "总结",
+                    key: "loaderSummary",
+                    href: "#loaderSummary"
+                  }
+                ]
+              },
+              {
+                title: "plugin",
+                key: "plugin",
+                href: "#plugin"
+              }
+            ]
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

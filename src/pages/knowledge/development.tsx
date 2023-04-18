@@ -1,16 +1,14 @@
 import { classMap } from "@/constants/constant";
-import { Anchor } from "antd";
-import { UseMarkDown } from "@/hooks/useMarkdown";
-const { Link } = Anchor;
 
 import DEVELOPMENT from "@images/knowledge/development.png";
 import { LazyImage } from "@/component/image";
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Index() {
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h2 id="pre" className={classMap.articleTitle}>
+        <h2 id="pre" className="font-semibold text-h2 mb-2">
           前端技术发展轨迹
         </h2>
         <LazyImage src={DEVELOPMENT} />
@@ -65,20 +63,52 @@ export default function Index() {
         <strong>ESR</strong>
         <br />
       </main>
-      <Anchor
-        className="anchor"
-        getContainer={() => document.getElementById("content") as HTMLElement}
-      >
-        <Link href="#pre" title="前端技术发展轨迹">
-          <Link href="#ajax" title="ajax"></Link>
-          <Link href="#mvc" title="MVC"></Link>
-          <Link href="#mvvm" title="MVVM"></Link>
-          <Link href="#node" title="Node.js"></Link>
-          <Link href="#serverless" title="Serverless"></Link>
-          <Link href="#plan" title="技术方案"></Link>
-          <Link href="#render" title="渲染方案"></Link>
-        </Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "前端技术发展轨迹",
+            key: "pre",
+            href: "#pre",
+            children: [
+              {
+                title: "ajax",
+                key: "ajax",
+                href: "#ajax"
+              },
+              {
+                title: "MVC",
+                key: "mvc",
+                href: "#mvc"
+              },
+              {
+                title: "MVVM",
+                key: "mvvm",
+                href: "#mvvm"
+              },
+              {
+                title: "Node.js",
+                key: "node",
+                href: "#node"
+              },
+              {
+                title: "Serverless",
+                key: "serverless",
+                href: "#serverless"
+              },
+              {
+                title: "技术方案",
+                key: "plan",
+                href: "#plan"
+              },
+              {
+                title: "渲染方案",
+                key: "render",
+                href: "#render"
+              }
+            ]
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

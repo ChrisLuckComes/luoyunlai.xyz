@@ -1,23 +1,24 @@
-import { classMap } from '@/constants/constant';
-import { Anchor } from 'antd';
+import { classMap } from "@/constants/constant";
 
-import HTTP_LISTEN from '@/images/http-listen.png';
-import HTTP_CHANGE from '@/images/http-change.png';
-import HTTP_FISH from '@/images/http-fish.png';
-import HTTPS from '@/images/https.png';
-import HTTPS_INSTRUCTION from '@/images/https-instruction.png';
-import HTTP2_FRAME from '@/images/http2-frame.png';
-import HTTP2_STREAM from '@/images/http2-stream.jpg';
-import { NGINX } from '.';
-import { UseMarkDown } from '@/hooks/useMarkdown';
-import { LazyImage } from '@/component/image';
-const { Link } = Anchor;
+import HTTP_LISTEN from "@/images/http-listen.png";
+import HTTP_CHANGE from "@/images/http-change.png";
+import HTTP_FISH from "@/images/http-fish.png";
+import HTTPS from "@/images/https.png";
+import HTTPS_INSTRUCTION from "@/images/https-instruction.png";
+import HTTP2_FRAME from "@/images/http2-frame.png";
+import HTTP2_STREAM from "@/images/http2-stream.jpg";
+import { NGINX } from ".";
+import { UseMarkDown } from "@/hooks/useMarkdown";
+import { LazyImage } from "@/component/image";
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Index() {
   return (
-    <article id="rootActicle" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h1 className={classMap.pageTitle}>http=&gt;https=&gt;http2</h1>
+        <h1 id="http" className="font-semibold text-h2 mb-2">
+          http=&gt;https=&gt;http2
+        </h1>
         <div>
           <h2 id="httpDisAdv" className={classMap.articleTitle}>
             http的不足
@@ -27,7 +28,8 @@ export default function Index() {
               1.&nbsp;<strong className="text-16">明文</strong>传输,安全性低
             </li>
             <li>
-              2.&nbsp;队头<strong className="text-16">阻塞</strong>，如果前面的请求未完成，后续的请求会被阻塞
+              2.&nbsp;队头<strong className="text-16">阻塞</strong>
+              ，如果前面的请求未完成，后续的请求会被阻塞
             </li>
           </ul>
           <br />
@@ -66,7 +68,9 @@ export default function Index() {
           <ul className={classMap.ul}>
             <li>
               1. 客户端使用公钥解密签名
-              <strong>（服务器对证书正文使用摘要算法生成摘要，并用私钥进行加密生成签名）</strong>
+              <strong>
+                （服务器对证书正文使用摘要算法生成摘要，并用私钥进行加密生成签名）
+              </strong>
               ，如果证书未被篡改才能解密成功得到摘要A，并使用同样的摘要算法对证书明文进行计算得到B，A跟B一致则验证成功。
             </li>
             <li>2. 比较证书中的域名和请求的域名是否一致</li>
@@ -110,28 +114,84 @@ export default function Index() {
           <h2 id="nginx" className={classMap.articleTitle}>
             nginx配置
           </h2>
-          开启http2非常简单，在listen 443 ssl后面追加http2就行，需要有 <code>http_v2_module</code>{' '}
-          模块，否则需要重新安装更高版本的nginx
+          开启http2非常简单，在listen 443 ssl后面追加http2就行，需要有
+          <code>http_v2_module</code> 模块，否则需要重新安装更高版本的nginx
           <UseMarkDown markdown={NGINX}></UseMarkDown>
         </div>
       </main>
-
-      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
-        <Link href="#httpDisAdv" title="http不足" />
-        <Link href="#https" title="https">
-          <Link href="#listen" title="被窃听" />
-          <Link href="#change" title="被篡改" />
-          <Link href="#fish" title="冒充" />
-          <Link href="#legal" title="验证证书合法性" />
-          <Link href="#disAdv" title="缺点" />
-        </Link>
-        <Link href="#http2" title="http2">
-          <Link href="#frame" title="帧结构" />
-          <Link href="#stream" title="并发传输" />
-          <Link href="#other" title="其他优点" />
-        </Link>
-        <Link href="#nginx" title="nginx配置"></Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "http",
+            key: "http",
+            href: "#http"
+          },
+          {
+            title: "http不足",
+            key: "httpDisAdv",
+            href: "#httpDisAdv"
+          },
+          {
+            title: "https",
+            key: "https",
+            href: "#https",
+            children: [
+              {
+                title: "被窃听",
+                key: "listen",
+                href: "#listen"
+              },
+              {
+                title: "被篡改",
+                key: "change",
+                href: "#change"
+              },
+              {
+                title: "冒充",
+                key: "fish",
+                href: "#fish"
+              },
+              {
+                title: "验证证书合法性",
+                key: "legal",
+                href: "#legal"
+              },
+              {
+                title: "缺点",
+                key: "disAdv",
+                href: "#disAdv"
+              }
+            ]
+          },
+          {
+            title: "http2",
+            key: "http2",
+            href: "#http2",
+            children: [
+              {
+                title: "帧结构",
+                key: "frame",
+                href: "#frame"
+              },
+              {
+                title: "并发传输",
+                key: "stream",
+                href: "#stream"
+              },
+              {
+                title: "其他优点",
+                key: "other",
+                href: "#other"
+              }
+            ]
+          },
+          {
+            title: "nginx配置",
+            key: "nginx",
+            href: "#nginx"
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

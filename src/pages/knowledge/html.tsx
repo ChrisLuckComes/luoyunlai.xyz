@@ -1,8 +1,8 @@
 import { classMap } from "@/constants/constant";
-import { Anchor, Table } from "antd";
+import { Table } from "antd";
 import { UseMarkDown } from "@/hooks/useMarkdown";
 import { CODE, SCRIPT_TEXT_HTML, SVELTE, SVELTE_HTML } from "./_html";
-const { Link } = Anchor;
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Index() {
   const columns = [
@@ -61,9 +61,9 @@ export default function Index() {
     jsExp1 = <UseMarkDown markdown={CODE}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h2 id="html" className={classMap.articleTitle}>
+        <h2 id="html" className="font-semibold text-h2 mb-2">
           回顾三剑客html,css,javascript
         </h2>
         回顾三剑客，看看有哪些是被忽视了的知识。
@@ -208,33 +208,105 @@ export default function Index() {
           <li>5. 并发是同时发生，并行是同时运行。</li>
         </ul>
       </main>
-      <Anchor
-        className="anchor"
-        getContainer={() => document.getElementById("content") as HTMLElement}
-      >
-        <Link href="#html" title="HTML">
-          <Link href="#csrSSr" title="CSR和SSR">
-            <Link href="#csr" title="CSR"></Link>
-            <Link href="#ssr" title="SSR"></Link>
-            <Link href="#diff" title="两者不同点"></Link>
-          </Link>
-          <Link href="#scriptType" title="script">
-            <Link href="#text" title="text/html"></Link>
-            <Link href="#module" title="module"></Link>
-          </Link>
-          <Link href="#fragment" title="DocumentFragment or 虚拟dom"></Link>
-          <Link href="#webComponent" title="WebComponents"></Link>
-        </Link>
-        <Link href="#css" title="CSS">
-          <Link href="#cssPre" title="css预处理器"></Link>
-          <Link href="#cssInJs" title="css-in-js"></Link>
-        </Link>
-        <Link href="#js" title="JavaScript">
-          <Link href="#type" title="类型"></Link>
-          <Link href="#immutable" title="不可变性"></Link>
-          <Link href="#async" title="异步编程"></Link>
-        </Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "HTML",
+            key: "html",
+            href: "#html",
+            children: [
+              {
+                title: "CSR和SSR",
+                key: "csrSSr",
+                href: "#csrSSr",
+                children: [
+                  {
+                    title: "CSR",
+                    key: "csr",
+                    href: "#csr"
+                  },
+                  {
+                    title: "SSR",
+                    key: "ssr",
+                    href: "#ssr"
+                  },
+                  {
+                    title: "两者不同点",
+                    key: "diff",
+                    href: "#diff"
+                  }
+                ]
+              },
+              {
+                title: "script",
+                key: "scriptType",
+                href: "#scriptType",
+                children: [
+                  {
+                    title: "text/html",
+                    key: "text",
+                    href: "#text"
+                  },
+                  {
+                    title: "module",
+                    key: "module",
+                    href: "#module"
+                  }
+                ]
+              },
+              {
+                title: "DocumentFragment or 虚拟dom",
+                key: "fragment",
+                href: "#fragment"
+              },
+              {
+                title: "WebComponents",
+                key: "webComponent",
+                href: "#webComponent"
+              }
+            ]
+          },
+          {
+            title: "CSS",
+            key: "css",
+            href: "#css",
+            children: [
+              {
+                title: "css预处理器",
+                key: "cssPre",
+                href: "#cssPre"
+              },
+              {
+                title: "css-in-js",
+                key: "cssInJs",
+                href: "#cssInJs"
+              }
+            ]
+          },
+          {
+            title: "JavaScript",
+            key: "js",
+            href: "#js",
+            children: [
+              {
+                title: "类型",
+                key: "type",
+                href: "#type"
+              },
+              {
+                title: "不可变性",
+                key: "immutable",
+                href: "#immutable"
+              },
+              {
+                title: "异步编程",
+                key: "async",
+                href: "#async"
+              }
+            ]
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

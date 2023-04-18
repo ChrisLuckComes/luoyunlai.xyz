@@ -1,6 +1,4 @@
 import { classMap } from "@/constants/constant";
-import { Anchor } from "antd";
-
 import {
   returnType,
   omit,
@@ -15,18 +13,18 @@ import {
   chainableOptions
 } from "./_tsExercise";
 
-import { Toggle } from "@/component/toggle";
 import { ExerciseItem } from "@/component/exerciseItem";
-const { Link } = Anchor;
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Ts2() {
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
         <ExerciseItem
           id="getReturnType"
           name="GetReturnType"
           source={returnType}
+          className="font-semibold text-h2 mb-2"
         />
         使用<code>infer</code>关键字来推导函数的返回值类型
         <ExerciseItem id="omit" name="Omit" source={omit} />
@@ -49,7 +47,7 @@ export default function Ts2() {
         <ExerciseItem id="pop" name="Pop" source={pop} />
         <ExerciseItem id="push" name="Push" source={push} />
         <ExerciseItem id="shift" name="Shift" source={shift} />
-        <ExerciseItem id="unshift" name="unshift" source={unshift} />
+        <ExerciseItem id="unshift" name="Unshift" source={unshift} />
         <ExerciseItem
           id="chainableOptions"
           name="Chainable Options"
@@ -65,22 +63,65 @@ export default function Ts2() {
           <li>3. Chainable传入类型需要排除当前key，实现覆盖</li>
         </ul>
       </main>
-      <Anchor
-        className="anchor"
-        getContainer={() => document.getElementById("content") as HTMLElement}
-      >
-        <Link href="#getReturnType" title="GetReturnType"></Link>
-        <Link href="#omit" title="Omit"></Link>
-        <Link href="#readonly2" title="Readonly 2"></Link>
-        <Link href="#deepReadonly" title="DeepReadonly"></Link>
-        <Link href="#tupleToUnion" title="Tuple To Union"></Link>
-        <Link href="#last" title="Last"></Link>
-        <Link href="#pop" title="Pop"></Link>
-        <Link href="#push" title="Push"></Link>
-        <Link href="#shift" title="Shift"></Link>
-        <Link href="#unshift" title="unshift"></Link>
-        <Link href="#chainableOptions" title="Chainable Options"></Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "GetReturnType",
+            key: "getReturnType",
+            href: "#getReturnType"
+          },
+          {
+            title: "Omit",
+            key: "omit",
+            href: "#omit"
+          },
+          {
+            title: "Readonly 2",
+            key: "readonly2",
+            href: "#readonly2"
+          },
+          {
+            title: "DeepReadonly",
+            key: "deepReadonly",
+            href: "#deepReadonly"
+          },
+          {
+            title: "Tuple To Union",
+            key: "tupleToUnion",
+            href: "#tupleToUnion"
+          },
+          {
+            title: "Last",
+            key: "last",
+            href: "#last"
+          },
+          {
+            title: "Pop",
+            key: "pop",
+            href: "#pop"
+          },
+          {
+            title: "Push",
+            key: "push",
+            href: "#push"
+          },
+          {
+            title: "Shift",
+            key: "shift",
+            href: "#shift"
+          },
+          {
+            title: "Unshift",
+            key: "unshift",
+            href: "#unshift"
+          },
+          {
+            title: "Chainable Options",
+            key: "chainableOptions",
+            href: "#chainableOptions"
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

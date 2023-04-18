@@ -1,11 +1,9 @@
-import { classMap } from '@/constants/constant';
-import { Anchor } from 'antd';
-import { UseMarkDown } from '@/hooks/useMarkdown';
-import { LazyImage } from '@/component/image';
-import RISK from '@images/knowledge/risks.png';
-import { SQL_1, CODE_1, XSS_HTML, CSP_CONFIG, CSRF_IMG } from './_safety';
-
-const { Link } = Anchor;
+import { classMap } from "@/constants/constant";
+import { UseMarkDown } from "@/hooks/useMarkdown";
+import { LazyImage } from "@/component/image";
+import RISK from "@images/knowledge/risks.png";
+import { SQL_1, CODE_1, XSS_HTML, CSP_CONFIG, CSRF_IMG } from "./_safety";
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Index() {
   const sql_1 = <UseMarkDown markdown={SQL_1}></UseMarkDown>,
@@ -15,9 +13,9 @@ export default function Index() {
     csrfImg = <UseMarkDown markdown={CSRF_IMG}></UseMarkDown>;
 
   return (
-    <article id="rootActicle" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main id="main" className={classMap.content}>
-        <h2 id="pre" className={classMap.articleTitle}>
+        <h2 id="pre" className="font-semibold text-h2 mb-2">
           常见Web应用安全漏洞及应对手段
         </h2>
         本文参考如下页面：
@@ -48,9 +46,14 @@ export default function Index() {
         具有以下弱点的应用容易被攻击
         <ul className={classMap.ul}>
           <li>1. 用户提供的数据没有合法化，未过滤，或者净化。</li>
-          <li>2. 动态查询或者未参数化的调用没有经过上下文感知转义就被解释器使用</li>
+          <li>
+            2. 动态查询或者未参数化的调用没有经过上下文感知转义就被解释器使用
+          </li>
           <li>3. 未信任的数据被ORM使用提取敏感数据</li>
-          <li>4. 未信任的数据直接使用或者用于连接,例如包含未信任数据的SQL语句或者命令的动态查询，命令，存储过程等</li>
+          <li>
+            4.
+            未信任的数据直接使用或者用于连接,例如包含未信任数据的SQL语句或者命令的动态查询，命令，存储过程等
+          </li>
         </ul>
         <h3 id="example1" className={classMap.articleSubTitle}>
           案例
@@ -61,7 +64,8 @@ export default function Index() {
             {sql_1}
           </li>
           <li>
-            2. 结合上面的例子，攻击者将如下链接id参数值改为{`'or '1'='1`}：<br />
+            2. 结合上面的例子，攻击者将如下链接id参数值改为{`'or '1'='1`}：
+            <br />
             <strong>{`http://example.com/app/accountView?id=' or '1'='1`}</strong>
             <br />
           </li>
@@ -88,13 +92,16 @@ export default function Index() {
         <ul className={classMap.ul}>
           <li>1. 放任自动化攻击或暴力破解</li>
           <li>
-            2. 允许默认/弱/知名密码，例如<strong>123456,password,admin/admin</strong>
+            2. 允许默认/弱/知名密码，例如
+            <strong>123456,password,admin/admin</strong>
           </li>
           <li>3. 密码找回过程太弱或者无效</li>
           <li>
             4. 在URL中暴露了<code>sessionId</code>
           </li>
-          <li>5. 在过期的或者登出的动作之后，session或者token没有正确的无效处理。</li>
+          <li>
+            5. 在过期的或者登出的动作之后，session或者token没有正确的无效处理。
+          </li>
           <li>6. 缺少多种认证方式</li>
         </ul>
         <h3 id="example2" className={classMap.articleSubTitle}>
@@ -130,7 +137,9 @@ export default function Index() {
         <ul className={classMap.ul}>
           <li>是不是有明文传输的数据？例如HTTP协议，外网尤其危险。</li>
           <li>是不是有敏感数据明文保存了，包括备份？</li>
-          <li>是否使用了默认密钥，弱密钥，或者重复使用的密钥？有没有密钥管理</li>
+          <li>
+            是否使用了默认密钥，弱密钥，或者重复使用的密钥？有没有密钥管理
+          </li>
           <li>如果不是强制加密，浏览器安全头部是否存在</li>
           <li>客户端有没有认证接收到的服务证书合法性？</li>
         </ul>
@@ -138,9 +147,13 @@ export default function Index() {
           案例
         </h3>
         <ul className={classMap.ul}>
-          <li>1. 使用数据库自动加密信用卡号，这个并没有什么效果，被注入攻击获取之后会自动解密成明文</li>
           <li>
-            2. 没有强制使用HTTPS等加密协议。攻击者可以降级到HTTP协议拦截请求，获取到session
+            1.
+            使用数据库自动加密信用卡号，这个并没有什么效果，被注入攻击获取之后会自动解密成明文
+          </li>
+          <li>
+            2.
+            没有强制使用HTTPS等加密协议。攻击者可以降级到HTTP协议拦截请求，获取到session
             cookie之后就可以进行攻击，甚至能修改传输的数据
           </li>
           <li>
@@ -158,7 +171,10 @@ export default function Index() {
           <li>确认强的算法是最新版本，使用正确的key管理</li>
           <li>
             强制使用HTTPS，并且设置安全相关头部。例如
-            <code>Strict-Transport-Security: max-age=31536000; includeSubDomains; preload</code>
+            <code>
+              Strict-Transport-Security: max-age=31536000; includeSubDomains;
+              preload
+            </code>
           </li>
         </ul>
         <h2 id="brokenAccess" className={classMap.articleTitle}>
@@ -172,7 +188,9 @@ export default function Index() {
         <ul className={classMap.ul}>
           <li>通过修改URL，应用内部状态，或者HTML页面，来通过访问控制</li>
           <li>允许主键修改。</li>
-          <li>出现权限提升，在未登录的情况下作为用户，或者登录之后作为管理员</li>
+          <li>
+            出现权限提升，在未登录的情况下作为用户，或者登录之后作为管理员
+          </li>
           <li>元数据控制，例如重放或者篡改JWT(Json Web Token)</li>
           <li>CORS错误设置，允许未认证的API访问。</li>
           <li>POST,PUT,DELETE请求API没有做访问控制</li>
@@ -182,7 +200,8 @@ export default function Index() {
         </h3>
         <ul className={classMap.ul}>
           <li>
-            1. 有如下URL：<code>http://example.com/app/accountInfo?acct=notmyacct</code>
+            1. 有如下URL：
+            <code>http://example.com/app/accountInfo?acct=notmyacct</code>
             发起get请求，如果服务端程序没有认证，直接使用该参数，那么攻击者只需要修改acct的值就可以获取任何人的账号信息，例如如下代码：
             {code_1}
           </li>
@@ -194,7 +213,9 @@ export default function Index() {
         <ul className={classMap.ul}>
           <li>1. 意外的资源访问默认拒绝</li>
           <li>2. 访问控制应该强制记录所有者</li>
-          <li>3. 禁用服务器资源列表，确定文件元数据和备份数据不在web根目录展示。</li>
+          <li>
+            3. 禁用服务器资源列表，确定文件元数据和备份数据不在web根目录展示。
+          </li>
           <li>4. 登出以后，JWT tokens应被废弃。</li>
           <li>5. 特殊业务的限制必要条件应该被强制执行</li>
         </ul>
@@ -216,7 +237,8 @@ export default function Index() {
             <strong>存储型CSS</strong>：程序或者API保存了未净化的用户输入。
           </li>
           <li>
-            <strong>DOM XSS</strong>: JS库，单页面应用，API动态引入了攻击者控制的数据
+            <strong>DOM XSS</strong>:
+            JS库，单页面应用，API动态引入了攻击者控制的数据
           </li>
         </ul>
         典型的XSS攻击包括劫持session，接管账号，替换DOM节点或污染，攻击用户浏览器下载恶意软件，按键记录等客户端攻击。
@@ -243,10 +265,12 @@ export default function Index() {
             等，学习框架的XSS保护措施，正确的处理没有覆盖到的场合。
           </li>
           <li>
-            2. 转义来自HTML输出的未信任的HTTP数据，例如(body,attribute,JavaScript,CSS,URL)可以解决反射型和存储型XSS。
+            2.
+            转义来自HTML输出的未信任的HTTP数据，例如(body,attribute,JavaScript,CSS,URL)可以解决反射型和存储型XSS。
           </li>
           <li>
-            3. 使用<code>Content Secruity Policy(CSP)</code>，它可以防止指定域名之外的恶意脚本执行。
+            3. 使用<code>Content Secruity Policy(CSP)</code>
+            ，它可以防止指定域名之外的恶意脚本执行。
             {cspConfig}
           </li>
         </ul>
@@ -262,7 +286,9 @@ export default function Index() {
           案例
         </h3>
         假定如下是某银行转账操作的URL：
-        <code>https://bank.example.com/withdraw?account=AccoutName&amount=1000&for=PayeeName</code>
+        <code>
+          https://bank.example.com/withdraw?account=AccoutName&amount=1000&for=PayeeName
+        </code>
         <br />
         攻击者在另一个网站放如下代码：
         {csrfImg}
@@ -273,45 +299,156 @@ export default function Index() {
         攻击者不能获取用户账户控制权，也不能窃取信息，能做到的就是以用户的名义进行某些操作。所以有如下防御措施：
         <ul className={classMap.ul}>
           <li>
-            1. 检查<code>Referer</code>字段，这个方法简单，简单校验请求和Referer是否同一域名即可，但是它有局限性，无法保证没有其他漏洞影响它或者被篡改。
+            1. 检查<code>Referer</code>
+            字段，这个方法简单，简单校验请求和Referer是否同一域名即可，但是它有局限性，无法保证没有其他漏洞影响它或者被篡改。
           </li>
           <li>
-            2. 添加校验Token，由服务器在某个请求中下发，然后在用户请求的时候一并提交校验，CSRF攻击并不能提前获取到这个随机数的值，校验Token错误就拒绝该请求。
+            2.
+            添加校验Token，由服务器在某个请求中下发，然后在用户请求的时候一并提交校验，CSRF攻击并不能提前获取到这个随机数的值，校验Token错误就拒绝该请求。
           </li>
         </ul>
-        <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
-          <Link href="#injection" title="注入">
-            <Link href="#weakness1" title="漏洞"></Link>
-            <Link href="#example1" title="案例"></Link>
-            <Link href="#prevent1" title="防御手段"></Link>
-          </Link>
-          <Link href="#brokenAuth" title="破解认证">
-            <Link href="#weakness2" title="漏洞"></Link>
-            <Link href="#example2" title="案例"></Link>
-            <Link href="#prevent2" title="防御手段"></Link>
-          </Link>
-          <Link href="#sensitiveData" title="敏感信息泄露">
-            <Link href="#weakness3" title="漏洞"></Link>
-            <Link href="#example3" title="案例"></Link>
-            <Link href="#prevent3" title="防御手段"></Link>
-          </Link>
-          <Link href="#brokenAccess" title="破解访问控制">
-            <Link href="#weakness4" title="漏洞"></Link>
-            <Link href="#example4" title="案例"></Link>
-            <Link href="#prevent4" title="防御手段"></Link>
-          </Link>
-          <Link href="#xss" title="跨站脚本(XSS)">
-            <Link href="#weakness5" title="漏洞"></Link>
-            <Link href="#example5" title="案例"></Link>
-            <Link href="#prevent5" title="防御手段"></Link>
-          </Link>
-          <Link href="#csrf" title="跨站请求伪造">
-            <Link href="#weakness6" title="漏洞"></Link>
-            <Link href="#example6" title="案例"></Link>
-            <Link href="#prevent6" title="防御手段"></Link>
-          </Link>
-        </Anchor>
       </main>
+      <ArticleAnchor
+        items={[
+          {
+            title: "常见Web应用安全漏洞及应对手段",
+            key: "pre",
+            href: "#pre"
+          },
+          {
+            title: "注入",
+            key: "injection",
+            href: "#injection",
+            children: [
+              {
+                title: "漏洞",
+                key: "weakness1",
+                href: "#weakness1"
+              },
+              {
+                title: "案例",
+                key: "example1",
+                href: "#example1"
+              },
+              {
+                title: "防御手段",
+                key: "prevent1",
+                href: "#prevent1"
+              }
+            ]
+          },
+          {
+            title: "破解认证",
+            key: "brokenAuth",
+            href: "#brokenAuth",
+            children: [
+              {
+                title: "漏洞",
+                key: "weakness2",
+                href: "#weakness2"
+              },
+              {
+                title: "案例",
+                key: "example2",
+                href: "#example2"
+              },
+              {
+                title: "防御手段",
+                key: "prevent2",
+                href: "#prevent2"
+              }
+            ]
+          },
+          {
+            title: "敏感信息泄露",
+            key: "sensitiveData",
+            href: "#sensitiveData",
+            children: [
+              {
+                title: "漏洞",
+                key: "weakness3",
+                href: "#weakness3"
+              },
+              {
+                title: "案例",
+                key: "example3",
+                href: "#example3"
+              },
+              {
+                title: "防御手段",
+                key: "prevent3",
+                href: "#prevent3"
+              }
+            ]
+          },
+          {
+            title: "破解访问控制",
+            key: "brokenAccess",
+            href: "#brokenAccess",
+            children: [
+              {
+                title: "漏洞",
+                key: "weakness4",
+                href: "#weakness4"
+              },
+              {
+                title: "案例",
+                key: "example4",
+                href: "#example4"
+              },
+              {
+                title: "防御手段",
+                key: "prevent4",
+                href: "#prevent4"
+              }
+            ]
+          },
+          {
+            title: "跨站脚本(XSS)",
+            key: "xss",
+            href: "#xss",
+            children: [
+              {
+                title: "漏洞",
+                key: "weakness5",
+                href: "#weakness5"
+              },
+              {
+                title: "案例",
+                key: "example5",
+                href: "#example5"
+              },
+              {
+                title: "防御手段",
+                key: "prevent5",
+                href: "#prevent5"
+              }
+            ]
+          },
+          {
+            title: "跨站请求伪造",
+            key: "csrf",
+            href: "#csrf",
+            children: [
+              {
+                title: "漏洞",
+                key: "weakness6",
+                href: "#weakness6"
+              },
+              {
+                title: "案例",
+                key: "example6",
+                href: "#example6"
+              },
+              {
+                title: "防御手段",
+                key: "prevent6",
+                href: "#prevent6"
+              }
+            ]
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

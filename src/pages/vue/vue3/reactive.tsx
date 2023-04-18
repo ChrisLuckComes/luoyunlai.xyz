@@ -1,5 +1,4 @@
-import { classMap } from '@/constants/constant';
-import { Anchor } from 'antd';
+import { classMap } from "@/constants/constant";
 import {
   COMPUTED,
   COMPUTED_REF_IMPL,
@@ -17,14 +16,16 @@ import {
   TARGET_TYPE_MAP,
   TRACK,
   TRIGGER
-} from '.';
-import { UseMarkDown } from '@/hooks/useMarkdown';
+} from ".";
+import { UseMarkDown } from "@/hooks/useMarkdown";
+import { ArticleAnchor } from "@/component/Anchor";
 
-const { Link } = Anchor;
 export default function Index() {
   const computed = <UseMarkDown markdown={COMPUTED}></UseMarkDown>,
     computedRefImpl = <UseMarkDown markdown={COMPUTED_REF_IMPL}></UseMarkDown>,
-    createReactiveObject = <UseMarkDown markdown={CREATE_REACTIVE_OBJECT}></UseMarkDown>,
+    createReactiveObject = (
+      <UseMarkDown markdown={CREATE_REACTIVE_OBJECT}></UseMarkDown>
+    ),
     createRef = <UseMarkDown markdown={CREATE_REF}></UseMarkDown>,
     effect = <UseMarkDown markdown={EFFECT_1}></UseMarkDown>,
     mutableGet = <UseMarkDown markdown={MUTABLE_GET}></UseMarkDown>,
@@ -33,23 +34,27 @@ export default function Index() {
     mutableSet = <UseMarkDown markdown={MUTABLE_SET}></UseMarkDown>,
     reactive = <UseMarkDown markdown={REACTIVE}></UseMarkDown>,
     reactiveEffect = <UseMarkDown markdown={REACTIVE_EFFECT}></UseMarkDown>,
-    recordEffectScope = <UseMarkDown markdown={RECORD_EFFECT_SCOPE}></UseMarkDown>,
+    recordEffectScope = (
+      <UseMarkDown markdown={RECORD_EFFECT_SCOPE}></UseMarkDown>
+    ),
     ref = <UseMarkDown markdown={REF}></UseMarkDown>,
     targetTypeMap = <UseMarkDown markdown={TARGET_TYPE_MAP}></UseMarkDown>,
     track = <UseMarkDown markdown={TRACK}></UseMarkDown>,
     trigger = <UseMarkDown markdown={TRIGGER}></UseMarkDown>;
 
   return (
-    <article id="rootActicle" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h1 className={classMap.pageTitle}>响应式系统</h1>
-        <h2 id="reactive" className={classMap.articleTitle}>
+        <h2 id="reactive" className="font-semibold text-h2 mb-2">
           reactive
         </h2>
         接受一个普通对象然后返回该对象的响应式<code>proxy</code>
         <br />
-        Vue3中响应式数据核心是<code>reactive</code>，它由<code>proxy</code>+<code>effect</code>组合
-        <div className={classMap.assist}>packages\reactivity\src\reactive.ts</div>
+        Vue3中响应式数据核心是<code>reactive</code>，它由<code>proxy</code>+
+        <code>effect</code>组合
+        <div className={classMap.assist}>
+          packages\reactivity\src\reactive.ts
+        </div>
         {reactive}
         再进入<code>createReactiveObject</code>
         {createReactiveObject}
@@ -73,13 +78,17 @@ export default function Index() {
         <h2 id="ref" className={classMap.articleTitle}>
           ref
         </h2>
-        接受一个参数值并返回一个响应式且可改变的ref对象，ref对象拥有一个指向内部值的单一属性.value ref可以看作是
-        <code>reactive</code> 的变形，用于解决值类型的数据响应，如果传入ref的是对象，会调用<code>reactive</code>
+        接受一个参数值并返回一个响应式且可改变的ref对象，ref对象拥有一个指向内部值的单一属性.value
+        ref可以看作是
+        <code>reactive</code>{" "}
+        的变形，用于解决值类型的数据响应，如果传入ref的是对象，会调用
+        <code>reactive</code>
         <br />
         <div className={classMap.assist}>packages\reactivity\src\ref.ts</div>
         {ref}
         <br />
-        <code>ref</code>调用<code>createRef</code>，判断value是不是ref，如果不是调用<code>new RefImpl</code>
+        <code>ref</code>调用<code>createRef</code>
+        ，判断value是不是ref，如果不是调用<code>new RefImpl</code>
         <br />
         <br />
         构造函数中，如果shallow是true直接将初始值和当前值都设为value,否则调用reactive包装value
@@ -92,8 +101,11 @@ export default function Index() {
         <h2 id="baseHandlers" className={classMap.articleTitle}>
           baseHandlers
         </h2>
-        handlers是Proxy的第二个参数，针对target具体操作同时做一些处理。<code>baseHandlers</code>包含4种handler
-        <div className={classMap.assist}>packages\reactivity\src\baseHandlers.ts</div>
+        handlers是Proxy的第二个参数，针对target具体操作同时做一些处理。
+        <code>baseHandlers</code>包含4种handler
+        <div className={classMap.assist}>
+          packages\reactivity\src\baseHandlers.ts
+        </div>
         <ul className={classMap.ul}>
           <li>mutableHandlers 可变处理</li>
           <li>readonlyHandlers 只读处理</li>
@@ -138,7 +150,8 @@ export default function Index() {
         构造函数调用 <code>recordEffectScope</code>
         {recordEffectScope}
         <br />
-        那么<code>effect</code>是如何收集和触发依赖的呢？接下来就来看看<code>track</code>和<code>trigger</code>
+        那么<code>effect</code>是如何收集和触发依赖的呢？接下来就来看看
+        <code>track</code>和<code>trigger</code>
         <h3 id="track" className={classMap.articleSubTitle}>
           track
         </h3>
@@ -156,7 +169,9 @@ export default function Index() {
         或者传入一个包含get，set函数的对象，创建一个可以手动修改的计算属性
         <br />
         可能会依赖其他<code>reactive</code>的值，同时会延迟和缓存计算值
-        <div className={classMap.assist}>packages\reactivity\src\computed.ts</div>
+        <div className={classMap.assist}>
+          packages\reactivity\src\computed.ts
+        </div>
         {computed}
         调用<code>ComputedRefImpl</code>
         {computedRefImpl}
@@ -175,22 +190,74 @@ export default function Index() {
           </li>
         </ul>
       </main>
-      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
-        <Link href="#reactive" title="reactive"></Link>
-        <Link href="#ref" title="ref"></Link>
-        <Link href="#baseHandlers" title="baseHandlers">
-          <Link href="#mutableHandlers" title="mutableHandlers"></Link>
-          <Link href="#get" title="get"></Link>
-          <Link href="#set" title="set"></Link>
-          <Link href="#other" title="deleteProperty has ownKeys"></Link>
-        </Link>
-        <Link href="#effect" title="effect">
-          <Link href="#track" title="track"></Link>
-          <Link href="#trigger" title="trigger"></Link>
-        </Link>
-        <Link href="#computed" title="computed"></Link>
-        <Link href="#summary" title="总结"></Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "reactive",
+            key: "reactive",
+            href: "#reactive"
+          },
+          {
+            title: "ref",
+            key: "ref",
+            href: "#ref"
+          },
+          {
+            title: "baseHandlers",
+            key: "baseHandlers",
+            href: "#baseHandlers",
+            children: [
+              {
+                title: "mutableHandlers",
+                key: "mutableHandlers",
+                href: "#mutableHandlers"
+              },
+              {
+                title: "get",
+                key: "get",
+                href: "#get"
+              },
+              {
+                title: "set",
+                key: "set",
+                href: "#set"
+              },
+              {
+                title: "deleteProperty has ownKeys",
+                key: "other",
+                href: "#other"
+              }
+            ]
+          },
+          {
+            title: "effect",
+            key: "effect",
+            href: "#effect",
+            children: [
+              {
+                title: "track",
+                key: "track",
+                href: "#track"
+              },
+              {
+                title: "trigger",
+                key: "trigger",
+                href: "#trigger"
+              }
+            ]
+          },
+          {
+            title: "computed",
+            key: "computed",
+            href: "#computed"
+          },
+          {
+            title: "总结",
+            key: "summary",
+            href: "#summary"
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

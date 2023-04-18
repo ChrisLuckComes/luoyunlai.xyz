@@ -1,6 +1,6 @@
-import { classMap } from '@/constants/constant';
-import { Anchor, Alert } from 'antd';
-import { UseMarkDown } from '@/hooks/useMarkdown';
+import { classMap } from "@/constants/constant";
+import { Alert } from "antd";
+import { UseMarkDown } from "@/hooks/useMarkdown";
 import {
   APP_USE,
   APP_USE_1,
@@ -11,12 +11,11 @@ import {
   PROCESS_PARAMS,
   PROTO_HANDLE,
   PROTO_USE
-} from './_middleware';
+} from "./_middleware";
 
-import ONION from '@/images/node/koa.png';
-import { LazyImage } from '@/component/image';
-
-const { Link } = Anchor;
+import ONION from "@/images/node/koa.png";
+import { LazyImage } from "@/component/image";
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Index() {
   const appUse = <UseMarkDown markdown={APP_USE}></UseMarkDown>,
@@ -28,9 +27,9 @@ export default function Index() {
     compose = <UseMarkDown markdown={COMPOSE}></UseMarkDown>;
 
   return (
-    <article id="rootActicle" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h2 id="express" className={classMap.articleTitle}>
+        <h2 id="express" className="font-semibold text-h2 mb-2">
           express中间件
         </h2>
         提到Node.js，绕不开的框架就是express以及原班人马开发的koa
@@ -79,13 +78,15 @@ export default function Index() {
         中间件的挂载主要通过<code>proto.use</code>和<code>proto.handle</code>
         {protoUse}
         <br />
-        <code>proto.use</code>主要将挂载的中间件存储在stack属性上，具体实现还要看<code>proto.handle</code>的
-        <code>next方法</code>
+        <code>proto.use</code>
+        主要将挂载的中间件存储在stack属性上，具体实现还要看
+        <code>proto.handle</code>的<code>next方法</code>
         <br />
         <br />
         {protoHandle}
         <br />
-        <code>proto.handle</code>中遍历stack，并取出layer并执行，具体执行逻辑在<code>process_params</code>
+        <code>proto.handle</code>中遍历stack，并取出layer并执行，具体执行逻辑在
+        <code>process_params</code>
         <br />
         <br />
         {processParams}
@@ -107,25 +108,54 @@ export default function Index() {
         {koaUse}
         <ul>
           <li>
-            1. 首先koa调用<code>use</code>将回调函数push到<code>middleware</code>数组
+            1. 首先koa调用<code>use</code>将回调函数push到
+            <code>middleware</code>数组
           </li>
           <li>
-            2. 调用<code>listen</code>，启动httpServer的同时，调用<code>callback</code>
+            2. 调用<code>listen</code>，启动httpServer的同时，调用
+            <code>callback</code>
           </li>
-          <li>3. callback调用<code>compose</code>执行中间件</li>
+          <li>
+            3. callback调用<code>compose</code>执行中间件
+          </li>
         </ul>
         {compose}
-        在compose中，对<code>middleware</code>中间件数组进行递归调用，返回一个Promise链。
+        在compose中，对<code>middleware</code>
+        中间件数组进行递归调用，返回一个Promise链。
       </main>
-      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
-        <Link href="express" title="express中间件">
-          <Link href="expressSource" title="源码解析"></Link>
-        </Link>
-        <Link href="koa" title="koa中间件">
-          <Link href="onion" title="洋葱模型"></Link>
-          <Link href="koaSource" title="源码解析"></Link>
-        </Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "express中间件",
+            key: "express",
+            href: "#express",
+            children: [
+              {
+                title: "源码解析",
+                key: "expressSource",
+                href: "#expressSource"
+              }
+            ]
+          },
+          {
+            title: "koa中间件",
+            key: "koa",
+            href: "#koa",
+            children: [
+              {
+                title: "洋葱模型",
+                key: "onion",
+                href: "#onion"
+              },
+              {
+                title: "源码解析",
+                key: "koaSource",
+                href: "#koaSource"
+              }
+            ]
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

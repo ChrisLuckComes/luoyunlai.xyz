@@ -1,16 +1,15 @@
-import { classMap } from '@/constants/constant';
-import { Anchor } from 'antd';
-import { UseMarkDown } from '@/hooks/useMarkdown';
-const { Link } = Anchor;
+import { classMap } from "@/constants/constant";
+import { UseMarkDown } from "@/hooks/useMarkdown";
 
-import CREATE_SSH from '@/images/createSSH.jpg';
-import SETTINGS from '@/images/settings.png';
-import NEW_SECRET from '@/images/newSecret.png';
-import NEW_WORKFLOW from '@/images/newWorkflow.png';
-import SETUP_YOURSELF from '@/images/setUpYourself.png';
-import COMMIT_WORKFLOW from '@/images/commitWorkflow.png';
-import WORKFLOW from '@/images/workflow.png';
-import { LazyImage } from '@/component/image';
+import CREATE_SSH from "@/images/createSSH.jpg";
+import SETTINGS from "@/images/settings.png";
+import NEW_SECRET from "@/images/newSecret.png";
+import NEW_WORKFLOW from "@/images/newWorkflow.png";
+import SETUP_YOURSELF from "@/images/setUpYourself.png";
+import COMMIT_WORKFLOW from "@/images/commitWorkflow.png";
+import WORKFLOW from "@/images/workflow.png";
+import { LazyImage } from "@/component/image";
+import { ArticleAnchor } from "@/component/Anchor";
 
 const MY_WORKFLOW = `\`\`\`xml
 # 一个workflow，名为deploy to tengxunyun
@@ -64,10 +63,11 @@ export default function Index() {
   const myWorkflow = <UseMarkDown markdown={MY_WORKFLOW}></UseMarkDown>;
 
   return (
-    <article id="rootActicle" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h2 id="diff" className={classMap.articleTitle}>
-          不会还有人在手动发版吧？不会吧？手把手带你使用Github Actions完成CI/CD自动化部署
+        <h2 id="pre" className="font-semibold text-h2 mb-2">
+          不会还有人在手动发版吧？不会吧？手把手带你使用Github
+          Actions完成CI/CD自动化部署
         </h2>
         <div className={classMap.assist}>以该repo为例子，部署在腾讯云</div>
         <h2 id="ssh" className={classMap.articleTitle}>
@@ -77,7 +77,8 @@ export default function Index() {
         <LazyImage src={CREATE_SSH} />
         <br />
         然后进入github，路径：github/settings/Secrets，已存在的密钥会在这里展示，点击
-        <strong>new repository secret</strong>新增，也可以创建环境变量区分不同环境。
+        <strong>new repository secret</strong>
+        新增，也可以创建环境变量区分不同环境。
         <br />
         <br />
         <LazyImage src={SETTINGS} />
@@ -94,7 +95,8 @@ export default function Index() {
         <LazyImage src={NEW_WORKFLOW} />
         <br />
         <br />
-        有很多模板可供选择，这里我们选择自定义，点击<strong>set up a work yourself</strong>
+        有很多模板可供选择，这里我们选择自定义，点击
+        <strong>set up a work yourself</strong>
         <br />
         <br />
         <LazyImage src={SETUP_YOURSELF} />
@@ -116,12 +118,35 @@ export default function Index() {
         <br />
         <LazyImage src={WORKFLOW} />
       </main>
-      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
-        <Link href="#ssh" title="SSH"></Link>
-        <Link href="#workflow" title="workflow"></Link>
-        <Link href="#code" title="代码"></Link>
-        <Link href="#result" title="Jobs"></Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "不要再手动发版了",
+            key: "pre",
+            href: "#pre"
+          },
+          {
+            title: "SSH",
+            key: "ssh",
+            href: "#ssh"
+          },
+          {
+            title: "workflow",
+            key: "workflow",
+            href: "#workflow"
+          },
+          {
+            title: "代码",
+            key: "code",
+            href: "#code"
+          },
+          {
+            title: "Jobs",
+            key: "result",
+            href: "#result"
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

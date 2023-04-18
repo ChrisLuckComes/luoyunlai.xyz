@@ -1,5 +1,4 @@
 import { classMap } from "@/constants/constant";
-import { Anchor } from "antd";
 import { UseMarkDown } from "@/hooks/useMarkdown";
 import {
   AWAITED,
@@ -15,8 +14,7 @@ import {
   TUPLE_TITLE
 } from "./_tsExercise";
 import { Toggle } from "@/component/toggle";
-
-const { Link } = Anchor;
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Ts() {
   const _if = <UseMarkDown markdown={If}></UseMarkDown>,
@@ -32,9 +30,9 @@ export default function Ts() {
     include = <UseMarkDown markdown={INCLUDE}></UseMarkDown>;
 
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h2 id="pre" className={classMap.articleTitle}>
+        <h2 id="pre" className="font-semibold text-h2 mb-2">
           TypeScript类型体操
         </h2>
         TS想必都不陌生了，练练手吧，巩固基础。
@@ -103,7 +101,7 @@ export default function Ts() {
         方法，这个类型接受两个参数，返回的类型要么是 true 要么是 false。
         <Toggle content={include} />
         如果不考虑子类型实现比较简单，要考虑的话需要递归去判断，并且要借助其他类型判断是否===
-        <h2 id="diff" className={classMap.articleTitle}>
+        <h2 id="know" className={classMap.articleTitle}>
           知识
         </h2>
         <h3 id="type" className={classMap.articleSubTitle}>
@@ -144,7 +142,88 @@ export default function Ts() {
           </li>
         </ul>
       </main>
-      <Anchor
+      <ArticleAnchor
+        items={[
+          {
+            title: "TypeScript类型体操",
+            key: "pre",
+            href: "#pre"
+          },
+          {
+            title: "If",
+            key: "if",
+            href: "#if"
+          },
+          {
+            title: "Pick",
+            key: "pick",
+            href: "#pick"
+          },
+          {
+            title: "Readonly",
+            key: "readonly",
+            href: "#readonly"
+          },
+          {
+            title: "TupleToObject",
+            key: "tupleToObject",
+            href: "#tupleToObject"
+          },
+          {
+            title: "First of Array",
+            key: "firstOfArray",
+            href: "#firstOfArray"
+          },
+          {
+            title: "Length Of Tuple",
+            key: "length",
+            href: "#length"
+          },
+          {
+            title: "Awaited",
+            key: "awaited",
+            href: "#awaited"
+          },
+          {
+            title: "Concat",
+            key: "concat",
+            href: "#concat"
+          },
+          {
+            title: "Exclude",
+            key: "exclude",
+            href: "#exclude"
+          },
+          {
+            title: "Include",
+            key: "include",
+            href: "#include"
+          },
+          {
+            title: "知识",
+            key: "know",
+            href: "#know",
+            children: [
+              {
+                title: "判断类型是否一致",
+                key: "type",
+                href: "#type"
+              },
+              {
+                title: "推断类型",
+                key: "infer",
+                href: "#infer"
+              },
+              {
+                title: "遍历",
+                key: "traverse",
+                href: "#traverse"
+              }
+            ]
+          }
+        ]}
+      />
+      {/* <Anchor
         className="anchor"
         getContainer={() => document.getElementById("content") as HTMLElement}
       >
@@ -163,7 +242,7 @@ export default function Ts() {
           <Link href="#infer" title="推断类型"></Link>
           <Link href="#traverse" title="遍历"></Link>
         </Link>
-      </Anchor>
+      </Anchor> */}
     </article>
   );
 }

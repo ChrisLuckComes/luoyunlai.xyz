@@ -1,20 +1,24 @@
-import { classMap } from '@/constants/constant';
-import { UseMarkDown } from '@/hooks/useMarkdown';
-import { Anchor } from 'antd';
-import { FLAGS, WORK_LOOP_CONCUNCURRENT } from '.';
-const { Link } = Anchor;
+import { classMap } from "@/constants/constant";
+import { UseMarkDown } from "@/hooks/useMarkdown";
+
+import { FLAGS, WORK_LOOP_CONCUNCURRENT } from ".";
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Thinking() {
-  const workLoopConcurrent = <UseMarkDown markdown={WORK_LOOP_CONCUNCURRENT}></UseMarkDown>,
+  const workLoopConcurrent = (
+      <UseMarkDown markdown={WORK_LOOP_CONCUNCURRENT}></UseMarkDown>
+    ),
     flags = <UseMarkDown markdown={FLAGS}></UseMarkDown>;
 
   return (
-    <article id="rootActicle" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h2 id="thinking" className={classMap.articleTitle}>
+        <h2 id="thinking" className="font-semibold text-h2 mb-2">
           React理念
         </h2>
-        <div className={classMap.assist}>我们认为，React是用JavaScript构建快速响应的大型Web应用程序的首选方式</div>
+        <div className={classMap.assist}>
+          我们认为，React是用JavaScript构建快速响应的大型Web应用程序的首选方式
+        </div>
         摘自
         <a
           className={classMap.href}
@@ -45,8 +49,8 @@ export default function Thinking() {
         <h3 id="oldReconciler" className={classMap.articleSubTitle}>
           Reconciler（协调器）
         </h3>
-        在<code>React</code>中可以通过<code>this.setState</code>、<code>this.forceUpdate</code>、
-        <code>ReactDOM.render</code>等API触发更新
+        在<code>React</code>中可以通过<code>this.setState</code>、
+        <code>this.forceUpdate</code>、<code>ReactDOM.render</code>等API触发更新
         <br />
         <br />
         每当有更新发生时,<strong>Reconciler</strong>会做如下工作
@@ -74,16 +78,27 @@ export default function Thinking() {
           Renderer（渲染器）
         </h3>
         <code>React</code>支持跨平台，前端最熟悉的是负责浏览器环境渲染的
-        <a className={classMap.href} rel="noreferrer" target="_blank" href="https://www.npmjs.com/package/react-dom">
+        <a
+          className={classMap.href}
+          rel="noreferrer"
+          target="_blank"
+          href="https://www.npmjs.com/package/react-dom"
+        >
           ReactDOM
         </a>
         ， 还有
-        <a className={classMap.href} rel="noreferrer" target="_blank" href="https://www.npmjs.com/package/react-native">
+        <a
+          className={classMap.href}
+          rel="noreferrer"
+          target="_blank"
+          href="https://www.npmjs.com/package/react-native"
+        >
           ReactNative
         </a>
         等渲染器
         <br />
-        每次更新发生时，<strong>Renderer</strong>接到<strong>Reconciler</strong>通知，将变化的组件渲染在当前环境
+        每次更新发生时，<strong>Renderer</strong>接到<strong>Reconciler</strong>
+        通知，将变化的组件渲染在当前环境
         <br />
         <a
           className={classMap.href}
@@ -96,7 +111,8 @@ export default function Thinking() {
         <h3 id="oldWeakness" className={classMap.articleSubTitle}>
           缺点
         </h3>
-        在<strong>Reconciler</strong>中，<code>mount</code>的组件会调用<code>mountComponent</code>,<code>update</code>
+        在<strong>Reconciler</strong>中，<code>mount</code>的组件会调用
+        <code>mountComponent</code>,<code>update</code>
         组件会调用<code>updateComponent</code>，它们都会递归更新子组件。
         递归执行一旦开始就无法中断，当层级很深时，递归更新时间超过了16ms，用户交互就会卡顿。
         <br />
@@ -106,7 +122,8 @@ export default function Thinking() {
         React16架构可以分为三层
         <ul className={classMap.ul}>
           <li>
-            Scheduler（调度器） 调度任务的优先级，高优先级任务优先进入<strong>Reconciler</strong>
+            Scheduler（调度器） 调度任务的优先级，高优先级任务优先进入
+            <strong>Reconciler</strong>
           </li>
           <li>Reconciler（协调器） 负责找出变化的组件</li>
           <li>Renderer（渲染器） 负责将变化的组件渲染到页面上</li>
@@ -124,46 +141,102 @@ export default function Thinking() {
         >
           requestIdleCallback
         </a>
-        ，但是它的兼容性不好，且触发频率不稳定。<code>React</code>选择了自行实现，这就是<strong>Scheduler</strong>
+        ，但是它的兼容性不好，且触发频率不稳定。<code>React</code>
+        选择了自行实现，这就是<strong>Scheduler</strong>
         ,可以在空闲时触发回调。
         <h3 id="newReconciler" className={classMap.articleSubTitle}>
           Reconciler（协调器）
         </h3>
-        React15中<strong>Reconciler</strong>是递归处理vDom的，react16解决了这个问题。
+        React15中<strong>Reconciler</strong>
+        是递归处理vDom的，react16解决了这个问题。
         <br />
-        更新工作改写成了可以中断的循环过程。每次循环都会调用<code>shouldYield</code>判断是否有剩余时间
-        <div className={classMap.assist}>packages\react-reconciler\src\ReactFiberWorkLoop.new.js</div>
+        更新工作改写成了可以中断的循环过程。每次循环都会调用
+        <code>shouldYield</code>判断是否有剩余时间
+        <div className={classMap.assist}>
+          packages\react-reconciler\src\ReactFiberWorkLoop.new.js
+        </div>
         {workLoopConcurrent}
-        另外，<strong>Reconciler</strong>和<strong>Renderer</strong>不再是交替工作。当<strong>Scheduler</strong>
+        另外，<strong>Reconciler</strong>和<strong>Renderer</strong>
+        不再是交替工作。当<strong>Scheduler</strong>
         将任务交给
-        <strong>Reconciler</strong>后，<strong>Reconciler</strong>会为有变化的vDom打上effectTag,如下：
-        <div className={classMap.assist}>packages\react-reconciler\src\ReactFiberFlags.js</div>
+        <strong>Reconciler</strong>后，<strong>Reconciler</strong>
+        会为有变化的vDom打上effectTag,如下：
+        <div className={classMap.assist}>
+          packages\react-reconciler\src\ReactFiberFlags.js
+        </div>
         {flags}
-        整个<strong>Scheduler</strong>和<strong>Reconciler</strong>的工作都在内存中进行，所有组件都完成
+        整个<strong>Scheduler</strong>和<strong>Reconciler</strong>
+        的工作都在内存中进行，所有组件都完成
         <strong>Reconciler</strong>的工作，才会统一交给renderer
         <h3 id="newRenderer" className={classMap.articleSubTitle}>
           Renderer（渲染器）
         </h3>
-        <strong>Renderer</strong>根据<strong>Reconciler</strong>标记的effectTag，同步执行对应的DOM操作
+        <strong>Renderer</strong>根据<strong>Reconciler</strong>
+        标记的effectTag，同步执行对应的DOM操作
         <h2 id="summary" className={classMap.articleTitle}>
           总结
         </h2>
-        <code>React16</code>采用了新的<code>Reconciler</code>,其内部采用了<code>Fiber</code>架构
+        <code>React16</code>采用了新的<code>Reconciler</code>,其内部采用了
+        <code>Fiber</code>架构
       </main>
-      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
-        <Link href="#thinking" title="理念"></Link>
-        <Link href="#oldStructure" title="React15架构">
-          <Link href="#oldReconciler" title="Reconciler（协调器）"></Link>
-          <Link href="#oldRenderer" title="Renderer（渲染器）"></Link>
-          <Link href="#oldWeakness" title="缺点"></Link>
-        </Link>
-        <Link href="#newStructure" title="React16架构">
-          <Link href="#scheduler" title="Scheduler（调度器）"></Link>
-          <Link href="#newReconciler" title="Reconciler（协调器）"></Link>
-          <Link href="#newRenderer" title="Renderer（渲染器）"></Link>
-        </Link>
-        <Link href="#summary" title="总结"></Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "理念",
+            key: "thinking",
+            href: "#thinking"
+          },
+          {
+            title: "React15架构",
+            key: "oldStructure",
+            href: "#oldStructure",
+            children: [
+              {
+                title: "Reconciler（协调器）",
+                key: "oldReconciler",
+                href: "#oldReconciler"
+              },
+              {
+                title: "Renderer（渲染器）",
+                key: "Renderer（渲染器）",
+                href: "#oldRenderer"
+              },
+              {
+                title: "缺点",
+                key: "oldWeakness",
+                href: "#oldWeakness"
+              }
+            ]
+          },
+          {
+            title: "React16架构",
+            key: "newStructure",
+            href: "#newStructure",
+            children: [
+              {
+                title: "Scheduler（调度器）",
+                key: "scheduler",
+                href: "#scheduler"
+              },
+              {
+                title: "Reconciler（协调器）",
+                key: "newReconciler",
+                href: "#newReconciler"
+              },
+              {
+                title: "Renderer（渲染器）",
+                key: "newRenderer",
+                href: "#newRenderer"
+              }
+            ]
+          },
+          {
+            title: "总结",
+            key: "summary",
+            href: "#summary"
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

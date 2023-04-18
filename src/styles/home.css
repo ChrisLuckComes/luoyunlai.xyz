@@ -1,4 +1,8 @@
-@import url('./flex.css');
+@import url("./flex.css");
+
+.ant-layout {
+  @apply w-full overflow-x-hidden;
+}
 
 .ant-layout-header {
   @apply bg-white !important;
@@ -36,7 +40,7 @@ ul {
 }
 
 .article {
-  @apply h-full overflow-y-auto;
+  @apply flex h-full overflow-y-auto;
 }
 
 .article-title {
@@ -65,7 +69,7 @@ ul {
 
 .markdown-container {
   background: #f2f4f5;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   font-size: 1em;
   line-height: 1.5em;
   hyphens: none;
@@ -76,12 +80,6 @@ ul {
   & code {
     border: none;
   }
-}
-
-.anchor {
-  @apply fixed top-150 right-100;
-  max-height: 80vh !important;
-  overflow-y: auto;
 }
 
 .min-w-header-menu {

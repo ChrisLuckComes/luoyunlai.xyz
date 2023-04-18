@@ -1,11 +1,16 @@
-import React from 'react';
-import { Anchor, Image } from 'antd';
-const { Link } = Anchor;
-import { classMap, imgFallback } from '@/constants/constant';
+import { classMap } from "@/constants/constant";
 
-import touDa from '@/images/头大.webp';
-import { INDEX_CSS, TAILWIND, SCRIPTS, HTML, POSTCSS } from '../experiences/index';
-import { UseMarkDown } from '@/hooks/useMarkdown';
+import touDa from "@/images/头大.webp";
+import {
+  INDEX_CSS,
+  TAILWIND,
+  SCRIPTS,
+  HTML,
+  POSTCSS
+} from "../experiences/index";
+import { UseMarkDown } from "@/hooks/useMarkdown";
+import { LazyImage } from "@/component/image";
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Tailwind() {
   const indexCss = <UseMarkDown markdown={INDEX_CSS}></UseMarkDown>,
@@ -17,22 +22,21 @@ export default function Tailwind() {
   return (
     <article className={classMap.article}>
       <main className={classMap.content}>
-        <h1 className={classMap.pageTitle}>来不及了，快上车tailwindcss🚘</h1>
-        <br />
-        <h2 id="front" className={classMap.articleTitle}>
-          前言
+        <h2 id="front" className="font-semibold text-h2 mb-2">
+          来不及了，快上车tailwindcss🚘
         </h2>
         <p>
           前端最讨厌的大概就是写css了🤮，而且还要注意优先级，命名覆盖等问题，取个啥名好是所有游戏的第一个难题🐶。项目大了css怎么维护真让人头大，多人协作一定会出现同样的样式却用不同的命名写了n次。
         </p>
         <p>
-          更让人烦的是某些css预处理器，对，说的就是你 <strong className={classMap.articleTitle}>sass</strong>
+          更让人烦的是某些css预处理器，对，说的就是你{" "}
+          <strong className={classMap.articleTitle}>sass</strong>
         </p>
         <p>
           首先某些脚手架初始化时涉及到node-sass的安装问题，菜鸟需要折腾好久。再就是sass-loader的性能问题，根据webpack-measure的插件显示sass-loader耗时着实不短。
         </p>
         <br />
-        <Image placeholder={true} width={220} height={220} src={touDa} fallback={imgFallback} preview={false} />
+        <LazyImage src={touDa} width={220} height={220}></LazyImage>
         <br />
         如果有一个人帮你写好了大部分的原子css（之前的项目里是我），开发时只需要引用组合，最多只是简单配置，那该有多香啊。
         <br />
@@ -78,11 +82,25 @@ export default function Tailwind() {
         <div className="markdown-container">{html}</div>
         很清爽有没有🤓
       </main>
-      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
-        <Link href="#front" title="前言" />
-        <Link href="#begin" title="开始使用"></Link>
-        <Link href="#exp" title="开启愉快的css编写体验"></Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "来不及了，快上车tailwindcss🚘",
+            key: "front",
+            href: "#front"
+          },
+          {
+            title: "开始使用",
+            key: "begin",
+            href: "#begin"
+          },
+          {
+            title: "开启愉快的css编写体验",
+            key: "exp",
+            href: "#exp"
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

@@ -1,27 +1,27 @@
-import { classMap } from '@/constants/constant';
-import { Alert, Anchor } from 'antd';
-import { UseMarkDown } from '@/hooks/useMarkdown';
+import { classMap } from "@/constants/constant";
+import { Alert } from "antd";
+import { UseMarkDown } from "@/hooks/useMarkdown";
 
-import SHARE from '@images/knowledge/share.png';
-import STRUCTURE from '@images/knowledge/structure.webp';
-import BASIC_FLOW from '@images/knowledge/basicFlow.webp';
-import MAIN_FLOW from '@images/knowledge/mainflow.webp';
-import MATH_EXPRESSION from '@images/knowledge/mathExpression.webp';
-import PARSE_TREE from '@images/knowledge/parseTree.webp';
-import DOM_TREE from '@images/knowledge/domTree.webp';
-import HTML_PARSING_FLOW from '@images/knowledge/htmlParseingFlow.webp';
-import TOKENIZE from '@images/knowledge/tokenize.webp';
-import TREE_CONSTRUCTION from '@images/knowledge/treeConstruction.webp';
-import CSS_PARSING from '@images/knowledge/parseCss.webp';
-import RELATION from '@images/knowledge/relation.webp';
-import BOX from '@images/knowledge/box.webp';
-import BLOCK from '@images/knowledge/blockBox.webp';
-import INLINE from '@images/knowledge/inlineBox.webp';
-import BLOCK_INLINE from '@images/knowledge/blockAndInline.webp';
-import LINES from '@images/knowledge/lines.webp';
-import RELATIVE from '@images/knowledge/relative.webp';
-import FLOAT_IMG from '@images/knowledge/float.webp';
-import FIXED from '@images/knowledge/fixed.webp';
+import SHARE from "@images/knowledge/share.png";
+import STRUCTURE from "@images/knowledge/structure.webp";
+import BASIC_FLOW from "@images/knowledge/basicFlow.webp";
+import MAIN_FLOW from "@images/knowledge/mainflow.webp";
+import MATH_EXPRESSION from "@images/knowledge/mathExpression.webp";
+import PARSE_TREE from "@images/knowledge/parseTree.webp";
+import DOM_TREE from "@images/knowledge/domTree.webp";
+import HTML_PARSING_FLOW from "@images/knowledge/htmlParseingFlow.webp";
+import TOKENIZE from "@images/knowledge/tokenize.webp";
+import TREE_CONSTRUCTION from "@images/knowledge/treeConstruction.webp";
+import CSS_PARSING from "@images/knowledge/parseCss.webp";
+import RELATION from "@images/knowledge/relation.webp";
+import BOX from "@images/knowledge/box.webp";
+import BLOCK from "@images/knowledge/blockBox.webp";
+import INLINE from "@images/knowledge/inlineBox.webp";
+import BLOCK_INLINE from "@images/knowledge/blockAndInline.webp";
+import LINES from "@images/knowledge/lines.webp";
+import RELATIVE from "@images/knowledge/relative.webp";
+import FLOAT_IMG from "@images/knowledge/float.webp";
+import FIXED from "@images/knowledge/fixed.webp";
 
 import {
   CSS_EXAMPLE,
@@ -38,10 +38,9 @@ import {
   WIDTH_CAL_EXAMPLES,
   EVENT_LOOP,
   FLOAT
-} from '.';
-import { LazyImage } from '@/component/image';
-
-const { Link } = Anchor;
+} from ".";
+import { LazyImage } from "@/component/image";
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Index() {
   const cssRules = <UseMarkDown markdown={CSS_RULES}></UseMarkDown>,
@@ -60,9 +59,9 @@ export default function Index() {
     float = <UseMarkDown markdown={FLOAT}></UseMarkDown>;
 
   return (
-    <article id="rootActicle" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h2 id="preface" className={classMap.articleTitle}>
+        <h2 id="preface" className="font-semibold text-h2 mb-2">
           前言
         </h2>
         作为一个web开发者，学习浏览器的内部运行机制能更好的做出决策，同时也可以了解采用最佳实践背后的理由。我们可能经常会被问到，当在地址栏输入完成按下enter键之后都发生了什么，下面会详细说明。
@@ -70,9 +69,15 @@ export default function Index() {
         <h2 id="browsers" className={classMap.articleTitle}>
           有哪些浏览器？
         </h2>
-        现在PC端主要有5个浏览器：Chrome,IE,Firefox,Safari,Opera。移动端主要是Android Browser,iPhone,Opera Mini,UC
+        现在PC端主要有5个浏览器：Chrome,IE,Firefox,Safari,Opera。移动端主要是Android
+        Browser,iPhone,Opera Mini,UC
         browser,Chrome.除了Opera之外，其他所有浏览器都是基于WebKit。截至于2023年，以下是各大浏览器的占有率，数据来源:
-        <a className={classMap.href} target="_blank" rel="noreferrer" href="https://gs.statcounter.com/">
+        <a
+          className={classMap.href}
+          target="_blank"
+          rel="noreferrer"
+          href="https://gs.statcounter.com/"
+        >
           StatCounter statistics
         </a>
         <br />
@@ -101,16 +106,18 @@ export default function Index() {
         浏览器的架构如下：
         <ul>
           <li>
-            1. <strong>用户界面(User Interface)</strong>：包括地址栏，前进后退按钮，书签菜单等。除了页面之外的部分都是。
+            1. <strong>用户界面(User Interface)</strong>
+            ：包括地址栏，前进后退按钮，书签菜单等。除了页面之外的部分都是。
           </li>
           <li>
-            2. <strong>浏览器引擎(browser engine)</strong>：组织UI和渲染引擎之间的操作
+            2. <strong>浏览器引擎(browser engine)</strong>
+            ：组织UI和渲染引擎之间的操作
           </li>
           <li>
             3. <strong>渲染引擎(rendering engine)</strong>
             ：负责展示请求到的内容。如果请求到的内容是HTML，就解析HTML和CSS，将解析后的内容展示出来。
-            不同的浏览器使用的渲染引擎不同：IE(Trident), Firefox(Gecko), Safari(WebKit),
-            Chrome,Opera(Blink,WebKit分支)。
+            不同的浏览器使用的渲染引擎不同：IE(Trident), Firefox(Gecko),
+            Safari(WebKit), Chrome,Opera(Blink,WebKit分支)。
           </li>
           <li>
             4. <strong>网络(networking)</strong>
@@ -121,7 +128,8 @@ export default function Index() {
             ：用于绘制基础部件，例如弹窗和级联选择。它有通用样式，除非使用了操作系统UI。
           </li>
           <li>
-            6. <strong>JS解释器(JavaScript interpreter)</strong>：用于解析和执行js代码
+            6. <strong>JS解释器(JavaScript interpreter)</strong>
+            ：用于解析和执行js代码
           </li>
           <li>
             7. <strong>数据存储(Data storage)</strong>
@@ -138,7 +146,8 @@ export default function Index() {
         <LazyImage src={BASIC_FLOW} />
         <br />
         渲染引擎开始解析HTML文档，把元素转换为DOM树(content
-        tree)。引擎还会解析样式数据，包括外部CSS文件和style元素。样式信息和HTML中的视觉描述一起创建渲染树(render tree)
+        tree)。引擎还会解析样式数据，包括外部CSS文件和style元素。样式信息和HTML中的视觉描述一起创建渲染树(render
+        tree)
         <br />
         <br />
         渲染树包含了有颜色、尺寸等视觉属性的矩形，它们会以正确的顺序显示在屏幕上。
@@ -196,7 +205,8 @@ export default function Index() {
         </ul>
         举个栗子,分析一下<code>2 + 3 - 1</code>：<br />
         <br />
-        首个命中规则的字串是<code>2</code>，第5条。第二个命中的是<code>2 + 3</code>，第3条。最后<code>2 + 3 - 1</code>
+        首个命中规则的字串是<code>2</code>，第5条。第二个命中的是
+        <code>2 + 3</code>，第3条。最后<code>2 + 3 - 1</code>
         再次命中第3条，因为<code>2 + 3</code>是一个表达式
         <h3 id="formal" className={classMap.articleSubTitle}>
           词汇表和语法的正式定义
@@ -216,7 +226,8 @@ export default function Index() {
         ></Alert>
         <br />
         <br />
-        数字被定义成正则表达式。语法通常被定义为巴科斯范式(Backus–Naur form)，如下：
+        数字被定义成正则表达式。语法通常被定义为巴科斯范式(Backus–Naur
+        form)，如下：
         <br />
         <br />
         <Alert
@@ -249,7 +260,8 @@ export default function Index() {
         有两种类型的解释器，自顶向下和自底向上。自顶向下检查语法的高级别结构并匹配规则，自底向上从输入开始逐步按语法规则转换，从低级别规则开始到高级别规则。
         还是上面的栗子<code></code>：<br />
         <br />
-        自顶向下从高级别规则开始，首先会识别出<code>2 + 3</code>作为表达式，然后再识别<code>2 + 3 - 1</code>作为表达式。
+        自顶向下从高级别规则开始，首先会识别出<code>2 + 3</code>
+        作为表达式，然后再识别<code>2 + 3 - 1</code>作为表达式。
         <br />
         自底向上会扫描输入直到匹配规则成功。
         <h2 id="htmlParser" className={classMap.articleTitle}>
@@ -263,7 +275,12 @@ export default function Index() {
           HTML DTD
         </h3>
         DTD用来定义
-        <a className={classMap.href} target="_blank" rel="noreferrer" href="https://zh.wikipedia.org/wiki/SGML">
+        <a
+          className={classMap.href}
+          target="_blank"
+          rel="noreferrer"
+          href="https://zh.wikipedia.org/wiki/SGML"
+        >
           SGML(Standard Generalized Markup Language)
         </a>
         家族的语言(XML,HTML),它包括了允许的元素定义，属性和层次。
@@ -272,14 +289,20 @@ export default function Index() {
         <h3 id="dom" className={classMap.articleSubTitle}>
           dom
         </h3>
-        语法树由DOM(Document Object Modal)元素和属性节点组成，DOM大多数是一对一的标记。
+        语法树由DOM(Document Object
+        Modal)元素和属性节点组成，DOM大多数是一对一的标记。
         <br />
         <br />
         <LazyImage src={DOM_TREE} />
         <br />
         <br />
         跟HTML类似，DOM也是W3C组织定义的，地址如下：
-        <a className={classMap.href} target="_blank" rel="noreferrer" href="http://www.w3.org/DOM/DOMTR">
+        <a
+          className={classMap.href}
+          target="_blank"
+          rel="noreferrer"
+          href="http://www.w3.org/DOM/DOMTR"
+        >
           http://www.w3.org/DOM/DOMTR
         </a>
         <h3 id="algo" className={classMap.articleSubTitle}>
@@ -306,20 +329,28 @@ export default function Index() {
         ></Alert>
         <br />
         <br />
-        初始状态称为&quot;data state&quot;。当遇到<code>{`<`}</code>时，状态变为&quot;Tag open state&quot;。消费
-        <code>a-z</code>字母时创建&quot;Start tag token&quot;，状态变为&quot;Tag name state&quot;。然后保持这个state直到
-        <code>{`>`}</code>被消费。每个字母会被追加到token name上。上面的栗子被创建的token就是<code>html</code> token。
+        初始状态称为&quot;data state&quot;。当遇到<code>{`<`}</code>
+        时，状态变为&quot;Tag open state&quot;。消费
+        <code>a-z</code>字母时创建&quot;Start tag token&quot;，状态变为&quot;Tag
+        name state&quot;。然后保持这个state直到
+        <code>{`>`}</code>被消费。每个字母会被追加到token
+        name上。上面的栗子被创建的token就是<code>html</code> token。
         <br />
         <br />
-        当遇到<code>{`>`}</code>时,当前token被发出，状态变为&quot;Data state&quot;，然后用同样的步骤对待
-        <code>{`<body>`}</code> tag，到现在已经发出了<code>html</code>和<code>body</code> tag，状态又回到了&quot;Data
-        state&quot; 开始消费H字母时会创建并发出一个字母token，直到遇到body标记的<code>{`<`}</code>
+        当遇到<code>{`>`}</code>时,当前token被发出，状态变为&quot;Data
+        state&quot;，然后用同样的步骤对待
+        <code>{`<body>`}</code> tag，到现在已经发出了<code>html</code>和
+        <code>body</code> tag，状态又回到了&quot;Data state&quot;
+        开始消费H字母时会创建并发出一个字母token，直到遇到body标记的
+        <code>{`<`}</code>
         ，最后发出一个字母token包括<code>Hello world</code>的每个字母。
         <br />
         <br />
-        再回到&quot;Tag open state&quot;。开始消费<code>{`/`}</code>符号时会创建<code>end tag token</code>
-        ，状态变为&quot;Tag name state&quot;，保持这个state直到<code>{`>`}</code>，就又发出了一个新的tag
-        token，状态变为&quot;Data state&quot;，<div className="code">{`</html>`}</div>的处理也跟之前一样。
+        再回到&quot;Tag open state&quot;。开始消费<code>{`/`}</code>符号时会创建
+        <code>end tag token</code>
+        ，状态变为&quot;Tag name state&quot;，保持这个state直到
+        <code>{`>`}</code>，就又发出了一个新的tag token，状态变为&quot;Data
+        state&quot;，<div className="code">{`</html>`}</div>的处理也跟之前一样。
         <br />
         <br />
         <LazyImage src={TOKENIZE} />
@@ -328,16 +359,19 @@ export default function Index() {
         <h3 id="treeAlgo" className={classMap.articleSubTitle}>
           树的构建算法
         </h3>
-        第一个mode是&quot;initial mode&quot;，接收<code>html</code>token会触发&quot;before
-        html&quot;mode，创建HTMLHtmlElement element，然后追加到根节点上。
+        第一个mode是&quot;initial mode&quot;，接收<code>html</code>
+        token会触发&quot;before html&quot;mode，创建HTMLHtmlElement
+        element，然后追加到根节点上。
         <br />
-        然后状态变为&quot;before head&quot;，接收到body token。然后隐式创建HTMLHeadElement并添加到树，尽管没有head
-        token。
+        然后状态变为&quot;before head&quot;，接收到body
+        token。然后隐式创建HTMLHeadElement并添加到树，尽管没有head token。
         <br />
-        接着状态变为&quot;in head&quot;，然后再是&quot;after head&quot;，重新处理body
+        接着状态变为&quot;in head&quot;，然后再是&quot;after
+        head&quot;，重新处理body
         token，创建并插入HTMLBodyElement，状态随后变为&quot;in body&quot;
         <br />
-        接收到Hello world字符token，第一个字符会触发创建&quot;Text&quot;节点，剩余的字母会追加到该节点。
+        接收到Hello
+        world字符token，第一个字符会触发创建&quot;Text&quot;节点，剩余的字母会追加到该节点。
         <br />
         body end token的接收，状态变为&quot;After body&quot; mode。
         <br />
@@ -351,7 +385,8 @@ export default function Index() {
           解析完成后的操作
         </h3>
         这个阶段浏览器会标记文档为可交互状态，开始解析<strong>deferred</strong>
-        的脚本，这些脚本应该在文档解析完成后执行。然后文档状态会被设置为<strong>complete</strong>，<strong>load</strong>
+        的脚本，这些脚本应该在文档解析完成后执行。然后文档状态会被设置为
+        <strong>complete</strong>，<strong>load</strong>
         事件会开始执行。
         <br />
         <br />
@@ -370,7 +405,8 @@ export default function Index() {
         <br />
         规范表达式词法如下：
         {cssWordRules}
-        <strong>ident</strong>是identifier的缩写，就像classname。<strong>name</strong>就是元素id
+        <strong>ident</strong>是identifier的缩写，就像classname。
+        <strong>name</strong>就是元素id
         <br />
         语法BNF描述如下：
         {cssRules}
@@ -395,14 +431,17 @@ export default function Index() {
         web的模型是同步的，作者希望解释器遇到<code>script</code>
         标签时立即解析和执行scripts，此时文档的解析会暂停直到script执行完成。
         如果这个script是外部的，资源首先要通过网络请求回来，这也是同步的，解析会暂停直到资源取回完成再开始。开发者可以在script上加上
-        <strong>defer</strong>属性，它就不会暂停文档解析，会在文档解析完后再执行。HTML5新增了<strong>async</strong>
+        <strong>defer</strong>
+        属性，它就不会暂停文档解析，会在文档解析完后再执行。HTML5新增了
+        <strong>async</strong>
         异步属性，它会在另一个线程解析和执行。
         <h3 id="speculative" className={classMap.articleSubTitle}>
           预测解析
         </h3>
         WebKit和Firefox都做了这项优化。当执行script时，另一个线程解析剩下的文档并找出其他需要被加载的网络资源并加载它们。这样资源可以并行的连接上加载，总体速度提升。
         <br />
-        值得一提的是，这个预测只解析外部引用资源例如外部script，样式表和图片，它不修改DOM Tree。
+        值得一提的是，这个预测只解析外部引用资源例如外部script，样式表和图片，它不修改DOM
+        Tree。
         <h3 id="styleSheet" className={classMap.articleSubTitle}>
           样式表
         </h3>
@@ -411,9 +450,11 @@ export default function Index() {
         <h2 id="renderTree" className={classMap.articleTitle}>
           Render Tree的构建
         </h2>
-        当DOM tree创建完成时，浏览器创建另一颗树，render tree，它由要展示的元素按顺序组成，目的是为了按顺序渲染内容。
+        当DOM tree创建完成时，浏览器创建另一颗树，render
+        tree，它由要展示的元素按顺序组成，目的是为了按顺序渲染内容。
         <br />
-        Firefox称render tree中这些元素为<strong>frame</strong>，WebKit则称为renderer或render object
+        Firefox称render tree中这些元素为<strong>frame</strong>
+        ，WebKit则称为renderer或render object
         <br />
         renderer知道怎么去布局和渲染它自己和它的children，如下是WebKit的RenderObject类定义，它是renderer的父类
         {renderObject}
@@ -427,10 +468,12 @@ export default function Index() {
         <h3 id="renderTreeRelate" className={classMap.articleSubTitle}>
           Render tree和DOM tree的关系
         </h3>
-        虽然renderers和DOM元素一致,但是不是一对一的关系。不可见的DOM元素不会被插入render tree，例如head。 display值为
+        虽然renderers和DOM元素一致,但是不是一对一的关系。不可见的DOM元素不会被插入render
+        tree，例如head。 display值为
         <strong>none</strong>也不会出现在树中(然而visibility:hidden会)。
         <br />
-        有的DOM元素跟多个object关联，因为它们的结构复杂，单个矩形描述不了。例如<code>select</code>
+        有的DOM元素跟多个object关联，因为它们的结构复杂，单个矩形描述不了。例如
+        <code>select</code>
         元素有三个renderer，一个用于展示区域，一个用于下拉列表盒子，一个用于按钮。
         文本宽度一行不足被强制换行的时候，新行也会新增额外的renderer。
         <br />
@@ -440,18 +483,22 @@ export default function Index() {
         <LazyImage src={RELATION} />
         <br />
         <br />
-        在WebKit解决样式，创建renderer的进程名为<code>attachment</code>，每个DOM节点都有<code>attach</code>
+        在WebKit解决样式，创建renderer的进程名为<code>attachment</code>
+        ，每个DOM节点都有<code>attach</code>
         方法。Attachment是同步的，节点插入DOM tree时会调用新节点的attach方法。
         <br />
         根节点对应CSS标准的containing
         block，最顶部的块包括所有其他块。它的尺寸就是视口，也就是浏览器窗口展示区域尺寸，WebKit称为
-        <code>RenderView</code>。 这就是document指向的render object，树中剩余节点都会当作DOM节点创建并插入。
+        <code>RenderView</code>。 这就是document指向的render
+        object，树中剩余节点都会当作DOM节点创建并插入。
         <h3 id="styleComputation" className={classMap.articleSubTitle}>
           样式计算
         </h3>
-        构建render tree需要计算每个render object的可视属性，这需要计算每个元素的样式属性。
+        构建render tree需要计算每个render
+        object的可视属性，这需要计算每个元素的样式属性。
         <br />
-        样式包括不同来源的样式表，行内样式和HTML的可视属性(例如<code>bgcolor</code>
+        样式包括不同来源的样式表，行内样式和HTML的可视属性(例如
+        <code>bgcolor</code>
         属性)，后面会被转换称对应的CSS样式属性。
         <br />
         样式表的来源有浏览器默认样式表，开发者提供的样式表，还有用户样式表。
@@ -469,7 +516,9 @@ export default function Index() {
             <br />
             这个规则表示div是3个div的子节点。设想一下，如果要检查这个规则是否符合给定的div元素，从头开始遍历节点树，只有1到2个div的不符合规则，又需要重新开始找。
           </li>
-          <li>定义规则层次时包括很复杂规则，例如级联。下面看下浏览器怎么面对这些问题。</li>
+          <li>
+            定义规则层次时包括很复杂规则，例如级联。下面看下浏览器怎么面对这些问题。
+          </li>
         </ul>
         <h3 id="share" className={classMap.articleSubTitle}>
           共享样式数据
@@ -520,7 +569,8 @@ export default function Index() {
         <br />
         举个栗子：
         {hashMapRules}
-        第一个规则会插入class map，第二个插入id map,第三个插入tag map。 对于下面的文档碎片：
+        第一个规则会插入class map，第二个插入id map,第三个插入tag map。
+        对于下面的文档碎片：
         {htmlForHash}
         <br />
         <br />
@@ -544,8 +594,13 @@ export default function Index() {
         </ul>
         <br />
         <br />
-        如果声明在同一级别，那么就会按定义的顺序来，详见下文{' '}
-        <a className={classMap.href} target="_self" rel="noreferrer" href="#specificity">
+        如果声明在同一级别，那么就会按定义的顺序来，详见下文{" "}
+        <a
+          className={classMap.href}
+          target="_self"
+          rel="noreferrer"
+          href="#specificity"
+        >
           明确定义
         </a>
         。
@@ -574,20 +629,25 @@ export default function Index() {
         <br />
         坐标系统和根部框架相关，使用top和left坐标轴。
         <br />
-        布局是一个递归的过程。它从根节点开始，对应的就是HTML文档的<code>html</code>
+        布局是一个递归的过程。它从根节点开始，对应的就是HTML文档的
+        <code>html</code>
         元素，然后层级递归地给每一个renderer计算几何属性。
         <br />
         根节点的renderer位置是0,0，它的尺寸就是视口viewport，也就是浏览器窗口的可视部分
         <br />
-        所有的renderer都有<code>layout</code>，<code>reflow</code>方法，每个renderer给它需要layout的子节点唤起
+        所有的renderer都有<code>layout</code>，<code>reflow</code>
+        方法，每个renderer给它需要layout的子节点唤起
         <code>layout</code>方法。
         <h3 id="dirtyBit" className={classMap.articleSubTitle}>
           标志位系统
         </h3>
-        为了避免一个小小的改变就完整layout，浏览器使用了标志位系统<code>dirty bit system</code>
-        。有变化的或者新增的renderer，将它自己和子节点标记为<code>dirty</code>: 需要layout。
+        为了避免一个小小的改变就完整layout，浏览器使用了标志位系统
+        <code>dirty bit system</code>
+        。有变化的或者新增的renderer，将它自己和子节点标记为<code>dirty</code>:
+        需要layout。
         <br />
-        有两个flag,<code>dirty</code>和<code>children are dirty</code>表示至少有一个子节点需要layout。
+        有两个flag,<code>dirty</code>和<code>children are dirty</code>
+        表示至少有一个子节点需要layout。
         <h3 id="global" className={classMap.articleSubTitle}>
           全局和增量的布局
         </h3>
@@ -599,14 +659,16 @@ export default function Index() {
           <li>2. 作为屏幕改变了大小的结果</li>
         </ul>
         <br />
-        layout可以是增量的，仅当标记为<strong>dirty</strong>的renderer要被展示的时候。例如从网络来的新的内容被添加到DOM
+        layout可以是增量的，仅当标记为<strong>dirty</strong>
+        的renderer要被展示的时候。例如从网络来的新的内容被添加到DOM
         Tree后，新的renderer追加到render tree中，就会异步触发增量layout。
         <h3 id="async" className={classMap.articleSubTitle}>
           异步和同步layout
         </h3>
         增量layout是异步完成的。WebKit有定时器来执行增量layout。
         <br />
-        脚本请求例如<code>offsetHeight</code>这种样式属性可以触发异步的增量layout。
+        脚本请求例如<code>offsetHeight</code>
+        这种样式属性可以触发异步的增量layout。
         <br />
         全局layout通常都会异步触发。
         <br />
@@ -614,7 +676,8 @@ export default function Index() {
         <h3 id="optimization" className={classMap.articleSubTitle}>
           优化
         </h3>
-        当layout在渲染位置的时候，被<code>resize</code>等事件触发，这些renders的大小会从缓存中获取，不会重新计算。
+        当layout在渲染位置的时候，被<code>resize</code>
+        等事件触发，这些renders的大小会从缓存中获取，不会重新计算。
         <br />
         有些情况子树被修改了，layout也不会从root开始。例如文字被插入文字区域这种，修改只在它自身，不会影响周围。
         <h3 id="layoutProcess" className={classMap.articleSubTitle}>
@@ -627,32 +690,43 @@ export default function Index() {
             2. 父级检查子级
             <ul className={classMap.ul}>
               <li>替换子renderer(重新设置x和y)</li>
-              <li>如果有必要，会调用子级的layout - 在被标记为dirty或者在全局layout，或者需要计算子级的高度的情况下</li>
+              <li>
+                如果有必要，会调用子级的layout -
+                在被标记为dirty或者在全局layout，或者需要计算子级的高度的情况下
+              </li>
             </ul>
           </li>
-          <li>父级用子级累加高度，还有margin和padding来设置自己高度的情况下，layout会被父级使用。</li>
+          <li>
+            父级用子级累加高度，还有margin和padding来设置自己高度的情况下，layout会被父级使用。
+          </li>
           <li>设置自身的dirty为false时</li>
         </ul>
         <h3 id="widthCalculation" className={classMap.articleSubTitle}>
           宽度计算
         </h3>
-        renderer的宽度使用容器的宽度计算，包括<strong>width,margin,border</strong>等属性。
+        renderer的宽度使用容器的宽度计算，包括
+        <strong>width,margin,border</strong>等属性。
         <br />
         例如以下的div
         {widthCalExample}
         WebKit按如下规则计算：
         <ul className={classMap.ul}>
           <li>
-            容器宽度是所有容器的<code>availableWidth</code>和0之中的最大值。这个栗子中<code>availableWidth</code>就是
+            容器宽度是所有容器的<code>availableWidth</code>
+            和0之中的最大值。这个栗子中<code>availableWidth</code>就是
             <code>contentWidth</code>计算方式如下
-            <div className="markdown-container">clientWidth() - paddingLeft() - paddingRight()</div>
+            <div className="markdown-container">
+              clientWidth() - paddingLeft() - paddingRight()
+            </div>
           </li>
         </ul>
-        <code>clientWidth</code>和<code>clientHeight</code>代表对象内部的宽高，也就是说不包括<code>border</code>和
+        <code>clientWidth</code>和<code>clientHeight</code>
+        代表对象内部的宽高，也就是说不包括<code>border</code>和
         <code>scrollbar</code>
         <ul className={classMap.ul}>
           <li>
-            元素宽度是<code>width</code>属性时，它会被当作绝对值来计算容器宽度的百分比
+            元素宽度是<code>width</code>
+            属性时，它会被当作绝对值来计算容器宽度的百分比
           </li>
           <li>
             水平的<code>border</code>和<code>padding</code>被添加了
@@ -668,7 +742,8 @@ export default function Index() {
         <h2 id="painting" className={classMap.articleTitle}>
           渲染
         </h2>
-        在渲染阶段，遍历render tree调用每个renderer的<code>paint</code>方法来把内容展示到屏幕上。渲染使用UI基础组件。
+        在渲染阶段，遍历render tree调用每个renderer的<code>paint</code>
+        方法来把内容展示到屏幕上。渲染使用UI基础组件。
         <h3 id="globalAndIncremental" className={classMap.articleSubTitle}>
           全局和增量
         </h3>
@@ -693,7 +768,8 @@ export default function Index() {
         <br />
         新增DOM节点也跟上面一样。
         <br />
-        像修改<code>html</code>元素的<code>fontSize</code>这种大的操作，会引起缓存失效，重新布局和绘制整个树。
+        像修改<code>html</code>元素的<code>fontSize</code>
+        这种大的操作，会引起缓存失效，重新布局和绘制整个树。
         <h3 id="thread" className={classMap.articleSubTitle}>
           渲染引擎线程
         </h3>
@@ -715,7 +791,12 @@ export default function Index() {
         <h3 id="box" className={classMap.articleSubTitle}>
           CSS盒模型
         </h3>
-        <a className={classMap.href} target="_blank" rel="noreferrer" href="http://www.w3.org/TR/CSS2/box.html">
+        <a
+          className={classMap.href}
+          target="_blank"
+          rel="noreferrer"
+          href="http://www.w3.org/TR/CSS2/box.html"
+        >
           CSS盒模型
         </a>
         ：视觉格式化模型，它用于在文档树中生成并展示元素。
@@ -731,13 +812,17 @@ export default function Index() {
           <li>none: 不会生成</li>
         </ul>
         <br />
-        默认类型是inline，但是浏览器的样式表会设置其他默认值,例如<code>div</code>元素的默认值是block。
+        默认类型是inline，但是浏览器的样式表会设置其他默认值,例如
+        <code>div</code>元素的默认值是block。
         <h3 id="position" className={classMap.articleSubTitle}>
           位置方案
         </h3>
         有三种方案：
         <ul className={classMap.ul}>
-          <li>Normal: 对象通过它在文档中的位置来定位，它会通过box类型和尺寸来显示。</li>
+          <li>
+            Normal:
+            对象通过它在文档中的位置来定位，它会通过box类型和尺寸来显示。
+          </li>
           <li>Float: 首先会像正常流一样显示，然后会尽量向左或向右移动。</li>
           <li>Absolute: 对象在渲染树的位置和在DOM树的位置不同。</li>
         </ul>
@@ -767,7 +852,8 @@ export default function Index() {
         block盒子在垂直方向排列，inline的盒子则是水平排列。
         <LazyImage src={BLOCK_INLINE} />
         <br />
-        inline盒子放在<strong>line boxes</strong>行盒子内。行盒子至少和最高的盒子一样高，也可以更高。当盒子按
+        inline盒子放在<strong>line boxes</strong>
+        行盒子内。行盒子至少和最高的盒子一样高，也可以更高。当盒子按
         <strong>baseline</strong>方式对齐，代表元素底部对齐其他盒子的底部。
         <br />
         <LazyImage src={LINES} />
@@ -799,7 +885,8 @@ export default function Index() {
         <br />
         盒子被分成层级上下文。每层后面的元素会先渲染然后前面的元素在顶部，更靠近用户。在重叠的情况下，最前面的元素会遮住后面的元素。
         <br />
-        层级通过<code>z-index</code>属性来排序。当元素没有包含z-index时，排序规则如下（由底到顶）：
+        层级通过<code>z-index</code>
+        属性来排序。当元素没有包含z-index时，排序规则如下（由底到顶）：
         <ul>
           <li>1. 根元素的背景和边界</li>
           <li>2. 普通流的块元素，按HTML中的出现顺序堆叠</li>
@@ -809,7 +896,9 @@ export default function Index() {
           type="info"
           message={
             <ul className={classMap.ul}>
-              <li>在一组不含有z-index的同类元素，这些元素按HTML出现的顺序堆叠，不管定位属性如何</li>
+              <li>
+                在一组不含有z-index的同类元素，这些元素按HTML出现的顺序堆叠，不管定位属性如何
+              </li>
               <li>
                 普通流中不含定位属性的块元素始终先于定位元素渲染并出现在定位元素的下层，即使出现顺序晚于定位元素。
               </li>
@@ -817,67 +906,279 @@ export default function Index() {
           }
         ></Alert>
       </main>
-      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
-        <Link href="#preface" title="前言"></Link>
-        <Link href="#browsers" title="有哪些浏览器?"></Link>
-        <Link href="#functionality" title="浏览器的主要功能"></Link>
-        <Link href="#structure" title="浏览器的架构"></Link>
-        <Link href="#mainFlow" title="主要流程">
-          <Link href="#examples" title="主要流程案例"></Link>
-          <Link href="#parse" title="解析"></Link>
-          <Link href="#parser" title="词法分析和语法分析"></Link>
-          <Link href="#parsingExample" title="解析案例"></Link>
-          <Link href="#formal" title="词法和语法的正式定义"></Link>
-          <Link href="#parseType" title="解释器的类型"></Link>
-          <Link href="#autoParsers" title="自动化解析"></Link>
-        </Link>
-        <Link href="#htmlParser" title="HTML解析">
-          <Link href="#dtd" title="HTML DTD"></Link>
-          <Link href="#dom" title="DOM"></Link>
-          <Link href="#algo" title="解析算法"></Link>
-          <Link href="#tokenizationAlgo" title="切分算法"></Link>
-          <Link href="#treeAlgo" title="树的构建算法"></Link>
-          <Link href="#parseFinished" title="解析完成后的操作"></Link>
-        </Link>
-        <Link href="#cssParser" title="CSS解析"></Link>
-        <Link href="#order" title="加载scripts和样式表的顺序">
-          <Link href="#scripts" title="Scripts"></Link>
-          <Link href="#speculative" title="预测解析"></Link>
-          <Link href="#styleSheet" title="样式表"></Link>
-        </Link>
-        <Link href="#renderTree" title="Render Tree的构建">
-          <Link href="#renderTreeRelate" title="Render tree和DOM tree的关系"></Link>
-          <Link href="#styleComputation" title="样式计算"></Link>
-          <Link href="#share" title="共享样式数据"></Link>
-          <Link href="#division" title="分割为结构体"></Link>
-          <Link href="#manipulate" title="简单匹配的操作"></Link>
-          <Link href="#cascade" title="样式表的顺序"></Link>
-          <Link href="#specificity" title="明确定义"></Link>
-        </Link>
-        <Link href="#layout" title="布局">
-          <Link href="#dirtyBit" title="标志位系统"></Link>
-          <Link href="#global" title="全局和增量的布局"></Link>
-          <Link href="#optimization" title="优化"></Link>
-          <Link href="#layoutProcess" title="布局过程"></Link>
-          <Link href="#widthCalculation" title="宽度计算"></Link>
-          <Link href="#line" title="换行"></Link>
-        </Link>
-        <Link href="#painting" title="渲染">
-          <Link href="#globalAndIncremental" title="全局和增量"></Link>
-          <Link href="#paintingOrder" title="渲染顺序"></Link>
-          <Link href="#dynamicChanges" title="动态修改"></Link>
-          <Link href="#thread" title="渲染引擎线程"></Link>
-          <Link href="#eventLoop" title="事件循环"></Link>
-        </Link>
-        <Link href="#cssVisualModel" title="CSS视觉模型">
-          <Link href="#canvas" title="Canvas"></Link>
-          <Link href="#box" title="CSS盒模型"></Link>
-          <Link href="#position" title="位置方案"></Link>
-          <Link href="#boxType" title="盒子类型"></Link>
-          <Link href="#positioning" title="定位"></Link>
-          <Link href="#layer" title="层级展示"></Link>
-        </Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "前言",
+            key: "preface",
+            href: "#preface"
+          },
+          {
+            title: "有哪些浏览器?",
+            key: "browsers",
+            href: "#browsers"
+          },
+          {
+            title: "浏览器的主要功能",
+            key: "functionality",
+            href: "#functionality"
+          },
+          {
+            title: "浏览器的架构",
+            key: "structure",
+            href: "#structure"
+          },
+          {
+            title: "主要流程",
+            key: "mainFlow",
+            href: "#mainFlow",
+            children: [
+              {
+                title: "主要流程案例",
+                key: "examples",
+                href: "#examples"
+              },
+              {
+                title: "解析",
+                key: "parse",
+                href: "#parse"
+              },
+              {
+                title: "词法分析和语法分析",
+                key: "parser",
+                href: "#parser"
+              },
+              {
+                title: "解析案例",
+                key: "parsingExample",
+                href: "#parsingExample"
+              },
+              {
+                title: "词法和语法的正式定义",
+                key: "formal",
+                href: "#formal"
+              },
+              {
+                title: "解释器的类型",
+                key: "parseType",
+                href: "#parseType"
+              }
+            ]
+          },
+          {
+            title: "HTML解析",
+            key: "htmlParser",
+            href: "#htmlParser",
+            children: [
+              {
+                title: "HTML DTD",
+                key: "dtd",
+                href: "#dtd"
+              },
+              {
+                title: "DOM",
+                key: "dom",
+                href: "#dom"
+              },
+              {
+                title: "解析算法",
+                key: "algo",
+                href: "#algo"
+              },
+              {
+                title: "切分算法",
+                key: "tokenizationAlgo",
+                href: "#tokenizationAlgo"
+              },
+              {
+                title: "树的构建算法",
+                key: "treeAlgo",
+                href: "#treeAlgo"
+              },
+              {
+                title: "解析完成后的操作",
+                key: "parseFinished",
+                href: "#parseFinished"
+              }
+            ]
+          },
+          {
+            title: "CSS解析",
+            key: "cssParser",
+            href: "#cssParser"
+          },
+          {
+            title: "加载scripts和样式表的顺序",
+            key: "order",
+            href: "#order",
+            children: [
+              {
+                title: "Scripts",
+                key: "scripts",
+                href: "#scripts"
+              },
+              {
+                title: "预测解析",
+                key: "speculative",
+                href: "#speculative"
+              },
+              {
+                title: "样式表",
+                key: "styleSheet",
+                href: "#styleSheet"
+              }
+            ]
+          },
+          {
+            title: "Render Tree的构建",
+            key: "renderTree",
+            href: "#renderTree",
+            children: [
+              {
+                title: "Render tree和DOM tree的关系",
+                key: "renderTreeRelate",
+                href: "#renderTreeRelate"
+              },
+              {
+                title: "样式计算",
+                key: "styleComputation",
+                href: "#styleComputation"
+              },
+              {
+                title: "共享样式数据",
+                key: "share",
+                href: "#share"
+              },
+              {
+                title: "分割为结构体",
+                key: "division",
+                href: "#division"
+              },
+              {
+                title: "简单匹配的操作",
+                key: "manipulate",
+                href: "#manipulate"
+              },
+              {
+                title: "样式表的顺序",
+                key: "cascade",
+                href: "#cascade"
+              },
+              {
+                title: "明确定义",
+                key: "specificity",
+                href: "#specificity"
+              }
+            ]
+          },
+          {
+            title: "布局",
+            key: "layout",
+            href: "#layout",
+            children: [
+              {
+                title: "标志位系统",
+                key: "dirtyBit",
+                href: "#dirtyBit"
+              },
+              {
+                title: "全局和增量的布局",
+                key: "global",
+                href: "#global"
+              },
+              {
+                title: "优化",
+                key: "optimization",
+                href: "#optimization"
+              },
+              {
+                title: "布局过程",
+                key: "layoutProcess",
+                href: "#layoutProcess"
+              },
+              {
+                title: "宽度计算",
+                key: "widthCalculation",
+                href: "#widthCalculation"
+              },
+              {
+                title: "换行",
+                key: "line",
+                href: "#line"
+              }
+            ]
+          },
+          {
+            title: "渲染",
+            key: "painting",
+            href: "#painting",
+            children: [
+              {
+                title: "全局和增量",
+                key: "globalAndIncremental",
+                href: "#globalAndIncremental"
+              },
+              {
+                title: "渲染顺序",
+                key: "paintingOrder",
+                href: "#paintingOrder"
+              },
+              {
+                title: "动态修改",
+                key: "dynamicChanges",
+                href: "#dynamicChanges"
+              },
+              {
+                title: "渲染引擎线程",
+                key: "thread",
+                href: "#thread"
+              },
+              {
+                title: "事件循环",
+                key: "eventLoop",
+                href: "#eventLoop"
+              }
+            ]
+          },
+          {
+            title: "CSS视觉模型",
+            key: "cssVisualModel",
+            href: "#cssVisualModel",
+            children: [
+              {
+                title: "Canvas",
+                key: "canvas",
+                href: "#canvas"
+              },
+              {
+                title: "CSS盒模型",
+                key: "box",
+                href: "#box"
+              },
+              {
+                title: "位置方案",
+                key: "position",
+                href: "#position"
+              },
+              {
+                title: "盒子类型",
+                key: "boxType",
+                href: "#boxType"
+              },
+              {
+                title: "定位",
+                key: "positioning",
+                href: "#positioning"
+              },
+              {
+                title: "层级展示",
+                key: "layer",
+                href: "#layer"
+              }
+            ]
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

@@ -1,5 +1,4 @@
 import { classMap } from "@/constants/constant";
-import { Anchor } from "antd";
 import { UseMarkDown } from "@/hooks/useMarkdown";
 import {
   DOM_LOOP,
@@ -9,13 +8,13 @@ import {
   CLOSURE_TIMER,
   CLOSURE
 } from "./_garbage";
-const { Link } = Anchor;
 
 import GC from "@images/js/majorGC.svg";
 import GENERATION from "@images/js/generation.svg";
 import MINOR from "@images/js/minorGC.svg";
 import OLD from "@images/js/oldGen.svg";
 import { LazyImage } from "@/component/image";
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Index() {
   const loop = <UseMarkDown markdown={LOOP}></UseMarkDown>,
@@ -25,9 +24,9 @@ export default function Index() {
     timer = <UseMarkDown markdown={CLOSURE_TIMER}></UseMarkDown>,
     closure = <UseMarkDown markdown={CLOSURE}></UseMarkDown>;
   return (
-    <article id="root" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h2 id="pre" className={classMap.articleTitle}>
+        <h2 id="pre" className="font-semibold text-h2 mb-2">
           垃圾回收
         </h2>
         在C/C++语言中，跟踪内存使用对开发者来说负担很大，也是很多问题的来源。在JavaScript中，内存分配和闲置资源回收都是自动的。
@@ -239,7 +238,7 @@ export default function Index() {
           </li>
         </ul>
       </main>
-      <Anchor
+      {/* <Anchor
         className="anchor"
         getContainer={() => document.getElementById("content") as HTMLElement}
       >
@@ -256,7 +255,70 @@ export default function Index() {
           <Link href="#minor" title="次要GC"></Link>
         </Link>
         <Link href="#manage" title="内存管理"></Link>
-      </Anchor>
+      </Anchor> */}
+      <ArticleAnchor
+        items={[
+          {
+            title: "垃圾回收",
+            key: "pre",
+            href: "#pre"
+          },
+          {
+            title: "标记清除",
+            key: "markSweep",
+            href: "#markSweep"
+          },
+          {
+            title: "引用计数",
+            key: "referenceCounting",
+            href: "#referenceCounting"
+          },
+          {
+            title: "V8垃圾回收策略",
+            key: "v8",
+            href: "#v8",
+            children: [
+              {
+                title: "主要GC",
+                key: "major",
+                href: "#major",
+                children: [
+                  {
+                    title: "标记",
+                    key: "mark",
+                    href: "#mark"
+                  },
+                  {
+                    title: "清除",
+                    key: "sweep",
+                    href: "#sweep"
+                  },
+                  {
+                    title: "整理",
+                    key: "compact",
+                    href: "#compact"
+                  }
+                ]
+              },
+              {
+                title: "两代之间的设计",
+                key: "generationalLayout",
+                href: "#generationalLayout"
+              },
+              {
+                title: "次要GC",
+                key: "minor",
+                href: "#minor"
+              }
+            ]
+          },
+          {
+            title: "内存管理",
+            key: "manage",
+            href: "#manage"
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

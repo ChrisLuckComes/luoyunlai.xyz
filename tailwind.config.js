@@ -20,6 +20,8 @@ module.exports = {
         5: "5px",
         8: "8px",
         10: "10px",
+        36: "36px",
+        48: "48px",
         50: "50px",
         60: "60px",
         72: "72px",
@@ -55,20 +57,23 @@ module.exports = {
       sider: "16.67%",
       full: "100%",
       48: "48px",
-      home: "530px"
+      36: "36px",
+      home: "530px",
+      content: "calc(100vw - 200px)"
     },
     maxWidth: {
       sider: "16.67%",
-      content: "75%"
+      full: "100%",
+      content: "85%"
     },
     height: {
-      content: "calc(100vh - 64px - 69px - 40px)",
       full: "100%",
       screen: "100vh",
       36: "36px",
       48: "48px",
       250: "250px",
-      300: "300px"
+      300: "300px",
+      content: "calc(100vh - 64px - 69px - 40px)"
     },
     maxHeight: {
       300: "300px"

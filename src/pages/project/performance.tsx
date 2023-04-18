@@ -1,5 +1,4 @@
 import { classMap } from "@/constants/constant";
-import { Anchor } from "antd";
 import { UseMarkDown } from "@/hooks/useMarkdown";
 import IMAGE_MAP from "@/images/project/indexMap.png";
 import LIGHTHOUSE from "@/images/project/lighthouse.png";
@@ -18,8 +17,7 @@ import {
 } from "./_performance";
 import { useEffect, useState } from "react";
 import { LazyImage } from "@/component/image";
-
-const { Link } = Anchor;
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Index() {
   const timing = <UseMarkDown markdown={TIMING}></UseMarkDown>,
@@ -68,13 +66,10 @@ export default function Index() {
   }, []);
 
   return (
-    <article id="rootActicle" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <div className={classMap.articleTitle}>
+        <h2 id="header" className="font-semibold text-h2 mb-2">
           连指标都不知道还敢说懂性能优化？
-        </div>
-        <h2 id="header" className={classMap.articleTitle}>
-          前言
         </h2>
         web性能通常分为两方面：
         <ul className={classMap.ul}>
@@ -86,12 +81,6 @@ export default function Index() {
         常见手段是打开谷歌浏览器F12，使用<code>performance</code>、
         <code>network</code>、<code>lighthouse</code>
         面板，对页面加载过程进行分析。
-        {/* <br />
-      <br />
-      它确实适合开发者自己定位性能问题，但是实际使用的用户访问的设备/网络环境等各种因素不一样，很有可能无法达到预期。这种情况下要排查问题，除非能以用户的使用环境本地复现。
-      <br />
-      <br />
-      所以需要一种监控工具 */}
         <h2 id="indexMap" className={classMap.articleTitle}>
           常见的性能优化指标及获取方式
         </h2>
@@ -337,24 +326,64 @@ export default function Index() {
         <code>performanceObserver</code>
         获取指标数据，然后通过接口上报。看板通过可视化图表的方式展示性能指标数据供分析
       </main>
-
-      <Anchor
-        className="anchor"
-        getContainer={() => document.getElementById("content") as HTMLElement}
-      >
-        <Link href="#header" title="前言"></Link>
-        <Link href="#indexMap" title="常见的性能优化指标及获取方式">
-          <Link href="#fp" title="页面何时开始渲染 - FP & FCP"></Link>
-          <Link href="#fmp" title="页面何时渲染主要内容 - LCP"></Link>
-          <Link href="#tti" title="何时可以交互 - TTI & TBT"></Link>
-          <Link href="#cls" title="页面视觉是否稳定 - CLS"></Link>
-          <Link href="#key" title="性能分析关键指标"></Link>
-        </Link>
-        <Link href="#sentry" title="使用Sentry做性能监控">
-          <Link href="#install" title="配置"></Link>
-          <Link href="#how" title="原理"></Link>
-        </Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "连指标都不知道还敢说懂性能优化？",
+            key: "header",
+            href: "#header"
+          },
+          {
+            title: "常见的性能优化指标及获取方式",
+            key: "indexMap",
+            href: "#indexMap",
+            children: [
+              {
+                title: "页面何时开始渲染 - FP & FCP",
+                key: "fp",
+                href: "#fp"
+              },
+              {
+                title: "页面何时渲染主要内容 - LCP",
+                key: "fmp",
+                href: "#fmp"
+              },
+              {
+                title: "何时可以交互 - TTI & TBT",
+                key: "tti",
+                href: "#tti"
+              },
+              {
+                title: "页面视觉是否稳定 - CLS",
+                key: "cls",
+                href: "#cls"
+              },
+              {
+                title: "性能分析关键指标",
+                key: "key",
+                href: "#key"
+              }
+            ]
+          },
+          {
+            title: "使用Sentry做性能监控",
+            key: "sentry",
+            href: "#sentry",
+            children: [
+              {
+                title: "配置",
+                key: "install",
+                href: "#install"
+              },
+              {
+                title: "原理",
+                key: "how",
+                href: "#how"
+              }
+            ]
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }

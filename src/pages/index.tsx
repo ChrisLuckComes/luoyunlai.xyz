@@ -10,8 +10,7 @@ import BackTop from "@/component/backTop";
 const { Sider, Content } = Layout;
 
 const classMap = {
-  layout: "h-content",
-  content: "h-full pl-content pr-5 bg-white overflow-y-auto",
+  content: "px-10 bg-white overflow-y-auto max-w-content",
   sider: "bg-white"
 };
 
@@ -61,9 +60,10 @@ export default function PageContent({ menus, groups }: PageContentProps) {
   }
 
   return (
-    <Layout className={classMap.layout}>
+    <Layout className="h-content">
       <Sider className={classMap.sider}>
         <Menu
+          className="h-full overflow-y-auto"
           selectedKeys={selectedKeys}
           onClick={(e) => clickMenu(e)}
           mode="inline"

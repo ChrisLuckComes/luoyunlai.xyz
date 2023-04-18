@@ -1,5 +1,5 @@
 import { UpSquareFilled } from "@ant-design/icons";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import "./backTop.css";
 import { useLocation } from "react-router-dom";
 
@@ -32,7 +32,7 @@ export default function BackTop() {
 
   useLayoutEffect(() => {
     setTimeout(() => {
-      let root = document.getElementById("rootActicle")!;
+      let root = document.getElementById("rootArticle")!;
       setScrollDom(root);
       root.addEventListener("scroll", showIcon, true);
     }, 1000);
@@ -44,7 +44,7 @@ export default function BackTop() {
 
   return (
     <UpSquareFilled
-      className="absolute back-top bottom-72 right-72"
+      className="block absolute z-[11] back-top bottom-48 right-48"
       style={{ visibility: visible ? "visible" : "hidden" }}
       onClick={goTop}
     ></UpSquareFilled>

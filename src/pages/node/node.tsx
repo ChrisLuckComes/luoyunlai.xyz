@@ -1,30 +1,29 @@
-import { classMap } from '@/constants/constant';
-import { Anchor } from 'antd';
-import { UseMarkDown } from '@/hooks/useMarkdown';
+import { classMap } from "@/constants/constant";
+import { UseMarkDown } from "@/hooks/useMarkdown";
 
-import NODE_MODEL from '@/images/node/nodeModel.png';
-import LIBUV from '@/images/node/libuv.webp';
-import BRAINLESS from '@/images/brainless.webp';
-import FLOW from '@/images/node/flow.png';
+import NODE_MODEL from "@/images/node/nodeModel.png";
+import LIBUV from "@/images/node/libuv.webp";
+import BRAINLESS from "@/images/brainless.webp";
+import FLOW from "@/images/node/flow.png";
 
-import { EVENT_LOOP, TIMER } from './_node';
-import { LazyImage } from '@/component/image';
-
-const { Link } = Anchor;
+import { EVENT_LOOP, TIMER } from "./_node";
+import { LazyImage } from "@/component/image";
+import { ArticleAnchor } from "@/component/Anchor";
 
 export default function Index() {
   const eventLoop = <UseMarkDown markdown={EVENT_LOOP}></UseMarkDown>,
     timer = <UseMarkDown markdown={TIMER}></UseMarkDown>;
 
   return (
-    <article id="rootActicle" className={classMap.article}>
+    <article id="rootArticle" className={classMap.article}>
       <main className={classMap.content}>
-        <h2 id="diff" className={classMap.articleTitle}>
+        <h2 id="intro" className="font-semibold text-h2 mb-2">
           Node.js
         </h2>
         什么是Node.js?官网一句话介绍：Node.js是一个开源，跨平台的JavaScript运行时环境。
         <div className={classMap.assist}>
-          Node.js® is an open-source, cross-platform JavaScript runtime environment.
+          Node.js® is an open-source, cross-platform JavaScript runtime
+          environment.
         </div>
         <br />
         Node.js基于V8引擎运行，脱离了浏览器，因此可以胜任任意类型的项目。Node.js
@@ -36,12 +35,12 @@ export default function Index() {
         <iframe
           src="https://codesandbox.io/embed/relaxed-shaw-5u3725?fontsize=14&hidenavigation=1&theme=dark"
           style={{
-            width: '100%',
-            height: '500px',
+            width: "100%",
+            height: "500px",
             border: 0,
-            borderRadius: '4px',
-            overflow: 'hidden',
-            margin: '10px 0'
+            borderRadius: "4px",
+            overflow: "hidden",
+            margin: "10px 0"
           }}
           title="relaxed-shaw-5u3725"
           allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
@@ -54,15 +53,26 @@ export default function Index() {
         <ul className={classMap.ul}>
           <li>
             <code>
-              <a className={classMap.href} target="_blank" rel="noreferrer" href="https://v8.dev/docs/">
+              <a
+                className={classMap.href}
+                target="_blank"
+                rel="noreferrer"
+                href="https://v8.dev/docs/"
+              >
                 V8
               </a>
             </code>
-            ：V8为Node.js提供了JavaScript引擎，Node.js通过V8 C++的API函数接口进行操控。V8由谷歌维护，用于谷歌浏览器中。
+            ：V8为Node.js提供了JavaScript引擎，Node.js通过V8
+            C++的API函数接口进行操控。V8由谷歌维护，用于谷歌浏览器中。
           </li>
           <li>
             <code>
-              <a className={classMap.href} target="_blank" rel="noreferrer" href="http://docs.libuv.org/">
+              <a
+                className={classMap.href}
+                target="_blank"
+                rel="noreferrer"
+                href="http://docs.libuv.org/"
+              >
                 libuv
               </a>
             </code>
@@ -70,7 +80,12 @@ export default function Index() {
           </li>
           <li>
             <code>
-              <a className={classMap.href} target="_blank" rel="noreferrer" href="https://github.com/nodejs/llhttp">
+              <a
+                className={classMap.href}
+                target="_blank"
+                rel="noreferrer"
+                href="https://github.com/nodejs/llhttp"
+              >
                 llhttp
               </a>
             </code>
@@ -78,7 +93,12 @@ export default function Index() {
           </li>
           <li>
             <code>
-              <a className={classMap.href} target="_blank" rel="noreferrer" href="https://c-ares.haxx.se/docs.html">
+              <a
+                className={classMap.href}
+                target="_blank"
+                rel="noreferrer"
+                href="https://c-ares.haxx.se/docs.html"
+              >
                 c-ares
               </a>
             </code>
@@ -86,15 +106,26 @@ export default function Index() {
           </li>
           <li>
             <code>
-              <a className={classMap.href} target="_blank" rel="noreferrer" href="https://www.openssl.org/docs/">
+              <a
+                className={classMap.href}
+                target="_blank"
+                rel="noreferrer"
+                href="https://www.openssl.org/docs/"
+              >
                 OpenSSL
               </a>
             </code>
-            ：在<code>tls</code>和<code>crypto</code>模块中使用，它提供了密码函数。
+            ：在<code>tls</code>和<code>crypto</code>
+            模块中使用，它提供了密码函数。
           </li>
           <li>
             <code>
-              <a className={classMap.href} target="_blank" rel="noreferrer" href="https://www.zlib.net/manual.html">
+              <a
+                className={classMap.href}
+                target="_blank"
+                rel="noreferrer"
+                href="https://www.zlib.net/manual.html"
+              >
                 zlib
               </a>
             </code>
@@ -105,7 +136,12 @@ export default function Index() {
         <ul className={classMap.ul}>
           <li>
             <code>
-              <a className={classMap.href} target="_blank" rel="noreferrer" href="https://docs.npmjs.com/">
+              <a
+                className={classMap.href}
+                target="_blank"
+                rel="noreferrer"
+                href="https://docs.npmjs.com/"
+              >
                 npm
               </a>
             </code>
@@ -210,7 +246,8 @@ export default function Index() {
             运行代码到需要读取文件，<code>libuv</code>开一个线程读文件
           </li>
           <li>
-            读完文件后，操作系统返回事件给<code>event loop</code>，<code>event loop</code>把文件传回给<code>V8</code>
+            读完文件后，操作系统返回事件给<code>event loop</code>，
+            <code>event loop</code>把文件传回给<code>V8</code>
           </li>
         </ul>
         <h3 id="eventLoop" className={classMap.articleSubTitle}>
@@ -220,11 +257,14 @@ export default function Index() {
         <br />
         <br />
         当Node.js启动后，它会初始化<code>Event Loop</code>
-        ，处理已提供的输入脚本，它可能会调用一些异步的API、调度定时器，或者调用<code>process.nextTick</code>
+        ，处理已提供的输入脚本，它可能会调用一些异步的API、调度定时器，或者调用
+        <code>process.nextTick</code>
         ，然后开始处理
         <code>Event Loop</code>，流程如下，它展示了操作顺序的简化概览：
         {eventLoop}
-        <div className={classMap.assist}>每个框都是事件循环机制的一个阶段。</div>
+        <div className={classMap.assist}>
+          每个框都是事件循环机制的一个阶段。
+        </div>
         <br />
         每个阶段都有一个FIFO队列来执行回调。虽然每个阶段都是特殊的，但通常情况下，当事件循环进入给定的阶段时，它将执行特定于该阶段的任何操作，然后之心该阶段队列中的回调，直到队列用尽或已执行到最大的回调数。当执行完成后，事件循环将移动到下一阶段，以此类推。
         <br />
@@ -234,20 +274,23 @@ export default function Index() {
         </h3>
         <ul className={classMap.ul}>
           <li>
-            <strong>timers(计时器)</strong>：本阶段执行已经被<code>setTimeout</code>和<code>setInterval</code>
+            <strong>timers(计时器)</strong>：本阶段执行已经被
+            <code>setTimeout</code>和<code>setInterval</code>
             的调度回调函数。
             <br />
             <br />
             计时器可以指定阈值，而不是用户希望回调执行的确切时间。经过指定的时间间隔后，计时器回调将被尽可能早地运行，但是操作系统调度或其他正在运行的回调可能会延迟它们
             (由轮询阶段控制)。举个例子，设置了一个100ms的定时器，假设读取文件需要95ms：
             {timer}
-            当事件循环进入poll阶段时，它由一个空队列（此时<code>fs.readFile</code>
+            当事件循环进入poll阶段时，它由一个空队列（此时
+            <code>fs.readFile</code>
             暂未完成），因此它将等待剩下的毫秒数，直到达到最快的一个计时器阈值为止。当它等待95ms后，
             <code>fs.readFile</code>
             完成，它的那个需要10毫秒才能完成的回调将被添加到轮询队列中并执行。当回调完成后，队列为空，此时事件循环机制发现计时器最快的阈值(100ms)已达到，将回到计时器阶段，执行计时器阶段。
           </li>
           <li>
-            <strong>I/O callbacks(待定回调)</strong>：执行延迟到下一个循环迭代的I/O回调
+            <strong>I/O callbacks(待定回调)</strong>
+            ：执行延迟到下一个循环迭代的I/O回调
             <br />
             <br />
             此阶段对某些系统操作（如TCP错误类型）执行回调。
@@ -256,8 +299,10 @@ export default function Index() {
             <strong>idle,prepare</strong>：仅系统内部使用
           </li>
           <li>
-            <strong>poll(轮询)</strong>：检索新的I/O事件；执行与I/O相关的回调（除了关闭的回调函数、计时器和
-            <code>setImmediate</code>调度的之外），其余情况node将在适当的时候在此阻塞。
+            <strong>poll(轮询)</strong>
+            ：检索新的I/O事件；执行与I/O相关的回调（除了关闭的回调函数、计时器和
+            <code>setImmediate</code>
+            调度的之外），其余情况node将在适当的时候在此阻塞。
             <br />
             <br />
             轮询阶段有两个重要的功能：
@@ -274,7 +319,8 @@ export default function Index() {
                 如果轮询队列是空的：
                 <ul className={classMap.ul}>
                   <li>
-                    如果脚本被<code>setImmediate</code>调度，则时间循环将结束轮询阶段，继续执行检查阶段
+                    如果脚本被<code>setImmediate</code>
+                    调度，则时间循环将结束轮询阶段，继续执行检查阶段
                   </li>
                   <li>否则等待回调被添加到队列中并立即执行</li>
                 </ul>
@@ -283,39 +329,75 @@ export default function Index() {
             一旦轮询队列为空，事件循环将检查已达到时间阈值的计时器。如果有计时器已准备就绪，则事件循环将绕回计时器阶段执行这些计时器的回调。
           </li>
           <li>
-            <strong>check(检查)</strong>：<code>setImmediate</code>回调函数在这里执行
+            <strong>check(检查)</strong>：<code>setImmediate</code>
+            回调函数在这里执行
             <br />
             <br />
-            此阶段允许在轮询阶段完成后立即执行回调。如果轮询阶段变为空闲状态，并且脚本使用<code>setImmediate</code>
+            此阶段允许在轮询阶段完成后立即执行回调。如果轮询阶段变为空闲状态，并且脚本使用
+            <code>setImmediate</code>
             后被排列在队列中，则事件循环可能到检查阶段而不是等待。
             <br />
-            <code>setImmediate</code>实际上是一个在事件循环的单独阶段运行的特殊计时器，它使用一个libuv
+            <code>setImmediate</code>
+            实际上是一个在事件循环的单独阶段运行的特殊计时器，它使用一个libuv
             API来安排回调在轮询阶段完成后执行。
             <br />
-            通常在执行代码时，事件循环最终会进入轮询阶段。但是如果回调已使用<code>setImmediate</code>
+            通常在执行代码时，事件循环最终会进入轮询阶段。但是如果回调已使用
+            <code>setImmediate</code>
             调度过，并且轮询阶段变为空闲状态，继续到检查阶段。
           </li>
           <li>
-            <strong>close callbacks(关闭的回调函数)</strong>；一些关闭的回调函数，如
+            <strong>close callbacks(关闭的回调函数)</strong>
+            ；一些关闭的回调函数，如
             <code>socket.on(&quot;close&quot;,...)</code>
             <br />
             <br />
-            如果socket或处理函数突然关闭(例如socket.destroy),则<code>close</code>事件将在这个阶段发出，否则通过
+            如果socket或处理函数突然关闭(例如socket.destroy),则
+            <code>close</code>事件将在这个阶段发出，否则通过
             <code>process.nextTick</code>发出。
           </li>
         </ul>
       </main>
-
-      <Anchor className="anchor" getContainer={() => document.getElementById('content') as HTMLElement}>
-        <Link href="#intro" title="Node.js"></Link>
-        <Link href="#bindings" title="Node bindings"></Link>
-        <Link href="#v8" title="V8"></Link>
-        <Link href="#libuv" title="libuv"></Link>
-        <Link href="#workflow" title="工作流程">
-          <Link href="#eventLoop" title="事件循环(Event Loop)"></Link>
-          <Link href="#stage" title="阶段概述"></Link>
-        </Link>
-      </Anchor>
+      <ArticleAnchor
+        items={[
+          {
+            title: "Node.js",
+            key: "intro",
+            href: "#intro"
+          },
+          {
+            title: "Node bindings",
+            key: "bindings",
+            href: "#bindings"
+          },
+          {
+            title: "V8",
+            key: "v8",
+            href: "#v8"
+          },
+          {
+            title: "libuv",
+            key: "libuv",
+            href: "#libuv"
+          },
+          {
+            title: "工作流程",
+            key: "工作流程",
+            href: "#workflow",
+            children: [
+              {
+                title: "事件循环(Event Loop)",
+                key: "eventLoop",
+                href: "#eventLoop"
+              },
+              {
+                title: "阶段概述",
+                key: "stage",
+                href: "#stage"
+              }
+            ]
+          }
+        ]}
+      ></ArticleAnchor>
     </article>
   );
 }
