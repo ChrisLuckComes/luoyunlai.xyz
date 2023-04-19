@@ -287,7 +287,7 @@ const routers = [
         key: "/experience/vsCodeExtenion",
         path: "vsCodeExtenion",
         name: "第一个VSCode插件",
-        element: lazy(() => import("@/pages/experiences/vsCodeExtenion"))
+        element: lazy(() => import("@/pages/experiences/vsCodeExtenion.mdx"))
       },
       {
         key: "/experience/cloud",
