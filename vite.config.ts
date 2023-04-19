@@ -7,6 +7,7 @@ import path from "path";
 import viteCompression from "vite-plugin-compression";
 
 export default defineConfig(async () => {
+  const mdx = await import("@mdx-js/rollup");
   return {
     build: {
       outDir: "build",
@@ -21,6 +22,7 @@ export default defineConfig(async () => {
       }
     },
     plugins: [
+      mdx.default(), // mdx格式支持
       react(),
       tsConfigPaths(),
       eslint(),
