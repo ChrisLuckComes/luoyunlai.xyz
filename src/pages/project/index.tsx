@@ -10,7 +10,7 @@ export default defineConfig({
 });
 \`\`\``;
 
-export const NGINX = `\`\`\`json server {
+export const NGINX = `\`\`\` server {
   listen       80;
   server_name luoyunlai.xyz;
   rewrite ^/(.*) https://$server_name$request_uri? permanent;
@@ -29,4 +29,5 @@ server {
 
       ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;
       ssl_prefer_server_ciphers on;
-}\`\`\``
+}
+\`\`\``;
